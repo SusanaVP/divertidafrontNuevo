@@ -1,0 +1,16 @@
+{
+  "routes": [
+    "/blog",
+    "/blog-entry-form",
+    "/error",
+    "/events",
+    "/favorites",
+    "/home",
+    "/login",
+    "/riddles",
+    "/sign-in",
+    "/story",
+    "/videos",
+    "/view-stories"
+  ]
+}
