@@ -13,7 +13,7 @@ app.use((req, res, next) => {
 
 // Send all requests to index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist','divertidafront', 'browser' ,'index.html'));
 });
 
 // Default Heroku port
