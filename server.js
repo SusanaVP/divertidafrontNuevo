@@ -6,14 +6,14 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'divertidafront', 'dist')));
 
 // Content Security Policy configuration
-// app.use((req, res, next) => {
-//   res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com");
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com");
+  next();
+});
 
 // Send all requests to index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'divertidafront', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'divertidafront', 'dist', 'browser', 'index.html'));
 });
 
 // Default Heroku port
