@@ -1,0 +1,62 @@
+.custom-card {
+    width: 250px;
+    height: 250px;
+    position: relative;
+    border-color: black;
+}
+
+.custom-btn {
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.custom-btn:hover {
+    background-color: black;
+    color: white;
+}
+
+.clasico {
+    background-image: url('/assets/imagenes/Story/icaperucita.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.corto {
+    background-image: url('/assets/imagenes/Story/icorto.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.animal {
+    background-image: url('/assets/imagenes/Story/ianimal.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.princess {
+    background-image: url('/assets/imagenes/Story/iprincess.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.dormir {
+    background-image: url('/assets/imagenes/Story/idormir.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.navidad {
+    background-image: url('/assets/imagenes/Story/inavidad.png');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}

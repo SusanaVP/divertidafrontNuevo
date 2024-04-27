@@ -1,0 +1,19 @@
+ion-content.container {
+    --background: rgba(255, 255, 255, 0.3) url("/assets/images/fondoJirafa.png") 0 0/100% 100% no-repeat !important;
+}
+
+.iconOK {
+    color: rgb(222, 242, 5)
+}
+
+.spinner {
+    margin: auto;
+    width: 80px;
+    height: 80px;
+    color: rgb(222, 242, 5)
+}
+
+p,
+h2 {
+    text-align: center;
+}

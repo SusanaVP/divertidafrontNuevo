@@ -1,0 +1,17 @@
+.img-fluid {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+}
+
+.font-weight-bold {
+    text-align: center;
+}
+
+.btn {
+    margin: 5%;
+}
+
+.buttons {
+    border-top: 1px solid rgb(225, 220, 220);
+}

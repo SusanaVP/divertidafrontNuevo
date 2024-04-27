@@ -1,0 +1,41 @@
+
+.navbar-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid rgb(239, 195, 100);
+    padding: 1%;
+    background-color: rgb(239, 195, 100);
+    margin: 0px;
+}
+
+.nav-item {
+    text-align: center;
+    justify-items: center;
+    margin-left: 50px;
+}
+
+.social-icons-widget a:hover {
+    transform: scale(1.5);
+    color: rgb(239, 195, 100);
+}
+
+.header-image {
+    margin-left: 5%;
+}
+
+.nav-pills .nav-link {
+    color: rgb(248, 93, 3);
+}
+
+.nav-link.active {
+    background-color: rgb(185, 80, 61);
+    color: white;
+    border-radius: 10px;
+}
+
+.nav-link:hover{
+    background-color: rgb(185, 80, 61);
+    color: white;
+    border-radius: 10px;
+}

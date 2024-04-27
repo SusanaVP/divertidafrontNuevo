@@ -1,0 +1,38 @@
+.boton-leer {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #f2e5cc;
+    border: none;
+    box-shadow: none;
+  }
+  
+  .info-container {
+    margin-bottom: 10px;
+  }
+  
+  .web-link {
+    margin: 10px;
+    text-align: right;
+  }
+  
+  .web-link a {
+    color: green;
+    text-decoration: none;
+  }
+  
+  .card-border {
+    border: 2px solid orange;
+  }
+  
+  .card-background {
+    background-color: #f2e5cc;
+  }
+
+  .img-fluid {
+    text-align: center;
+    margin: auto;
+  }
+
+  .alert-info {
+    text-align: center;
+  }

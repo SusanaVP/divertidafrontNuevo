@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Cuentos</h1>
+            <div *ngIf="stories && stories.length > 0">
+                <div *ngFor="let story of stories">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ story.title }}</h5>
+                            <!-- Mostrar solo las primeras 30 palabras si la historia no está expandida -->
+                            <p class="card-text">{{ (expandedStories[story.id] ? story.description :
+                                story.description.split(' ').slice(0, 30).join(' ')) }}</p>
+                            <!-- Botón para expandir/cerrar la historia -->
+                            <button class="btn btn-link" (click)="toggleExpanded(story.id)">
+                                {{ expandedStories[story.id] ? 'Leer menos' : 'Leer más' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!stories || stories.length === 0">
+                <p>No hay cuentos disponibles en esta categoría. Disculpen las molestias.</p>
+                <img src="assets/imagenes/Story/inolibro.jpg" class="img-fluid mx-auto d-block">
+            </div>
+            <button class="btn btn-primary" (click)="chooseOtherCategory()">Elegir otra categoría</button>
+        </div>
+    </div>
+</div>

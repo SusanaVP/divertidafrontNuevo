@@ -1,0 +1,27 @@
+.container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.fa-youtube {
+    color: red;
+}
+
+.fa-instagram {
+    color:blueviolet;
+}
+
+.fa-facebook {
+    color: blue;
+}
+
+.social-icons-widget a:hover {
+    transform: scale(1.5);
+    color: rgb(239, 195, 100);
+}
+
+.header-image {
+    margin-left: 5%;
+    width: 250px;
+}
+
