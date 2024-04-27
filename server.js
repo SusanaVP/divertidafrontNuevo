@@ -7,33 +7,16 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 // Content Security Policy configuration
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline'; img-src 'self' https://ddivertida-frontend-64b56329e5d5.herokuapp.com/favicon.ico;");
+  res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com");
   next();
 });
 
-
 // Send all requests to index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'browser', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// // Default Heroku port
-// app.listen(process.env.PORT || 5000, () => {
-//   console.log('Servidor iniciado en el puerto 5000');
-// });
-
-// const express = require('express');
-// const path = require('path');
-// const app = express();
-
-// app.use(express.static(path.join(__dirname,  'src',  'assets')));
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'src', 'index.html'));
-// });
-
-// const PORT = process.env.PORT || 3000;
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
+// Default Heroku port
+app.listen(process.env.PORT || 5000, () => {
+  console.log('Servidor iniciado en el puerto 5000');
+});
