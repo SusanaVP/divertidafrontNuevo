@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'divertidafront', 'dist')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Content Security Policy configuration
 // Content Security Policy configuration
