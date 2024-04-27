@@ -17,20 +17,20 @@
 
 
   <div *ngIf="showRecommendedVideos" class="recommended-videos">
-    <div class="col-12 mb-3">
+    <div class="col-12 col-md-4 mb-3">
       <strong>Vídeos recomendados!!!</strong>
     </div>
     <app-recommended-videos></app-recommended-videos>
   </div>
 
   <div class="row" *ngIf="filteredVideos.length === 0 || !filteredVideos">
-    <div class="col-12 mb-3">
+    <div class="col-12 col-md-4 mb-3">
       No se han encontrado vídeos en tu búsqueda.
     </div>
   </div>
 
   <div class="row" *ngIf="filteredVideos.length > 0">
-    <div class="col-12 mb-3">
+    <div class="col-12 col-md-4 mb-3">
       Lista de vídeos seleccionada.
     </div>
   </div>
