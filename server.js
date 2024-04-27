@@ -5,12 +5,6 @@ const app = express();
 // Serve static files
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Content Security Policy configuration
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", "default-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com");
-  next();
-});
-
 // Send all requests to index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist','divertidafront', 'browser' ,'index.html'));
