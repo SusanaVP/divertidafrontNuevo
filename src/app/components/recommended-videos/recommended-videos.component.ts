@@ -40,16 +40,16 @@ export class RecommendedVideosComponent implements OnInit {
   }
 
   async editFavorite(idVideo: number) {
-    const idPerson = await this._storageService.getUserId('loggedInUser');
+    const idUser = await this._storageService.getUserId('loggedInUser');
     const favoritesVideos = await this._videosService.getFavoritesVideos();
     this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
 
-    if (idPerson !== null && idPerson !== undefined) {
+    if (idUser !== null && idUser !== undefined) {
       try {
         if (this.favoriteVideosIds.has(idVideo)) {
          console.log('Ups! El vídeo ya estaba en tu lista de favoritos.');
         } else {
-          await this._videosService.addFavoriteVideo(idVideo, idPerson);
+          await this._videosService.addFavoriteVideo(idVideo, idUser);
          console.log('Añadido correctamente a tu lista de favoritos.');
         }
       } catch (err: any) {

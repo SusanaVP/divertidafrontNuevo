@@ -1,60 +1,61 @@
 <div class="container mt-3">
   <div class="row">
-    <div class="col-6 mb-3">
-      <label class="form-label">Buscar por:</label>
-      <select class="form-select" [(ngModel)]="selectedCategory">
-        <option value="title">Título</option>
-        <option value="description">Descripción</option>
-        <option value="category">Categoría</option>
-      </select>
+    <div class="col-12 w-100">
+      <div class="row">
+        <div class="col-6 mb-3">
+          <label class="form-label">Buscar por:</label>
+          <select class="form-select" [(ngModel)]="selectedCategory">
+            <option value="title">Título</option>
+            <option value="description">Descripción</option>
+            <option value="category">Categoría</option>
+          </select>
+        </div>
+        <div class="col-6 mb-3">
+          <label class="form-label">Introduzca texto:</label>
+          <input type="text" class="form-control" placeholder="Buscar videos" [(ngModel)]="searchTerm"
+            (input)="filterVideos()">
+        </div>
+      </div>
     </div>
-    <div class="col-6 mb-3">
-      <label class="form-label">Introduzca texto:</label>
-      <input type="text" class="form-control" placeholder="Buscar videos" [(ngModel)]="searchTerm"
-        (input)="filterVideos()">
-    </div>
-  </div>
 
-
-  <div *ngIf="showRecommendedVideos" class="recommended-videos">
-    <div class="col-12 col-md-4 mb-3">
-      <strong>Vídeos recomendados!!!</strong>
-    </div>
-    <app-recommended-videos></app-recommended-videos>
-  </div>
-
-  <div class="row" *ngIf="filteredVideos.length === 0 || !filteredVideos">
-    <div class="col-12 col-md-4 mb-3">
-      No se han encontrado vídeos en tu búsqueda.
-    </div>
-  </div>
-
-  <div class="row" *ngIf="filteredVideos.length > 0">
-    <div class="col-12 col-md-4 mb-3">
-      Lista de vídeos seleccionada.
+    <div class="row">
+      <div *ngIf="showRecommendedVideos" class="recommended-videos">
+        <div class="col-12 col-md-4 mb-3">
+          <strong>Vídeos recomendados!!!</strong>
+        </div>
+        <app-recommended-videos></app-recommended-videos>
+      </div>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 w-100">
       <div class="row">
-        <div class="col-12 col-md-4 mb-3" *ngFor="let video of filteredVideos | filter:searchTerm:selectedCategory">
-          <div class="card">
-            <div class="card-header">
-              <h5 class="card-title">{{ video.title }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Categoría:{{ video.categoriesVideo.nameCategory }}</h6>
-            </div>
-            <div class="video-container">
-              <iframe width="100%" height="315" [src]="getEmbeddedUrl(video.url)" frameborder="0"
-                allowfullscreen></iframe>
-            </div>
-            <div class="card-body">
-              <p class="card-text">{{ video.description }}</p>
-              <button class="btn btn-outline-danger" (click)="editFavorite(video.id)">
-                <i class=" {{ favoriteVideosIds.has(video.id) ? 'fa-solid fa-heart' : 'fa-regular fa-heart' }}"></i>
-              </button>
-            </div>
-          </div>
+        <div class="col-12 w-100" *ngIf="filteredVideos.length === 0 || !filteredVideos">
+          <p>No se han encontrado vídeos en tu búsqueda.</p>
+        </div>
+        <div class="col-12 w-100" *ngIf="filteredVideos.length > 0">
+         <p >Lista de vídeos seleccionada.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-md-{{ filteredVideos.length === 1 ? '12' : '4' }} mb-3" *ngFor="let video of filteredVideos | filter:searchTerm:selectedCategory">
+      <div class="card h-100 mb-4">
+        <div class="card-header">
+          <h5 class="card-title">{{ video.title }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Categoría:{{ video.categoriesVideo.nameCategory }}</h6>
+        </div>
+        <div class="video-container">
+          <iframe width="100%" height="315" [src]="getEmbeddedUrl(video.url)" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ video.description }}</p>
+          <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavorite(video.id)">
+            <i class=" {{ favoriteVideosIds.has(video.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
+          </button>
         </div>
       </div>
     </div>
