@@ -2,7 +2,7 @@ export const environment = {
     production: true,
     // baseUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/',
   
-    // userUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/person',
+    // userUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/user',
   
     // videoUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/video',
   
@@ -15,7 +15,7 @@ export const environment = {
     // riddlesUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/riddles'
     baseUrl: 'http://localhost:8081/',
   
-    userUrl: 'http://localhost:8081/person',
+    userUrl: 'http://localhost:8081/user',
   
     videoUrl: 'http://localhost:8081/video',
   

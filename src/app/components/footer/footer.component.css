@@ -1,6 +1,6 @@
 .container-footer {
     width: 100%;
-    margin: 0;
+    margin-top: 20px;
     padding: 1%;
     background-color: rgb(239, 195, 100);
 }
@@ -21,7 +21,6 @@ li a:hover {
 
 li a {
     color: rgb(53, 52, 52);
-    /* justify: space-around; */
 }
 
 .container-footer .nav-link {

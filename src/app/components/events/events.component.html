@@ -1,38 +1,39 @@
-<div class="container">
-    <ng-container *ngIf="eventsList.length > 0">
-      <div class="row">
-        <div *ngFor="let event of eventsList" class="col-md-6">
-          <div class="card border card-background">
-            <div class="card-header">
-              <h5 class="card-title">{{ event.title }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">Fecha: {{ event.date }}</h6>
-              <img [src]="event.image" class="card-img-top" alt="Event Image">
-            </div>
-  
-            <div class="card-body">
-              <div [innerHTML]="formatDescription(event.description, 30, event.expand)"></div>
-              <button (click)="toggleExpandido(event)" class="btn btn-primary boton-leer">
-                <strong>{{ event.expand ? 'Leer menos' : 'Leer más' }}</strong>
-              </button>
-              <div *ngIf="event.expand" class="info-container">
-                <p><strong>Información:</strong> {{ event.info }}</p>
-              </div>
-            </div>
-            <div class="card-footer text-end">
-              <p class="web-link"><a href="{{ event.url }}" target="_blank">Ir a la WEB</a></p>
+<div class="container-events">
+  <div *ngIf="eventsList.length > 0">
+    <div class="row">
+      <div *ngFor="let event of eventsList" class="col-md-6">
+        <div class="card border card-background">
+          <div class="card-header">
+            <h5 class="card-title">{{ event.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Fecha: {{ event.date }}</h6>
+            <img [src]="event.image" class="card-img-top" alt="Event Image">
+          </div>
+
+          <div class="card-body">
+            <div [innerHTML]="formatDescription(event.description, 30, event.expand)"></div>
+            <button (click)="toggleExpandido(event)" class="btn btn-primary boton-leer">
+              <strong>{{ event.expand ? 'Leer menos' : 'Leer más' }}</strong>
+            </button>
+            <div *ngIf="event.expand" class="info-container">
+              <p><strong>Información:</strong> {{ event.info }}</p>
             </div>
           </div>
-        </div>
-      </div>
-    </ng-container>
-  
-    <div *ngIf="eventsList.length === 0" class="row">
-      <div class="col-md-12">
-        <div class="alert alert-info" role="alert">
-         <p> No hay Eventos en este momento, disculpen las molestias.</p>
-          <img src="assets/imagenes/eventos.png" class="img-fluid" alt="No hay eventos">
+          <div class="card-footer text-end">
+            <p class="web-link"><a href="{{ event.url }}" target="_blank">Ir a la WEB</a></p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  
+
+  <div class="row">
+    <div *ngIf="eventsList.length === 0">
+      <div class="col-md-12 ">
+        <div class="alert alert-info" role="alert">
+          <p> No hay Eventos en este momento, disculpen las molestias.</p>
+          <img src="assets/imagenes/eventos.png" class="img" alt="Jirafa con carte de 'No hay eventos'">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

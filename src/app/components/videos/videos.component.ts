@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { VideosService } from '../../services/videos.service';
 import { StorageService } from '../../services/storage.service';
 import { Video } from '../interfaces/videos';

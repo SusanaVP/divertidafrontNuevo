@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar'; 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -20,7 +22,9 @@ import { HttpClientModule } from '@angular/common/http';
         AppRoutingModule,
         RouterModule,
         ComponentsModule,
-        HttpClientModule
+        HttpClientModule,
+        MatSnackBarModule,
+        BrowserAnimationsModule
     ]
 })
 export class AppModule { }

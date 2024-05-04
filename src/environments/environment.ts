@@ -2,7 +2,7 @@ export const environment = {
     production: false,
     baseUrl: 'http://localhost:8081/',
   
-    userUrl: 'http://localhost:8081/person',
+    userUrl: 'http://localhost:8081/user',
   
     videoUrl: 'http://localhost:8081/video',
   

@@ -14,10 +14,13 @@
 .fa-facebook {
     color: blue;
 }
+.login {
+    color: rgb(239, 177, 7);
+}
 
 .social-icons-widget a:hover {
     transform: scale(1.5);
-    color: rgb(239, 195, 100);
+    color:rgb(13, 195, 13);
 }
 
 .header-image {
@@ -25,3 +28,11 @@
     width: 250px;
 }
 
+.login {
+    font-size: 35px;
+    transition: all 0.3s ease;
+}
+
+.login a:hover {
+    transform: scale(5);
+}

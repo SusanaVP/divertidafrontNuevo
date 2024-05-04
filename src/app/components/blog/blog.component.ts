@@ -35,12 +35,12 @@ export class BlogComponent {
   }
 
   async openBlogEntryForm() {
-      const idPerson = await this._storageService.getUserId('loggedInUser');
+      const idUser = await this._storageService.getUserId('loggedInUser');
 
       // if(idPerson !== null && idPerson !== undefined) {
 
         return this._router.navigate(['/blog-entry-form']).then(() => {
-          idPerson
+          idUser
           window.location.reload();
         });
       // const modal = await this._modalController.create({

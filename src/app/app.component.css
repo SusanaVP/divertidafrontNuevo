@@ -1,6 +1,32 @@
+* {
+    box-sizing: border-box;
+}
+
 .container {
     width: 100%;
-    height: 100%;
-    display: flex;
     padding: 2%;
+    margin-bottom: 5%;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    margin-bottom: 10%;
+}
+
+.scroll-to-top a {
+    padding: 10px 15px;
+}
+
+.arrow-icon {
+    width: 45px;
+    height: 45px;
+    display: inline-block;
+    background-image: url('/assets/icon/flecha-hacia-arriba.png');
+    background-size: cover;
+    border: 2px solid rgb(131, 86, 4);
+    border-radius: 20%;
+    background-color: rgb(131, 86, 4);
 }
