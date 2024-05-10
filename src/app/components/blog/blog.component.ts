@@ -3,6 +3,7 @@ import { BlogService } from '../../services/blog.service';
 import { StorageService } from '../../services/storage.service';
 import { Blog } from '../interfaces/blog';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-blog',
@@ -15,12 +16,23 @@ export class BlogComponent {
   entry: number = 0;
   likesCont: number = 0;
 
-  constructor(private _blogService: BlogService, private _storageService: StorageService, private _router: Router ) { }
+  constructor(private _blogService: BlogService,
+    private _storageService: StorageService,
+    private _router: Router,
+    private _snackBar: MatSnackBar) { }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+  }
 
   ngOnInit() {
     this.loading = true;
 
-    this._blogService.getBlog().subscribe(entries => {
+    this._blogService.getBlogValidated().subscribe(entries => {
       this.blogEntries = entries;
       this.loading = false;
     },
@@ -35,44 +47,37 @@ export class BlogComponent {
   }
 
   async openBlogEntryForm() {
-      const idUser = await this._storageService.getUserId('loggedInUser');
+    const idUser = await this._storageService.getUserId('loggedInUser');
 
-      // if(idPerson !== null && idPerson !== undefined) {
+    if (idUser !== null && idUser !== undefined) {
 
-        return this._router.navigate(['/blog-entry-form']).then(() => {
-          idUser
-          window.location.reload();
-        });
-      // const modal = await this._modalController.create({
-      //   component: BlogEntryFormComponent,
-      //   componentProps: { id_person: idPerson }
-      //  
-     // return await modal.present();
-    // } else {
-    //   console.log('Tienes que loguearte o registrarte. Ve a la página Inicio.');
-    // }
+      return this._router.navigate(['/blog-entry-form', { idUser: idUser }]);
+
+    } else {
+      return this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
+    }
   }
 
-  async openRankingModal() {
-    const idPerson = await this._storageService.getUserId('loggedInUser');
+  async openRanking() {
+    const idUser = await this._storageService.getUserId('loggedInUser');
 
-    // if (idPerson !== null && idPerson !== undefined) {
+    if (idUser !== null && idUser !== undefined) {
       return this._router.navigate(['/ranking']).then(() => {
-        idPerson
+        idUser
         window.location.reload();
       });
-    // } else {
-    //   console.log('Tienes que loguearte o registrarte. Ve a la página Inicio.');
-    // }
+    } else {
+      this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
+    }
   }
 
   async likeBlog(entryId: number) {
     if (this.likesCont === 3) {
-      console.log('Solo puedes dar a me gusta 3 veces.');
+      this.openSnackBar('Solo puedes dar a me gusta 3 veces.');
     } else {
-      const idPerson = await this._storageService.getUserId('loggedInUser');
+      const idUser = await this._storageService.getUserId('loggedInUser');
 
-      if (idPerson !== null && idPerson !== undefined) {
+      if (idUser !== null && idUser !== undefined) {
         const idBlog = entryId;
         this._blogService.likePlus(idBlog)
           .then(response => {
@@ -82,10 +87,10 @@ export class BlogComponent {
           })
           .catch(error => {
             console.error(error);
-            console.log(`Error al incrementar los likes.`);
+            this.openSnackBar(`Error al incrementar los likes.`);
           });
       } else {
-        console.log('Tienes que loguearte o registrarte. Ve a la página Inicio.');
+        this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
       }
     }
   }

@@ -69,3 +69,7 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+
+.card {
+    box-shadow: 4px 2px 8px rgb(236, 167, 30);
+}

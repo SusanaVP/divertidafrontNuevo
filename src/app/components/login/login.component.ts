@@ -15,6 +15,8 @@ export class LoginComponent {
 
   email: string = '';
   password: string = '';
+  isLoggedIn: boolean = false;
+
 
   constructor(private _userService: UserService,
     private _router: Router,
@@ -58,7 +60,7 @@ export class LoginComponent {
 
         this.openSnackBar('Inicio de sesión correcto.');
         this._router.navigate(['/home']).then(() => {
-          window.location.reload();
+          this.isLoggedIn = true;
         });
       } else {
         this.openSnackBar('Email o contraseña incorrectos.');

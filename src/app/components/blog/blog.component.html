@@ -1,12 +1,12 @@
-<div class="container">
-  <div class="row">
+<div class="container-blog">
+  <div class="row mb-4">
     <div class="col-md-6">
       <div class="card h-100">
         <div class="card-body d-flex flex-column">
           <h2>¡Participa en nuestro blog y gana!</h2>
           <p>Comparte tus manualidades más divertidas en nuestro tablón y entra en el sorteo de una taza personalizada
             con el logo de "D de Divertida".</p>
-            <button (click)="openBlogEntryForm()" class="btn btn-success btn-block">Participar en el Blog</button>
+          <button (click)="openBlogEntryForm()" class="btn btn-success btn-block">Participar en el Blog</button>
         </div>
       </div>
     </div>
@@ -14,7 +14,8 @@
       <div class="card h-100">
         <div class="card-body d-flex flex-column">
           <h2>¡Ya puedes ver cuantos LIKES tiene tu creación!</h2>
-          <button (click)="openRankingModal()" class="btn btn-dark btn-block mt-auto"><i class="fas fa-thumbs-up"></i> Ranking
+          <button (click)="openRanking()" class="btn btn-dark btn-block mt-auto"><i class="fas fa-thumbs-up"></i>
+            Ranking
             de likes</button>
         </div>
       </div>
@@ -29,15 +30,21 @@
 
   <div class="row">
     <ng-container *ngIf="blogEntries && blogEntries.length > 0">
-      <div *ngFor="let entry of blogEntries" class="col-md-6">
-        <div class="card">
+      <div class="col-md-6" *ngFor="let entry of blogEntries; let i = index">
+        <div class="card h-100 mb-4">
           <div class="card-header">
             <h5 class="card-title">{{ entry.title }}</h5>
           </div>
-          <div class="card-body">
-            <img *ngIf="entry.image" [src]="entry.image" alt="Imagen de materiales de manualidades" class="img-fluid">
-            <p>{{ entry.description }}</p>
-            <button (click)="likeBlog(entry.id)" class="btn btn-primary"><i class="fas fa-thumbs-up"></i></button>
+          <div class="card-body mb-3">
+            <div class="image-container text-center mb-3">
+              <img *ngIf="entry.image" [src]="entry.image" alt="Imagen de materiales de manualidades"
+                class="img-fluid rounded align-items-center mb-3">
+            </div>
+            <div class="card-footer">
+              <p>{{ entry.description }}</p>
+              <button (click)="likeBlog(entry.id)" class="btn btn-primary  position-absolute bottom-0 end-0 m-3"><i
+                  class="fas fa-thumbs-up"></i></button>
+            </div>
           </div>
         </div>
       </div>

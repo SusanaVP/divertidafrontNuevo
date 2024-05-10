@@ -20,7 +20,6 @@
 
 .social-icons-widget a:hover {
     transform: scale(1.5);
-    color:rgb(13, 195, 13);
 }
 
 .header-image {
@@ -29,10 +28,19 @@
 }
 
 .login {
-    font-size: 35px;
+   font-size: 35px;
     transition: all 0.3s ease;
 }
 
 .login a:hover {
     transform: scale(5);
 }
+
+.green-icon {
+    color: rgb(7, 182, 7);
+}
+
+.red-icon {
+    color: red;
+}
+

@@ -1,5 +1,9 @@
-ion-content.container {
-    --background: rgba(255, 255, 255, 0.3) url("/assets/images/fondoJirafa.png") 0 0/100% 100% no-repeat !important;
+.container-blog {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: auto;
 }
 
 .iconOK {
@@ -16,4 +20,43 @@ ion-content.container {
 p,
 h2 {
     text-align: center;
+}
+
+.card-title {
+    text-align: center;
+    text-shadow: 0.5px 0.5px 0.5px black;
+    font-size: large;
+}
+
+.card-header {
+    background-image: url('/assets/imagenes/fondoJirafa.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.image-container {
+    width: 70%;
+    height: 70%;
+    margin: auto;
+}
+
+.image-container img {
+    max-width: 100%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.card-footer {
+    margin-top: 10px;
+    min-height: 60px;
+}
+
+.description {
+    min-height: 40%;
+}
+
+.card {
+    background-color: rgb(233, 210, 165);
+    box-shadow: 4px 2px 20px rgb(168, 101, 70);
 }

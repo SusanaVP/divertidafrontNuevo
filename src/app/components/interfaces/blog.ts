@@ -6,5 +6,6 @@ export interface Blog {
   description: string;
   image: string;
   heart: number;
-  user: User;/*solo la id o algo más quiero aquí???*/
+  user: User;
+  validado: boolean;
 }

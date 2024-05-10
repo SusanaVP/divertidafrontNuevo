@@ -17,6 +17,10 @@ export class BlogService {
     return this._http.get<Blog[]>(`${this.apiUrl}`);
   }
 
+  getBlogValidated(): Observable<Blog[]> {
+    return this._http.get<Blog[]>(`${this.apiUrl}/blogValidated`);
+  }
+
   async addBlogEntry(blogEntryData: Blog): Promise<string> {
     const url = `${this.apiUrl}/addBlog`;
     const response: HttpResponse<string> | undefined = await this._http.post<string>(url, blogEntryData, { observe: 'response' }).toPromise();
