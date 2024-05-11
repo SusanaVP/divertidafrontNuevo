@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BlogEntryFormComponent } from './blog-entry-form/blog-entry-form.component';
 import { ViewStoriesComponent } from './view-stories/view-stories.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { ViewRiddlesComponent } from './view-riddles/view-riddles.component';
 
 
 
@@ -39,7 +40,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
         RecommendedVideosComponent,
         BlogEntryFormComponent,
         ViewStoriesComponent,
-        SignInComponent
+        SignInComponent,
+        ViewRiddlesComponent
     ],
     exports: [
         BlogComponent,
@@ -58,7 +60,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
         ReactiveFormsModule,
         BlogEntryFormComponent,
         ViewStoriesComponent,
-        SignInComponent
+        SignInComponent,
+        ViewRiddlesComponent
     ],
     imports: [
         CommonModule,

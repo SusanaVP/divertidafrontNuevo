@@ -12,7 +12,10 @@ export const environment = {
 
     // storyUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/story',
 
-    // riddlesUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/riddles'
+    // riddlesUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/riddles',
+
+    //favoritesUrl: 'https://ddivertida-83acd5ff25f3.herokuapp.com/favorites',
+
     baseUrl: 'http://localhost:8081/',
   
     userUrl: 'http://localhost:8081/user',
@@ -25,6 +28,8 @@ export const environment = {
 
     storyUrl: 'http://localhost:8081/story',
 
-    riddlesUrl: 'http://localhost:8081/riddles'
+    riddlesUrl: 'http://localhost:8081/riddles',
+
+    favoritesUrl: 'http://localhost:8081/favorites'
 
   };

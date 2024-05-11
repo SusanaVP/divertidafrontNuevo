@@ -12,5 +12,7 @@ export const environment = {
 
     storyUrl: 'http://localhost:8081/story',
 
-    riddlesUrl: 'http://localhost:8081/riddles'
+    riddlesUrl: 'http://localhost:8081/riddles',
+    
+    favoritesUrl: 'http://localhost:8081/favorites'
   };

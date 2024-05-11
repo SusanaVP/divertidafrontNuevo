@@ -12,7 +12,7 @@ import { CategoryRiddle, categoriesRiddles } from '../interfaces/categoryRiddle'
 export class RiddlesComponent {
 
   constructor(private _riddleService: RiddleService, private _router: Router) { }
-riddles: Riddles[] | undefined = [];
+  riddles: Riddles[] | undefined = [];
   categorySelected: string | undefined;
   async ngOnInit() {
 
@@ -25,11 +25,11 @@ riddles: Riddles[] | undefined = [];
   }
 
   async getCategoryRiddles(nameCategory: string) {
-    const name = categoriesRiddles.find((cn: CategoryRiddle )=> cn.nameCategory === nameCategory);
+    const name = categoriesRiddles.find((cn: CategoryRiddle) => cn.nameCategory === nameCategory);
     const categoryId = name ? name.id : 0;
 
     try {
-      const riddles= await this._riddleService.getRiddlesByCategory(categoryId);
+      const riddles = await this._riddleService.getRiddlesByCategory(categoryId);
 
       if (riddles.length > 0 || riddles !== undefined) {
         const navigationExtras: NavigationExtras = {
@@ -37,12 +37,12 @@ riddles: Riddles[] | undefined = [];
             riddles: riddles
           }
         };
-  
-        this._router.navigate(['/viewRiddles'], navigationExtras);
+
+        this._router.navigate(['/view-riddles'], navigationExtras);
+      } else {
+        console.log("la lista de adivinanzas esta vacía");
       }
-      this._router.navigate(['/error']).then(() => {
-        window.location.reload();
-      });
+
     } catch (error) {
       console.error('Error al obtener adivinanzas por categoría:', error);
       this._router.navigate(['/error']).then(() => {

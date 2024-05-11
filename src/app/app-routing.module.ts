@@ -12,6 +12,7 @@ import { ErrorComponent } from './components/error/error.component';
 import { BlogEntryFormComponent } from './components/blog-entry-form/blog-entry-form.component';
 import { ViewStoriesComponent } from './components/view-stories/view-stories.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { ViewRiddlesComponent } from './components/view-riddles/view-riddles.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'blog-entry-form', component: BlogEntryFormComponent },
   { path: 'view-stories', component: ViewStoriesComponent },
   { path: 'sign-in', component: SignInComponent },
+  { path: 'view-riddles', component: ViewRiddlesComponent },
 ];
 
 @NgModule({

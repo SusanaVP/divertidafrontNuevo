@@ -5,8 +5,9 @@ import { VideosService } from '../../services/videos.service';
 import { StorageService } from '../../services/storage.service';
 import { Video } from '../interfaces/videos';
 import { Router } from '@angular/router';
-import { CategoryVideo, categoriesVideos } from '../interfaces/categoryVideo';
-import { CategoryStory } from '../interfaces/categoryStory';
+import { categoriesVideos } from '../interfaces/categoryVideo';
+import { FavoritesService } from '../../services/favorites.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -20,16 +21,32 @@ export class RecommendedVideosComponent implements OnInit {
   slideIndex = 0;
   slideWidth = 0;
   favoriteVideosIds: Set<number> = new Set<number>();
+  contentType:string = "video";
+  contentId: number = 0;
 
 
-  constructor(private _videosService: VideosService, private _storageService: StorageService, private _sanitizer: DomSanitizer, private _router: Router) { }
+  constructor(private _videosService: VideosService, 
+    private _storageService: StorageService, 
+    private _sanitizer: DomSanitizer,
+     private _router: Router,
+    private _favoritesService: FavoritesService,
+    private _snackBar: MatSnackBar) { }
+
+    openSnackBar(message: string) {
+      this._snackBar.open(message, 'Cerrar', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+      });
+    }
+  
 
   ngOnInit(): void {
     this._videosService.getRecommendedVideos().subscribe((videos: Video[]) => {
       this.recommendedVideos = videos;
     
     }, (error) => {
-      console.log('Error al obtener los videos recomendados:');
+      this.openSnackBar('Error al obtener los videos recomendados:');
       this.recommendedVideos = [];
     });
   }
@@ -40,29 +57,30 @@ export class RecommendedVideosComponent implements OnInit {
   }
 
   async editFavorite(idVideo: number) {
-    const idUser = await this._storageService.getUserId('loggedInUser');
-    const favoritesVideos = await this._videosService.getFavoritesVideos();
-    this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
+    try {
+      const idUser = await this._storageService.getUserId('loggedInUser');
 
-    if (idUser !== null && idUser !== undefined) {
-      try {
+      if (idUser !== null && idUser !== undefined) {
+        const favoritesVideos = await this._favoritesService.getFavoritesVideos(idUser);
+        this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
+
         if (this.favoriteVideosIds.has(idVideo)) {
-         console.log('Ups! El vídeo ya estaba en tu lista de favoritos.');
+          this.openSnackBar('Ups! El vídeo ya estaba en tu lista de favoritos.');
         } else {
-          await this._videosService.addFavoriteVideo(idVideo, idUser);
-         console.log('Añadido correctamente a tu lista de favoritos.');
+          this.contentId = idVideo;
+          await this._favoritesService.addFavorite(this.contentId, idUser, this.contentType);
+          this.openSnackBar('Añadido correctamente a tu lista de favoritos.');
         }
-      } catch (err: any) {
-       console.log("ERROR: Al añadir a la lista de favoritos.");
-       this._router.navigate(['/error']).then(() => {
+      } else {
+        this.openSnackBar('Tienes que loguearte o registrarte.');
+      }
+    } catch (err: any) {
+      this.openSnackBar("ERROR: Al añadir el vídeo a favoritos.");
+      this._router.navigate(['/error']).then(() => {
         window.location.reload();
       });
-      }
-    } else {
-     console.log('Tienes que loguearte o registrarte. Ve a la página Inicio');
     }
   }
-
   extractVideoId(url: string): string {
     const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regExp);

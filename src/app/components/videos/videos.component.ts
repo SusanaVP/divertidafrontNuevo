@@ -4,6 +4,8 @@ import { StorageService } from '../../services/storage.service';
 import { Video } from '../interfaces/videos';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FavoritesService } from '../../services/favorites.service';
 
 type VideoProperty = "title" | "descriptions" | "category";
 @Component({
@@ -12,9 +14,6 @@ type VideoProperty = "title" | "descriptions" | "category";
   styleUrl: './videos.component.css'
 })
 export class VideosComponent implements OnInit {
-
-  constructor(private _videosService: VideosService, private _storageService: StorageService, private _sanitizer: DomSanitizer, private _router: Router) {
-  }
 
   public selectedCategory: VideoProperty = "title";
   public searchTerm: string = '';
@@ -26,54 +25,44 @@ export class VideosComponent implements OnInit {
 
   public showRecommendedVideos: boolean = false;
   favoriteVideosIds: Set<number> = new Set<number>();
+  contentType: string = "video";
+  contentId: number = 0;
+  favoritesVideos: Video[] = [];
+  idUser: number | null = null;
+
+  constructor(private _videosService: VideosService,
+    private _favoritesService: FavoritesService,
+    private _storageService: StorageService,
+    private _sanitizer: DomSanitizer,
+    private _router: Router,
+    private _snackBar: MatSnackBar) {
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+  }
 
   async ngOnInit() {
     this.showRecommendedVideos = true;
+
+    this.idUser = await this._storageService.getUserId('loggedInUser');
   }
 
-  // filterVideos() {
-  //   try {
-  //     this.showRecommendedVideos = false;
-
-  //     if (this.searchTerm === null || this.searchTerm === undefined) {
-  //       return;
-  //     }
-
-  //     this._videosService.getVideos().subscribe((videos) => {
-  //       this.filteredVideos = videos;
-
-  //       this.categories = ['title', 'descriptions', 'category'];
-
-  //       if (this.categories.includes(this.selectedCategory)) {
-  //         let findSelectedCategory: Video[] = this.filteredVideos.filter(item => {
-  //           return item[this.selectedCategory] && item[this.selectedCategory].toString().toLowerCase().includes(this.searchTerm.toLowerCase());
-  //         });
-
-  //         if (findSelectedCategory.length === 0) {
-  //           this.filteredVideos = [];
-  //           return;
-  //         }
-  //       }
-  //     });
-
-  //   } catch (err: any) {
-  //     this._router.navigate(['/error']).then(() => {
-  //       window.location.reload();
-  //       this.filteredVideos = [];
-  //     });
-  //   }
-  // }
   filterVideos() {
     try {
       this.showRecommendedVideos = false;
-  
+
       if (this.searchTerm === null || this.searchTerm === undefined || this.searchTerm === '') {
         return;
       }
-  
+
       this._videosService.getVideos().subscribe((videos) => {
         this.filteredVideos = videos;
-  
+
         // Filtrar por categoría si la categoría es la propiedad seleccionada
         if (this.selectedCategory === 'category') {
           this.filteredVideos = this.filteredVideos.filter(item => {
@@ -83,35 +72,42 @@ export class VideosComponent implements OnInit {
           // Filtrar por título o descripción
           this.filteredVideos = this.filteredVideos.filter(item => {
             return (item.title && item.title.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
-                   (item.description && item.description.toLowerCase().includes(this.searchTerm.toLowerCase()));
+              (item.description && item.description.toLowerCase().includes(this.searchTerm.toLowerCase()));
           });
         }
       });
-  
+
     } catch (err: any) {
-      console.log("ERROR: Al filtrar los vídeos.");
+      this.openSnackBar("ERROR: Al filtrar los vídeos.");
+      this._router.navigate(['/error']).then(() => {
+        window.location.reload();
+      });
       this.filteredVideos = [];
     }
   }
 
   async editFavorite(idVideo: number) {
-    const idPerson = await this._storageService.getUserId('loggedInUser');
-    const favoritesVideos = await this._videosService.getFavoritesVideos();
-    this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
+    try {
+      if (this.idUser !== null && this.idUser !== undefined) {
+        this.favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser);
+        this.favoriteVideosIds = new Set<number>(this.favoritesVideos.map(video => video.id));
 
-    if (idPerson !== null && idPerson !== undefined) {
-      try {
         if (this.favoriteVideosIds.has(idVideo)) {
-          console.log('Ups! El vídeo ya estaba en tu lista de favoritos.');
+          this.openSnackBar('Ups! El vídeo ya estaba en tu lista de favoritos.');
         } else {
-          await this._videosService.addFavoriteVideo(idVideo, idPerson);
-          console.log('Añadido correctamente a tu lista de favoritos.');
+          this.contentId = idVideo;
+          await this._favoritesService.addFavorite(this.contentId, this.idUser!, this.contentType);
+          this.openSnackBar('Añadido correctamente a tu lista de favoritos.');
         }
-      } catch (err: any) {
-        console.log("ERROR: Al añadir el vídeo a favoritos.");
+      } else {
+        this.openSnackBar('Tienes que loguearte o registrarte.');
       }
-    } else {
-      console.log('Tienes que loguearte o registrarte. Ve a la página Inicio');
+
+    } catch (err: any) {
+      this.openSnackBar("ERROR: Al añadir el vídeo a favoritos.");
+      this._router.navigate(['/error']).then(() => {
+        window.location.reload();
+      });
     }
   }
 
