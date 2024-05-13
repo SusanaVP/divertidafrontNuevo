@@ -6,6 +6,9 @@ import { StorageService } from '../../services/storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Riddles } from '../interfaces/riddles';
+import { Stories } from '../interfaces/stories';
+import { Event } from '../interfaces/events';
 
 @Component({
   selector: 'app-favorites',
@@ -16,15 +19,28 @@ import { Router } from '@angular/router';
 export class FavoritesComponent implements OnInit {
 
   videos: Video[] = [];
-  favoriteVideosIds: Set<number> = new Set<number>();
-  isLoggedIn: boolean = false;
-  favoriteVideosList: Video[] = [];
-  idUser: number | null = null;
-  contentType:string = "";
-  contentId: number = 0;
 
-  constructor(private _videosService: VideosService,
-    private _favoritesService: FavoritesService,
+  favoriteVideosIds: Set<number> = new Set<number>();
+  favoriteStoriesIds: Set<number> = new Set<number>();
+  favoriteRiddlesIds: Set<number> = new Set<number>();
+  favoriteEventsIds: Set<number> = new Set<number>();
+
+  favoriteVideosList: Video[] = [];
+  favoriteStoriesList: Stories[] = [];
+  favoriteRiddlesList: Riddles[] = [];
+  favoriteEventsList: Event[] = [];
+
+  isLoggedIn: boolean = false;
+  idUser: number | null = null;
+  contentType: string = "";
+  contentId: number = 0;
+  currentIndex = 0;
+  userId: number = 0;
+
+  expandedStories: { [id: number]: boolean } = {};
+  expandedRiddles: { [id: number]: boolean } = {};
+
+  constructor(private _favoritesService: FavoritesService,
     private _storageService: StorageService,
     private _sanitizer: DomSanitizer,
     private _router: Router,
@@ -40,64 +56,142 @@ export class FavoritesComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const idUser = this._storageService.getUserId('loggedInUser');
+    this.idUser = this._storageService.getUserId('loggedInUser');
 
-    if (idUser !== null && idUser !== undefined) {
-      this.idUser = idUser;
+    if (this.idUser !== null && this.idUser !== undefined) {
       await this.loadFavoritesUser();
       this.isLoggedIn = true;
     } else {
-      this.openSnackBar("ERROR: El ID de usuario es nulo o indefinido.");
-        this.isLoggedIn = false;
+      console.log("ERROR: El ID de usuario es nulo o indefinido.");
+      this.isLoggedIn = false;
     }
   }
 
 
   async loadFavoritesUser() {
     try {
-      //  const favoritesIdUser = await this._favoritesService.getFavoritesIdUser(this.idUser!);
-        const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser!);
-        /*Aquí toda la lógica de sacar que es cada cosa por si typocontent y leugo ahcer las llamadas al backend.. para que s emuestre en cada apartado del html..*/
-  
-        //this.favoriteVideosIds = new Set<number>(this.favoriteVideosList.map(video => video.id));
-  
-        if (favoritesVideos.length == 0) {
-          this.openSnackBar('No tienes videos favoritos, añade alguno!!!');
-        }else {
-           this.favoriteVideosList = favoritesVideos;
-        }
+      const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser!);
+      if (favoritesVideos.length == 0) {
+        console.log('No tienes videos favoritos, añade alguno!!!');
+      } else {
+        this.favoriteVideosList = favoritesVideos;
+      }
+
+      const favoritesStories = await this._favoritesService.getFavoritesStories(this.idUser!);
+      if (favoritesStories.length == 0) {
+        console.log('No tienes cuentos favoritos, añade alguno!!!');
+      } else {
+        this.favoriteStoriesList = favoritesStories;
+      }
+
+      const favoritesRiddles = await this._favoritesService.getFavoritesRiddles(this.idUser!);
+      if (favoritesRiddles.length == 0) {
+        console.log('No tienes aivinanzas favoritas, añade alguna!!!');
+      }
+      else {
+        this.favoriteRiddlesList = favoritesRiddles;
+      }
+
+      
+      const favoritesEvents = await this._favoritesService.getFavoritesEvents(this.idUser!);
+      if (favoritesEvents.length == 0) {
+        console.log('No tienes eventos favoritos, añade alguno!!!');
+      }
+      else {
+        this.favoriteEventsList = favoritesEvents;
+      }
+
     } catch (err: any) {
-      this.openSnackBar("ERROR: Al cargar los vídeos favoritos.");
+      this.openSnackBar("ERROR: Al cargar los favoritos.");
     }
   }
 
   async editFavoriteVideo(idVideo: number) {
-    const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser!);
-    this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
-      try {
-        if (this.favoriteVideosIds.has(idVideo)) {
-          this.openSnackBar('Ups! El vídeo ya estaba en tu lista de favoritos.');
-        } else {
-          this.contentId = idVideo;
-          this.contentType = "video";
-          await this._favoritesService.addFavorite(this.contentId, this.idUser!, this.contentType);
-          this.openSnackBar('Añadido correctamente a tu lista de favoritos.');
-        }
-      } catch (err: any) {
-        this._router.navigate(['/error']).then(() => {
-          window.location.reload();
-        });
-        this.openSnackBar("ERROR: Al añadir el vídeo a favoritos.");
-      }
+    this.favoriteVideosIds = new Set<number>(this.favoriteVideosList.map(video => video.id));
+    try {
+      this.contentId = idVideo;
+      this.contentType = "video";
+      await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
+      window.location.reload();
+      this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
+
+    } catch (err: any) {
+      this._router.navigate(['/error']).then(() => {
+        window.location.reload();
+      });
+      this.openSnackBar("ERROR: Al añadir el vídeo a favoritos.");
+    }
+  }
+
+  async editFavoriteStory(idStory: number) {
+    this.favoriteStoriesIds = new Set<number>(this.favoriteStoriesList.map(story => story.id));
+    try {
+      this.contentId = idStory;
+      this.contentType = "story";
+      await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
+      window.location.reload();
+      this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
+
+    } catch (err: any) {
+      this._router.navigate(['/error']).then(() => {
+        window.location.reload();
+      });
+      this.openSnackBar("ERROR: Al añadir el cuento a favoritos.");
+    }
+  }
+
+  async editFavoriteRiddle(idRiddle: number) {
+    this.favoriteRiddlesIds = new Set<number>(this.favoriteRiddlesList.map(riddle => riddle.id));
+    try {
+      this.contentId = idRiddle;
+      this.contentType = "riddle";
+      await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
+      window.location.reload();
+      this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
+
+    } catch (err: any) {
+      this._router.navigate(['/error']).then(() => {
+        window.location.reload();
+      });
+      this.openSnackBar("ERROR: Al añadir el cuento a favoritos.");
+    }
+  }
+
+  async editFavoriteEvent(idEvent: number) {
+    this.favoriteRiddlesIds = new Set<number>(this.favoriteRiddlesList.map(event => event.id));
+    try {
+      this.contentId = idEvent;
+      this.contentType = "event";
+      await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
+      window.location.reload();
+      this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
+
+    } catch (err: any) {
+      this._router.navigate(['/error']).then(() => {
+        window.location.reload();
+      });
+      this.openSnackBar("ERROR: Al añadir el cuento a favoritos.");
+    }
   }
 
   async openLogin() {
     this._router.navigate(['/login']);
-
   }
 
   goToVideosPage() {
     this._router.navigate(['/videos']);
+  }
+
+  goToRiddlesPage() {
+    this._router.navigate(['/riddles']);
+  }
+
+  goToStoriesPage() {
+    this._router.navigate(['/story']);
+  }
+
+  goToEventsPage() {
+    this._router.navigate(['/events']);
   }
 
   extractVideoId(url: string): string {
@@ -111,5 +205,46 @@ export class FavoritesComponent implements OnInit {
     const videoId = this.extractVideoId(url);
 
     return this._sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}`);
+  }
+
+  prevVideo() {
+    this.currentIndex = (this.currentIndex - 1 + this.favoriteVideosList.length) % this.favoriteVideosList.length;
+  }
+
+  nextVideo() {
+    this.currentIndex = (this.currentIndex + 1) % this.favoriteVideosList.length;
+  }
+
+  toggleExpandedStory(storyId: number): void {
+    this.expandedStories[storyId] = !this.expandedStories[storyId];
+  }
+
+  toggleExpandedRiddles(riddleId: number): void {
+    this.expandedRiddles[riddleId] = !this.expandedRiddles[riddleId];
+  }
+
+  toggleExpandidedEvent(event: Event) {
+    event.expand = !event.expand;
+  }
+
+  formatDescription(description: string, wordsToShow: number, expand: boolean): string {
+    const words = description.split(' ');
+    let result = '';
+    let currentWordsCount = 0;
+
+    for (let i = 0; i < words.length; i++) {
+      result += words[i] + ' ';
+      currentWordsCount++;
+      if (currentWordsCount === wordsToShow && !expand) {
+        result += '<br><br>';
+        break;
+      }
+
+      if (words[i].endsWith('.') && expand) {
+        result += '<br><br>';
+        currentWordsCount = 0;
+      }
+    }
+    return result;
   }
 }

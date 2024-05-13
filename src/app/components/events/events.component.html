@@ -1,7 +1,7 @@
 <div class="container-events">
   <div *ngIf="eventsList.length > 0">
     <div class="row">
-      <div *ngFor="let event of eventsList" class="col-md-6">
+      <div class="col-md-6" *ngFor="let event of eventsList">
         <div class="card border card-background">
           <div class="card-header">
             <h5 class="card-title">{{ event.title }}</h5>
@@ -11,15 +11,18 @@
 
           <div class="card-body">
             <div [innerHTML]="formatDescription(event.description, 30, event.expand)"></div>
-            <button (click)="toggleExpandido(event)" class="btn btn-primary boton-leer">
+            <button (click)="toggleExpandido(event)" class="btn btn-primary botton-read">
               <strong>{{ event.expand ? 'Leer menos' : 'Leer más' }}</strong>
             </button>
             <div *ngIf="event.expand" class="info-container">
               <p><strong>Información:</strong> {{ event.info }}</p>
             </div>
           </div>
-          <div class="card-footer text-end">
-            <p class="web-link"><a href="{{ event.url }}" target="_blank">Ir a la WEB</a></p>
+          <div class="card-footer">
+            <p class="web-link text-start"><a href="{{ event.url }}" target="_blank">Ir a la WEB</a></p>
+            <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavoriteEvent(event.id)">
+              <i class=" {{ favoriteEventsIds.has(event.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
+            </button>
           </div>
         </div>
       </div>

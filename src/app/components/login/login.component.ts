@@ -61,6 +61,7 @@ export class LoginComponent {
         this.openSnackBar('Inicio de sesión correcto.');
         this._router.navigate(['/home']).then(() => {
           this.isLoggedIn = true;
+          window.location.reload();
         });
       } else {
         this.openSnackBar('Email o contraseña incorrectos.');

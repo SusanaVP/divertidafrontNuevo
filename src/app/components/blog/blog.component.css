@@ -2,7 +2,7 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     margin: auto;
 }
 
@@ -10,11 +10,14 @@
     color: rgb(222, 242, 5)
 }
 
+.spinner-container {
+    margin-top: 20px;
+}
+
 .spinner {
-    margin: auto;
-    width: 80px;
-    height: 80px;
-    color: rgb(222, 242, 5)
+    width: 40px;
+    height: 40px;
+    color: rgb(238, 102, 39);
 }
 
 p,
@@ -57,6 +60,6 @@ h2 {
 }
 
 .card {
-    background-color: rgb(233, 210, 165);
+    background-color: rgb(232, 231, 229);
     box-shadow: 4px 2px 20px rgb(168, 101, 70);
 }

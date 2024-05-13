@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { Video } from '../components/interfaces/videos';
 import { Favorites } from '../components/interfaces/favorites';
+import { Stories } from '../components/interfaces/stories';
+import { Riddles } from '../components/interfaces/riddles';
+import { Event } from '../components/interfaces/events';
 @Injectable({
   providedIn: 'root'
 })
@@ -37,12 +40,57 @@ export class FavoritesService {
       const result = await this._http.get<Video[]>(`${this.apiUrl}/favoritesVideos/${idUser}`).toPromise();
 
       if (result?.length === 0 || result === undefined || result === null) {
-        console.error('La respuesta del servidor es indefinida.');
+        console.log('La respuesta del servidor es indefinida.');
         return [];
       }
       return result;
     } catch (error) {
       console.error('Error al obtener los videos favoritos:', error);
+      return [];
+    }
+  }
+
+  async getFavoritesStories(idUser: number): Promise<Stories[]> {
+    try {
+      const result = await this._http.get<Stories[]>(`${this.apiUrl}/favoritesStories/${idUser}`).toPromise();
+
+      if (result?.length === 0 || result === undefined || result === null) {
+        console.log('La respuesta del servidor es indefinida.');
+        return [];
+      }
+      return result;
+    } catch (error) {
+      console.error('Error al obtener los cuentos favoritos:', error);
+      return [];
+    }
+  }
+
+  async getFavoritesRiddles(idUser: number): Promise<Riddles[]> {
+    try {
+      const result = await this._http.get<Riddles[]>(`${this.apiUrl}/favoritesRiddles/${idUser}`).toPromise();
+
+      if (result?.length === 0 || result === undefined || result === null) {
+        console.log('La respuesta del servidor es indefinida.');
+        return [];
+      }
+      return result;
+    } catch (error) {
+      console.error('Error al obtener las adivinanzas favoritos:', error);
+      return [];
+    }
+  }
+
+  async getFavoritesEvents(idUser: number): Promise<Event[]> {
+    try {
+      const result = await this._http.get<Event[]>(`${this.apiUrl}/favoritesEvents/${idUser}`).toPromise();
+
+      if (result?.length === 0 || result === undefined || result === null) {
+        console.log('La respuesta del servidor es indefinida.');
+        return [];
+      }
+      return result;
+    } catch (error) {
+      console.error('Error al obtener los eventos favoritos:', error);
       return [];
     }
   }

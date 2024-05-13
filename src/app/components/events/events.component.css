@@ -7,12 +7,18 @@
   margin: auto;
 }
 
-.boton-leer {
+.botton-read {
     font-size: 18px;
     font-weight: bold;
-    background-color: #f2e5cc;
+    color: rgb(244, 185, 113);
+    background-color: #e07407;
     border: none;
     box-shadow: none;
+    margin-bottom: 10px;
+  }
+
+  .botton-read:hover {
+    transform: scale(1.1);
   }
   
   .info-container {
@@ -28,11 +34,15 @@
     color: green;
     text-decoration: none;
   }
-  
-  .card-border {
-    border: 2px solid orange;
+
+  .web-link a:hover {
+    color: #e07407;
   }
   
   .card-background {
-    background-color: #f2e5cc;
+    background-color: #e8c583;
+  }
+
+  .img {
+    width: 20%;
   }

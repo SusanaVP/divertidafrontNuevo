@@ -48,8 +48,17 @@ export class VideosComponent implements OnInit {
 
   async ngOnInit() {
     this.showRecommendedVideos = true;
-
     this.idUser = await this._storageService.getUserId('loggedInUser');
+    this.loadFavoriteVideos();
+  }
+
+  async loadFavoriteVideos() {
+    try {
+      const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser!);
+      this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
+    } catch (error) {
+      console.error('Error al obtener los videos favoritos:', error);
+    }
   }
 
   filterVideos() {
@@ -93,10 +102,14 @@ export class VideosComponent implements OnInit {
         this.favoriteVideosIds = new Set<number>(this.favoritesVideos.map(video => video.id));
 
         if (this.favoriteVideosIds.has(idVideo)) {
-          this.openSnackBar('Ups! El vídeo ya estaba en tu lista de favoritos.');
+          this.contentId = idVideo;
+          await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
+          window.location.reload();
+          this.openSnackBar('Eliminado de tu lista de favoritos.');
         } else {
           this.contentId = idVideo;
           await this._favoritesService.addFavorite(this.contentId, this.idUser!, this.contentType);
+          window.location.reload();
           this.openSnackBar('Añadido correctamente a tu lista de favoritos.');
         }
       } else {

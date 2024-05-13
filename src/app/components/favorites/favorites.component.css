@@ -1,0 +1,63 @@
+.btn-per {
+    margin-bottom: 10px;
+    color: rgb(214, 134, 43);
+    background-color: brown;
+}
+
+.btn-per:hover {
+    transform: scale(1.1);
+}
+
+.card-video {
+    background-color: rgb(192, 241, 241);
+}
+
+.card-title {
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+}
+
+.card-subtitle {
+    font-size: medium;
+}
+
+.botton-read {
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(244, 185, 113);
+    background-color: #e07407;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 10px;
+  }
+
+  .botton-read:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-container {
+    margin-bottom: 10px;
+  }
+  
+  .web-link {
+    margin: 10px;
+    text-align: right;
+  }
+  
+  .web-link a {
+    color: green;
+    text-decoration: none;
+  }
+
+  .web-link a:hover {
+    color: #e07407;
+  }
+
+  .card-background-event {
+    background-color: #e8c583;
+  }
+
+  .img {
+    width: 20%;
+  }

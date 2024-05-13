@@ -1,88 +1,149 @@
-<!-- <div class="container-favorites">
-    <ng-container class="videosFavorites" *ngIf="isLoggedIn">
-        <div class="row">
-            <div class="col-md-4" *ngFor="let video of favoriteVideosList">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title">{{ video.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Categoría: {{ video.categoriesVideo.nameCategory }}
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe class="embed-responsive-item" [src]="getEmbeddedUrl(video.url)" frameborder="0"
-                                allowfullscreen></iframe>
-                        </div>
-                        <p class="card-text">{{ video.description }}</p>
-                        <button class="btn btn-outline-danger" (click)="editFavorite(video.id)">
-                            <i class="bi bi-heart-fill" *ngIf="favoriteVideosIds.has(video.id)"></i>
-                            <i class="bi bi-heart" *ngIf="!favoriteVideosIds.has(video.id)"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div *ngIf="favoriteVideosList.length === 0 && isLoggedIn" class="row">
-            <div class="col">
-                <div class="alert alert-warning" role="alert">
-                    No tienes videos favoritos, ¡añade alguno!
-                </div>
-                <button class="btn btn-dark" (click)="goToVideosPage()">Ir a vídeos</button>
-            </div>
-        </div>
-        <div *ngIf="!isLoggedIn" class="row">
-            <div class="col">
-                <p class="mt-3">No estás logueado. Por favor inicia sesión para ver tus vídeos favoritos.</p>
-                <button class="btn btn-primary" (click)="openLogin()">Iniciar Sesión</button>
-            </div>
-        </div>
-    </ng-container>
-</div> -->
 
 <div class="container-favorites">
-    <ng-container *ngIf="isLoggedIn">
-        <div *ngIf="favoriteVideosList.length > 0">
-            <div id="videoCarousel" class="carousel slide"data-bs-ride="carousel" data-bs-interval="5000">
-                <div class="carousel-inner">
-                    <div class="carousel-item" *ngFor="let video of favoriteVideosList; let i = index"
-                        [class.active]="i === 0">
-                        <div class="card h-100 mb-4">
-                            <div class="card-header">
-                              <h5 class="card-title">{{ video.title }}</h5>
-                              <h6 class="card-subtitle mb-2 text-muted">Categoría:{{ video.categoriesVideo.nameCategory }}</h6>
-                            </div>
-                            <div class="video-container">
-                              <iframe width="100%" height="315" [src]="getEmbeddedUrl(video.url)" frameborder="0" allowfullscreen></iframe>
-                            </div>
-                            <div class="card-body">
-                              <p class="card-text">{{ video.description }}</p>
-                              <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavoriteVideo(video.id)">
-                                <i class=" {{ favoriteVideosIds.has(video.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
-                              </button>
-                            </div>
-                          </div>
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#videoCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#videoCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>                
+  <ng-container *ngIf="isLoggedIn">
+    <div class="Videos">
+      <h1>Vídeos favoritos!!!</h1>
+      <div class="row">
+        <div class="col-12 col-md-{{ favoriteVideosList.length === 1 ? '12' : '6' }} mb-3"
+          *ngFor="let video of favoriteVideosList">
+          <div class="card h-100 mb-4 card-video">
+            <div class="card-header">
+              <h5 class="card-title">{{ video.title }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Categoría:{{ video.categoriesVideo.nameCategory }}</h6>
             </div>
-        </div>
-        <div *ngIf="favoriteVideosList.length === 0">
-            <div class="alert alert-warning" role="alert">
-                No tienes videos favoritos, ¡añade alguno!
+            <div class="video-container">
+              <iframe width="100%" height="315" [src]="getEmbeddedUrl(video.url)" frameborder="0"
+                allowfullscreen></iframe>
             </div>
-            <button class="btn btn-dark" (click)="goToVideosPage()">Ir a vídeos</button>
+            <div class="card-body">
+              <p class="card-text">{{ video.description }}</p>
+              <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavoriteVideo(video.id)">
+                <i class=" {{ favoriteVideosIds.has(video.id) ? 'fas fa-heart' : 'far fa-heart' }}"></i>
+              </button>
+            </div>
+          </div>
         </div>
-    </ng-container>
-    <div *ngIf="!isLoggedIn">
-        <p class="mt-3">No estás logueado. Por favor inicia sesión para ver tus vídeos favoritos.</p>
-        <button class="btn btn-primary" (click)="openLogin()">Iniciar Sesión</button>
+      </div>
+      <div *ngIf="favoriteVideosList.length === 0">
+        <div class="alert alert-warning" role="alert">
+          No tienes videos favoritos. ¡Añade alguno!
+        </div>
+        <button class="btn btn-per" (click)="goToVideosPage()">Ir a vídeos</button>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-12">
+        <h1>Cuentos favoritos!!!</h1>
+        <div *ngIf="favoriteStoriesList.length > 0">
+          <div *ngFor="let story of favoriteStoriesList">
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">{{ story.title }}</h5>
+                <!-- Mostrar solo las primeras 30 palabras si la historia no está expandida -->
+                <p class="card-text">{{ (expandedStories[story.id] ? story.description :
+                  story.description.split(' ').slice(0, 30).join(' ')) }}</p>
+                <!-- Botón para expandir/cerrar la historia -->
+                <button class="btn btn-link" (click)="toggleExpandedStory(story.id)">
+                  {{ expandedStories[story.id] ? 'Leer menos' : 'Leer más' }}
+                </button>
+                <button class="btn btn-danger position-absolute bottom-0 end-0 m-3"
+                  (click)="editFavoriteStory(story.id)">
+                  <i class=" {{ favoriteStoriesIds.has(story.id) ? 'fas fa-heart' : 'far fa-heart' }}"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div *ngIf="favoriteStoriesList.length === 0">
+          <div class="alert alert-warning" role="alert">
+            No tienes Cuentos favoritos. ¡Añade alguno!
+          </div>
+          <button class="btn btn-per" (click)="goToStoriesPage()">Ir a Cuentos</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="Adivinanzas">
+          <h1>Adivinanzas favoritas!!!</h1>
+          <div *ngIf="favoriteRiddlesList.length > 0">
+            <div *ngFor="let riddle of favoriteRiddlesList">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <h5 class="card-title">{{ riddle.title }}</h5>
+                  <!-- Mostrar solo las primeras 30 palabras si la historia no está expandida -->
+                  <p class="card-text">{{ (expandedRiddles[riddle.id] ? riddle.description :
+                    riddle.description.split(' ').slice(0, 30).join(' ')) }}</p>
+                  <!-- Botón para expandir/cerrar la historia -->
+                  <button class="btn btn-link" (click)="toggleExpandedRiddles(riddle.id)">
+                    {{ expandedRiddles[riddle.id] ? 'Leer menos' : 'Leer más' }}
+                  </button>
+                  <button class="btn btn-danger position-absolute bottom-0 end-0 m-3"
+                    (click)="editFavoriteRiddle(riddle.id)">
+                    <i class=" {{ favoriteRiddlesIds.has(riddle.id) ? 'fas fa-heart' : 'far fa-heart' }}"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="favoriteRiddlesList.length === 0">
+          <div class="alert alert-warning" role="alert">
+            No tienes Adivinanzas favoritas. ¡Añade alguna!
+          </div>
+          <button class="btn btn-per" (click)="goToRiddlesPage()">Ir a Adivinanzas</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="Eventos">
+        <h1>Eventos favoritos!!!</h1>
+        <div *ngIf="favoriteEventsList.length > 0">
+          <div class="col-md-6" *ngFor="let event of favoriteEventsList">
+            <div class="card border card-background-event">
+              <div class="card-header">
+                <h5 class="card-title">{{ event.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted text-center">Fecha: {{ event.date }}</h6>
+                <img [src]="event.image" class="card-img-top" alt="Event Image">
+              </div>
+              <div class="card-body text-center">
+                <div [innerHTML]="formatDescription(event.description, 30, event.expand)"></div>
+                <button (click)="toggleExpandidedEvent(event)" class="btn btn-primary botton-read">
+                  <strong>{{ event.expand ? 'Leer menos' : 'Leer más' }}</strong>
+                </button>
+                <div *ngIf="event.expand" class="info-container">
+                  <p><strong>Información:</strong> {{ event.info }}</p>
+                </div>
+              </div>
+              <div class="card-footer">
+                <p class="web-link text-start"><a href="{{ event.url }}" target="_blank">Ir a la WEB</a></p>
+                <button class="btn btn-danger position-absolute bottom-0 end-0 m-3"
+                  (click)="editFavoriteEvent(event.id)">
+                  <i class=" {{ favoriteEventsIds.has(event.id) ? 'fas fa-heart' : 'far fa-heart' }}"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="favoriteEventsList.length === 0">
+        <div class="alert alert-warning" role="alert">
+          No tienes Eventos favoritos. ¡Añade alguno!
+        </div>
+        <button class="btn btn-per" (click)="goToEventsPage()">Ir a Eventos</button>
+      </div>
+    </div>
+
+  </ng-container>
+  <div *ngIf="!isLoggedIn">
+    <p class="mt-3">No estás logueado. Por favor inicia sesión para ver tus favoritos.</p>
+    <button class="btn btn-per" (click)="openLogin()">Iniciar Sesión</button>
+  </div>
 </div>

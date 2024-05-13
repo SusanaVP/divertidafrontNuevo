@@ -21,36 +21,52 @@ export class RecommendedVideosComponent implements OnInit {
   slideIndex = 0;
   slideWidth = 0;
   favoriteVideosIds: Set<number> = new Set<number>();
-  contentType:string = "video";
+  contentType: string = "video";
   contentId: number = 0;
+  idUser: number | null = null;
 
 
-  constructor(private _videosService: VideosService, 
-    private _storageService: StorageService, 
+  constructor(private _videosService: VideosService,
+    private _storageService: StorageService,
     private _sanitizer: DomSanitizer,
-     private _router: Router,
+    private _router: Router,
     private _favoritesService: FavoritesService,
     private _snackBar: MatSnackBar) { }
 
-    openSnackBar(message: string) {
-      this._snackBar.open(message, 'Cerrar', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-      });
-    }
-  
-
-  ngOnInit(): void {
-    this._videosService.getRecommendedVideos().subscribe((videos: Video[]) => {
-      this.recommendedVideos = videos;
-    
-    }, (error) => {
-      this.openSnackBar('Error al obtener los videos recomendados:');
-      this.recommendedVideos = [];
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
     });
   }
-  
+
+
+  async ngOnInit() {
+    this.loadRecommendedVideos();
+    this.idUser = await this._storageService.getUserId('loggedInUser');
+    this.loadFavoriteVideos();
+  }
+
+  async loadRecommendedVideos() {
+    try {
+      const videos = await this._videosService.getRecommendedVideos().toPromise();
+      this.recommendedVideos = videos || [];
+    } catch (error) {
+      this.openSnackBar('Error al obtener los videos recomendados:');
+      this.recommendedVideos = [];
+    }
+  }
+
+  async loadFavoriteVideos() {
+    try {
+      const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser!);
+      this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
+    } catch (error) {
+      console.error('Error al obtener los videos favoritos:', error);
+    }
+  }
+
   getCategoriaVideo(categoryId: number): string {
     const category = categoriesVideos.find(a => a.id === categoryId);
     return category ? category.nameCategory : '';
@@ -58,18 +74,21 @@ export class RecommendedVideosComponent implements OnInit {
 
   async editFavorite(idVideo: number) {
     try {
-      const idUser = await this._storageService.getUserId('loggedInUser');
 
-      if (idUser !== null && idUser !== undefined) {
-        const favoritesVideos = await this._favoritesService.getFavoritesVideos(idUser);
+      if (this.idUser !== null && this.idUser !== undefined) {
+        const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser);
         this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
 
         if (this.favoriteVideosIds.has(idVideo)) {
-          this.openSnackBar('Ups! El vídeo ya estaba en tu lista de favoritos.');
+          this.contentId = idVideo;
+          await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
+          window.location.reload();
+          this.openSnackBar('Eliminado de tu lista de favoritos.');
         } else {
           this.contentId = idVideo;
-          await this._favoritesService.addFavorite(this.contentId, idUser, this.contentType);
+          await this._favoritesService.addFavorite(this.contentId, this.idUser, this.contentType);
           this.openSnackBar('Añadido correctamente a tu lista de favoritos.');
+          this.favoriteVideosIds.add(idVideo);
         }
       } else {
         this.openSnackBar('Tienes que loguearte o registrarte.');
@@ -81,6 +100,7 @@ export class RecommendedVideosComponent implements OnInit {
       });
     }
   }
+  
   extractVideoId(url: string): string {
     const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regExp);
