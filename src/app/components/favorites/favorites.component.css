@@ -61,3 +61,18 @@
   .img {
     width: 20%;
   }
+
+  .btn-link{
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(16, 16, 16);
+    background-color: #e07407;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 10px;
+    text-decoration: none;
+  }
+
+  .btn-link:hover {
+    transform: scale(1.1);
+  }

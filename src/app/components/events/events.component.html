@@ -1,20 +1,19 @@
 <div class="container-events">
   <div *ngIf="eventsList.length > 0">
     <div class="row">
-      <div class="col-md-6" *ngFor="let event of eventsList">
+      <div class="col-md-6" *ngFor="let event of sortedEventsList">
         <div class="card border card-background">
           <div class="card-header">
             <h5 class="card-title">{{ event.title }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Fecha: {{ event.date }}</h6>
             <img [src]="event.image" class="card-img-top" alt="Event Image">
           </div>
-
-          <div class="card-body">
-            <div [innerHTML]="formatDescription(event.description, 30, event.expand)"></div>
-            <button (click)="toggleExpandido(event)" class="btn btn-primary botton-read">
-              <strong>{{ event.expand ? 'Leer menos' : 'Leer más' }}</strong>
+          <div class="card-body text-center">
+            <div [innerHTML]="formatDescription(event.description, 30, expandedEvents[event.id] )"></div>
+            <button (click)="toggleExpandidedEvent(event.id)" class="btn btn-primary botton-read">
+              <strong>{{ expandedEvents[event.id]  ? 'Leer menos' : 'Leer más' }}</strong>
             </button>
-            <div *ngIf="event.expand" class="info-container">
+            <div *ngIf="expandedEvents[event.id]" class="info-container">
               <p><strong>Información:</strong> {{ event.info }}</p>
             </div>
           </div>
@@ -29,13 +28,11 @@
     </div>
   </div>
 
-  <div class="row">
-    <div *ngIf="eventsList.length === 0">
-      <div class="col-md-12 ">
-        <div class="alert alert-info" role="alert">
-          <p> No hay Eventos en este momento, disculpen las molestias.</p>
-          <img src="assets/imagenes/eventos.png" class="img" alt="Jirafa con carte de 'No hay eventos'">
-        </div>
+  <div *ngIf="eventsList.length === 0">
+    <div class="col-md-12 ">
+      <div class="alert alert-info" role="alert">
+        <p> No hay Eventos en este momento, disculpen las molestias.</p>
+        <img src="assets/imagenes/eventos.png" class="img" alt="Jirafa con carte de 'No hay eventos'">
       </div>
     </div>
   </div>

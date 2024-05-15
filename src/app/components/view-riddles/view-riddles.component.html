@@ -7,12 +7,9 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <h5 class="card-title">{{ riddle.title }}</h5>
-                            <!-- Mostrar solo las primeras 30 palabras si la historia no está expandida -->
-                            <p class="card-text">{{ (expandedRiddles[riddle.id] ? riddle.description :
-                                riddle.description.split(' ').slice(0, 30).join(' ')) }}</p>
-                            <!-- Botón para expandir/cerrar la historia -->
-                            <button class="btn btn-link" (click)="toggleExpanded(riddle.id)">
-                                {{ expandedRiddles[riddle.id] ? 'Leer menos' : 'Leer más' }}
+                            <div [innerHTML]="formatDescription(riddle.description, 50, expandedRiddles[riddle.id])"></div>
+                            <button class="btn btn-link" (click)="toggleExpandedRiddles(riddle.id)">
+                                <strong>{{  expandedRiddles[riddle.id] ? 'Leer menos' : 'Leer más' }}</strong>
                             </button>
                             <button class="btn btn-danger position-absolute bottom-0 end-0 m-3"
                                 (click)="editFavoriteRiddle(riddle.id)">

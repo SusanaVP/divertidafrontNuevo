@@ -8,5 +8,4 @@ export interface Event {
     latitude: number;
     longitude: number;
     url: string;
-    expand: boolean;
   }

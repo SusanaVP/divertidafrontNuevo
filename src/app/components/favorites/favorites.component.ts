@@ -39,6 +39,7 @@ export class FavoritesComponent implements OnInit {
 
   expandedStories: { [id: number]: boolean } = {};
   expandedRiddles: { [id: number]: boolean } = {};
+  expandedEvents: { [id: number]: boolean } = {};
 
   constructor(private _favoritesService: FavoritesService,
     private _storageService: StorageService,
@@ -92,7 +93,6 @@ export class FavoritesComponent implements OnInit {
         this.favoriteRiddlesList = favoritesRiddles;
       }
 
-      
       const favoritesEvents = await this._favoritesService.getFavoritesEvents(this.idUser!);
       if (favoritesEvents.length == 0) {
         console.log('No tienes eventos favoritos, añade alguno!!!');
@@ -112,7 +112,7 @@ export class FavoritesComponent implements OnInit {
       this.contentId = idVideo;
       this.contentType = "video";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-      window.location.reload();
+      this.favoriteVideosIds.delete(idVideo);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {
@@ -129,7 +129,7 @@ export class FavoritesComponent implements OnInit {
       this.contentId = idStory;
       this.contentType = "story";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-      window.location.reload();
+      this.favoriteStoriesIds.delete(idStory);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {
@@ -146,7 +146,7 @@ export class FavoritesComponent implements OnInit {
       this.contentId = idRiddle;
       this.contentType = "riddle";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-      window.location.reload();
+      this.favoriteRiddlesIds.delete(idRiddle);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {
@@ -163,7 +163,7 @@ export class FavoritesComponent implements OnInit {
       this.contentId = idEvent;
       this.contentType = "event";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-      window.location.reload();
+      this.favoriteEventsIds.delete(idEvent);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {
@@ -223,8 +223,8 @@ export class FavoritesComponent implements OnInit {
     this.expandedRiddles[riddleId] = !this.expandedRiddles[riddleId];
   }
 
-  toggleExpandidedEvent(event: Event) {
-    event.expand = !event.expand;
+  toggleExpandidedEvent(eventId: number) {
+    this.expandedEvents[eventId] = !this.expandedEvents[eventId];
   }
 
   formatDescription(description: string, wordsToShow: number, expand: boolean): string {

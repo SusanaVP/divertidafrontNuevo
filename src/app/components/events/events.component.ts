@@ -18,16 +18,18 @@ export class EventsComponent {
 
   favoriteEventsIds: Set<number> = new Set<number>();
   favoriteEventsList: Event[] = [];
+  sortedEventsList: Event[] = [];
   contentType: string = "event";
   contentId: number = 0;
   favoritesEvents: Event[] = [];
   idUser: number | null = null;
+  expandedEvents: { [id: number]: boolean } = {};
 
   constructor(private _eventService: EventService,
-     private _router: Router,
-     private _snackBar: MatSnackBar,
-     private _storageService: StorageService,
-     private _favoritesService: FavoritesService) { }
+    private _router: Router,
+    private _snackBar: MatSnackBar,
+    private _storageService: StorageService,
+    private _favoritesService: FavoritesService) { }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {
@@ -40,19 +42,18 @@ export class EventsComponent {
   async ngOnInit() {
     this.idUser = await this._storageService.getUserId('loggedInUser');
     this.geolocationVerify();
+    this.loadEvents();
+    this.loadFavoriteEvents();
+  }
+
+  async loadEvents() {
+    // Carga de eventos desde el servicio
     this._eventService.getEvents().subscribe(entries => {
       this.eventsList = entries.map(event => ({ ...event, expand: false }));
-      console.log(entries);
+      this.sortEventsByDistance(); // Ordenar los eventos por distancia después de cargarlos
     },
-      error => {
-        this._router.navigate(['/error']).then(() => {
-          window.location.reload();
-          this.eventsList = [];
-        }
-        );
-      }
+    // Manejo de errores
     );
-    this.loadFavoriteEvents();
   }
 
   async loadFavoriteEvents() {
@@ -63,6 +64,7 @@ export class EventsComponent {
       console.error('Error al obtener los cuentos favoritos:', error);
     }
   }
+
   geolocationVerify() {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -70,15 +72,16 @@ export class EventsComponent {
         this.longitudeUser = position.coords.longitude;
       }, error => {
         this.openSnackBar('Error al obtener la ubicación:');
-       
+
       });
     } else {
       this.openSnackBar('La geolocalización no es compatible con este navegador.');
     }
   }
 
-  toggleExpandido(event: Event) {
-    event.expand = !event.expand;
+ 
+  toggleExpandidedEvent(eventId: number) {
+    this.expandedEvents[eventId] = !this.expandedEvents[eventId];
   }
 
   formatDescription(description: string, wordsToShow: number, expand: boolean): string {
@@ -111,12 +114,12 @@ export class EventsComponent {
         if (this.favoriteEventsIds.has(idEvent)) {
           this.contentId = idEvent;
           await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-          window.location.reload();
+          this.favoriteEventsIds.delete(idEvent);
           this.openSnackBar('Eliminado de tu lista de favoritos.');
         } else {
           this.contentId = idEvent;
           await this._favoritesService.addFavorite(this.contentId, this.idUser!, this.contentType);
-          window.location.reload();
+          this.favoriteEventsIds.add(idEvent);
           this.openSnackBar('Añadido correctamente a tu lista de favoritos.');
         }
       } else {
@@ -130,4 +133,34 @@ export class EventsComponent {
       });
     }
   }
+
+  sortEventsByDistance() {
+    // Ordenar los eventos por distancia
+    this.sortedEventsList = [...this.eventsList].sort((a, b) => {
+      return this.calculateDistance(a) - this.calculateDistance(b);
+    });
+  }
+
+  calculateDistance(event: Event): number {
+    const R = 6371; // Radio de la Tierra en kilómetros
+    const lat1 = this.latitudeUser;
+    const lon1 = this.longitudeUser;
+    const lat2 = event.latitude;
+    const lon2 = event.longitude;
+  
+    const dLat = this.deg2rad(lat2 - lat1);
+    const dLon = this.deg2rad(lon2 - lon1);
+  
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distancia en kilómetros
+    return distance;
+  }
+  
+  deg2rad(deg: number): number {
+    return deg * (Math.PI / 180);
+  }
+  
 }

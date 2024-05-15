@@ -104,12 +104,12 @@ export class VideosComponent implements OnInit {
         if (this.favoriteVideosIds.has(idVideo)) {
           this.contentId = idVideo;
           await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-          window.location.reload();
+          this.favoriteVideosIds.delete(idVideo);
           this.openSnackBar('Eliminado de tu lista de favoritos.');
         } else {
           this.contentId = idVideo;
           await this._favoritesService.addFavorite(this.contentId, this.idUser!, this.contentType);
-          window.location.reload();
+          this.favoriteVideosIds.add(idVideo);
           this.openSnackBar('Añadido correctamente a tu lista de favoritos.');
         }
       } else {

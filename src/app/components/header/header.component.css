@@ -3,23 +3,25 @@
     margin: 0;
     padding: 0;
 }
+
 .fa-youtube {
     color: red;
 }
 
 .fa-instagram {
-    color:blueviolet;
+    color: blueviolet;
 }
 
 .fa-facebook {
     color: blue;
 }
+
 .login {
     color: rgb(239, 177, 7);
 }
 
 .social-icons-widget a:hover {
-    transform: scale(1.5);
+    transform: scale(1.2);
 }
 
 .header-image {
@@ -28,7 +30,7 @@
 }
 
 .login {
-   font-size: 35px;
+    font-size: 35px;
     transition: all 0.3s ease;
 }
 
@@ -44,3 +46,33 @@
     color: red;
 }
 
+.social-icons-widget {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.social-icons-widget a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+}
+
+.social-icons-widget a.login {
+    flex-direction: column;
+    /* Alinea el icono y el texto verticalmente */
+    align-items: center;
+    text-align: center;
+}
+
+.social-icons-widget a.login i {
+    margin-bottom: 5px;
+    /* Espacio entre el icono y el texto */
+}
+
+.social-icons-widget a.login .ng-binding {
+    display: block;
+    margin-top: 5px;
+}

@@ -7,11 +7,15 @@
 }
 
 .iconOK {
-    color: rgb(222, 242, 5)
+    color: rgb(222, 242, 5);
 }
 
 .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
     margin-top: 20px;
+    width: 100%;
 }
 
 .spinner {
@@ -20,8 +24,7 @@
     color: rgb(238, 102, 39);
 }
 
-p,
-h2 {
+p, h2 {
     text-align: center;
 }
 

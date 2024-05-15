@@ -63,7 +63,7 @@ export class ViewRiddlesComponent {
         if (this.favoriteRiddlesIds.has(idRiddle)) {
           this.contentId = idRiddle;
           await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-          window.location.reload();
+          this.favoriteRiddlesIds.delete(idRiddle);
           this.openSnackBar('Ups! La adivinanza ya estaba en tu lista de favoritos.');
         } else {
           this.contentId = idRiddle;
@@ -82,35 +82,28 @@ export class ViewRiddlesComponent {
     }
   }
 
-  divideTextIntoParagraphs(text: string) {
-    // Dividir el texto en párrafos utilizando el delimitador ". "
-    const paragraphs = text.split('. ');
-
-    // Recorrer cada párrafo para dividir las líneas de diálogo y almacenarlas en un array
-    paragraphs.forEach(paragraph => {
-      // Dividir el párrafo en líneas de diálogo utilizando el delimitador "-"
-      const lines = paragraph.split('-');
-
-      // Agregar cada línea de diálogo al array de párrafos divididos
-      lines.forEach(line => {
-        // Eliminar los espacios en blanco al principio y al final de la línea
-        const trimmedLine = line.trim();
-        // Si la línea no está vacía, agregarla al array de párrafos divididos
-        if (trimmedLine !== '') {
-          this.dividedParagraphs.push(trimmedLine);
-        }
-      });
-    });
-  }
-
-  splitText(text: string): string[] {
-    const lines = text.split('\n');
-    const cleanedLines = lines.map(line => line.trim());
-
-    return cleanedLines;
-  }
-
-  toggleExpanded(riddleId: number): void {
+  toggleExpandedRiddles(riddleId: number): void {
     this.expandedRiddles[riddleId] = !this.expandedRiddles[riddleId];
+  }
+
+  formatDescription(description: string, wordsToShow: number, expand: boolean): string {
+    const words = description.split(' ');
+    let result = '';
+    let currentWordsCount = 0;
+
+    for (let i = 0; i < words.length; i++) {
+      result += words[i] + ' ';
+      currentWordsCount++;
+      if (currentWordsCount === wordsToShow && !expand) {
+        result += '<br><br>';
+        break;
+      }
+
+      if (words[i].endsWith('.') && expand) {
+        result += '<br><br>';
+        currentWordsCount = 0;
+      }
+    }
+    return result;
   }
 }

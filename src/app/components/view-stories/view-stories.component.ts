@@ -56,9 +56,12 @@ export class ViewStoriesComponent implements OnInit {
       if (this.idUser !== null && this.idUser !== undefined) {
         if (this.favoriteStoriesIds.has(idStory)) {
           this.contentId = idStory;
+
           await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
-          window.location.reload();
+
+          this.favoriteStoriesIds.delete(idStory);
           this.openSnackBar('Eliminado de tu lista de favoritos.');
+
         } else {
           this.contentId = idStory;
           await this._favoritesService.addFavorite(this.contentId, this.idUser, this.contentType);
@@ -76,40 +79,28 @@ export class ViewStoriesComponent implements OnInit {
     }
   }
 
-
-
-  divideTextIntoParagraphs(text: string) {
-    // Dividir el texto en párrafos utilizando el delimitador ". "
-    const paragraphs = text.split('. ');
-
-    // Recorrer cada párrafo para dividir las líneas de diálogo y almacenarlas en un array
-    paragraphs.forEach(paragraph => {
-      // Dividir el párrafo en líneas de diálogo utilizando el delimitador "-"
-      const lines = paragraph.split('-');
-
-      // Agregar cada línea de diálogo al array de párrafos divididos
-      lines.forEach(line => {
-        // Eliminar los espacios en blanco al principio y al final de la línea
-        const trimmedLine = line.trim();
-        // Si la línea no está vacía, agregarla al array de párrafos divididos
-        if (trimmedLine !== '') {
-          this.dividedParagraphs.push(trimmedLine);
-        }
-      });
-    });
+  toggleExpandedStory(storyId: number): void {
+    this.expandedStories[storyId] = !this.expandedStories[storyId];
   }
 
-  splitText(text: string): string[] {
-    // Dividir el texto por guion ('-') para obtener cada línea de diálogo como un elemento en un array
-    const lines = text.split('\n'); // Dividir el texto en líneas
+  formatDescription(description: string, wordsToShow: number, expand: boolean): string {
+    const words = description.split(' ');
+    let result = '';
+    let currentWordsCount = 0;
 
-    // Eliminar los espacios en blanco al principio y al final de cada línea
-    const cleanedLines = lines.map(line => line.trim());
+    for (let i = 0; i < words.length; i++) {
+      result += words[i] + ' ';
+      currentWordsCount++;
+      if (currentWordsCount === wordsToShow && !expand) {
+        result += '<br><br>';
+        break;
+      }
 
-    return cleanedLines;
-  }
-
-  toggleExpanded(storyId: number): void {
-    this.expandedStories[storyId] = !this.expandedStories[storyId]; // Alternar el estado de expansión
+      if (words[i].endsWith('.') && expand) {
+        result += '<br><br>';
+        currentWordsCount = 0;
+      }
+    }
+    return result;
   }
 }
