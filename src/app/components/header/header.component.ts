@@ -28,9 +28,9 @@ export class HeaderComponent implements OnInit {
   }
 
   async ngOnInit() {
-   // this.idUser = this._storageService.getUserId();
+  const token = this._storageService.getToken();
     //this.isAdmin = this._storageService.isAdmin();
-    if (  this.idUser !== 0 &&   this.idUser !== null) {
+    if ( token && token.length > 0) {
       this.isLoggedIn = true;
     }
   }

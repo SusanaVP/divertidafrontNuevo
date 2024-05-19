@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { StorageService } from '../../services/storage.service';
 import { AuthService } from '../../services/auth.service';
-import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
@@ -12,22 +13,14 @@ export class NavComponent implements OnInit {
   isAdmin: boolean = false;
   isLoggedIn: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private _authService: AuthService, private router: Router,   private _storageService: StorageService) { }
 
   ngOnInit() {
-    combineLatest([
-      this.authService.isLoggedIn,
-      this.authService.isAdmin
-    ]).pipe(
-      map(([loggedIn, isAdmin]) => ({ loggedIn, isAdmin }))
-    ).subscribe(({ loggedIn, isAdmin }) => {
-      this.isLoggedIn = loggedIn;
-      this.isAdmin = isAdmin;
-    });
-  }
-
-  logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      this.isLoggedIn = true;
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+    }
   }
 }

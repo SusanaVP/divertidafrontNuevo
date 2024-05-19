@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,10 +11,12 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   idUser: number | null = null;
   isAdmin: boolean = false;
+  isLoggedIn: boolean = false;
 
   constructor(private _storageService: StorageService,
     private _router: Router,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private route: ActivatedRoute) { }
 
 
   openSnackBar(message: string) {
@@ -26,7 +28,9 @@ export class HomeComponent implements OnInit {
   }
   
   async ngOnInit() {
- //   this.idUser = this._storageService.getUserId();
-   // this.isAdmin = this._storageService.isAdmin();
+    this.route.params.subscribe(params => {
+      this.isLoggedIn = params['isLoggedIn'];
+      this.isAdmin = params['isAdmin'];
+    });
   }
 }

@@ -25,6 +25,6 @@ export class StorageService {
   }
 
   public removeUser() {
-    localStorage.removeItem(this.userIdKey);
+    localStorage.removeItem('token');
   }
 }

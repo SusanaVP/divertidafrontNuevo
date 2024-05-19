@@ -60,8 +60,12 @@ export class LoginComponent {
       console.log(token);
       if (token.email !== null && token.email !== undefined) {
         this.isLoggedIn = true;
+        this.isAdmin = token.isAdmin;
         this.openSnackBar('Inicio de sesión correcto.');
-        this._router.navigate(['/home']);
+        this._router.navigate(['/home', { isLoggedIn: this.isLoggedIn, isAdmin: this.isAdmin }]).then(() => {
+          window.location.reload();
+        });
+
       } else {
         this.openSnackBar('Email o contraseña incorrectos.');
       }
