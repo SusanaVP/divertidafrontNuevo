@@ -20,6 +20,7 @@ export class ViewRiddlesComponent {
   contentType: string = "riddle";
   contentId: number = 0;
   idUser: number | null = null;
+  isAdmin: boolean = false;
 
   constructor(private _route: ActivatedRoute,
     private _router: Router, private _favoritesService: FavoritesService, private _storageService: StorageService, private _snackBar: MatSnackBar) {
@@ -36,7 +37,8 @@ export class ViewRiddlesComponent {
 
   async ngOnInit() {
     this.riddles = history.state.riddles;
-    this.idUser = await this._storageService.getUserId('loggedInUser');
+    //this.idUser = this._storageService.getUserId();
+   // this.isAdmin = this._storageService.isAdmin();
     this.loadFavoriteRiddles();
   }
 

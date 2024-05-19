@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { User } from '../interfaces/user';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
-import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as bcrypt from 'bcryptjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -21,7 +20,7 @@ export class SignInComponent {
     email: '',
     password: '',
     date: '',
-    postalCode:'',
+    postalCode: '',
     admin: false
   };
 
@@ -29,16 +28,16 @@ export class SignInComponent {
 
   constructor(private _userService: UserService,
     private _router: Router,
-    private _storageService: StorageService,
+    private _authService: AuthService,
     private _snackBar: MatSnackBar) { }
 
-    openSnackBar(message: string) {
-      this._snackBar.open(message, 'Cerrar', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-      });
-    }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+  }
 
   async onSubmit(): Promise<void> {
     if (!this.userData.name || !this.userData.lastName || !this.userData.date ||
@@ -88,27 +87,24 @@ export class SignInComponent {
       return;
     } else {
 
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(this.userData.password, salt);
-      this.userData.password = hashedPassword;
-
       const result = await this._userService.userDataSave(this.userData);
 
       if (result === 'success') {
         try {
-          const user: User | undefined = await this._userService.getUserByEmail(this.userData.email);
+          const login = await this._authService.login(this.userData.email, this.userData.email);
 
-          if (user != undefined) {
-            await this._storageService.setUserId('loggedInUser', user.id);
-       
+          if (login !== null || !login) {
             this._router.navigate(['/home']).then(() => {
               window.location.reload();
               this.openSnackBar('Registro exitoso.');
             });
+          } else {
+            this.openSnackBar('Error al iniciar sesión.');
           }
+          // }
         } catch (error) {
           console.log('Error al iniciar sesión:');
-         
+
         }
       } else {
         console.log('Error al guardar los datos del usuario.');

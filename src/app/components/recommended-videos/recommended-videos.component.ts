@@ -24,6 +24,7 @@ export class RecommendedVideosComponent implements OnInit {
   contentType: string = "video";
   contentId: number = 0;
   idUser: number | null = null;
+  isAdmin: boolean = false;
 
 
   constructor(private _videosService: VideosService,
@@ -44,7 +45,8 @@ export class RecommendedVideosComponent implements OnInit {
 
   async ngOnInit() {
     this.loadRecommendedVideos();
-    this.idUser = await this._storageService.getUserId('loggedInUser');
+   // this.idUser = this._storageService.getUserId();
+    //this.isAdmin = this._storageService.isAdmin();
     this.loadFavoriteVideos();
   }
 

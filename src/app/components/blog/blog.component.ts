@@ -15,6 +15,8 @@ export class BlogComponent {
   loading: boolean = true;
   entry: number = 0;
   likesCont: number = 0;
+  idUser: number | null = null;
+  isAdmin: boolean = false;
 
   constructor(private _blogService: BlogService,
     private _storageService: StorageService,
@@ -31,6 +33,8 @@ export class BlogComponent {
 
   ngOnInit() {
     this.loading = true;
+  //  this.idUser = this._storageService.getUserId();
+    //this.isAdmin = this._storageService.isAdmin();
 
     this._blogService.getBlogValidated().subscribe(entries => {
       this.blogEntries = entries;
@@ -47,11 +51,9 @@ export class BlogComponent {
   }
 
   async openBlogEntryForm() {
-    const idUser = await this._storageService.getUserId('loggedInUser');
+    if (this.idUser  !== null && this.idUser  !== undefined) {
 
-    if (idUser !== null && idUser !== undefined) {
-
-      return this._router.navigate(['/blog-entry-form', { idUser: idUser }]);
+      return this._router.navigate(['/blog-entry-form', { idUser : this.idUser  }]);
 
     } else {
       return this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
@@ -59,11 +61,9 @@ export class BlogComponent {
   }
 
   async openRanking() {
-    const idUser = await this._storageService.getUserId('loggedInUser');
-
-    if (idUser !== null && idUser !== undefined) {
+    if (this.idUser  !== null && this.idUser  !== undefined) {
       return this._router.navigate(['/ranking']).then(() => {
-        idUser
+        this.idUser 
         window.location.reload();
       });
     } else {
@@ -75,9 +75,8 @@ export class BlogComponent {
     if (this.likesCont === 3) {
       this.openSnackBar('Solo puedes dar a me gusta 3 veces.');
     } else {
-      const idUser = await this._storageService.getUserId('loggedInUser');
 
-      if (idUser !== null && idUser !== undefined) {
+      if (this.idUser  !== null && this.idUser  !== undefined) {
         const idBlog = entryId;
         this._blogService.likePlus(idBlog)
           .then(response => {

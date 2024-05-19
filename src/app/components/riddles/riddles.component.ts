@@ -14,15 +14,6 @@ export class RiddlesComponent {
   constructor(private _riddleService: RiddleService, private _router: Router) { }
   riddles: Riddles[] | undefined = [];
   categorySelected: string | undefined;
-  async ngOnInit() {
-
-    // this._storyService.getStory().subscribe((data: StoryCategory[]) => { 
-    //   this.stories = data;
-    //   if (this.stories.length === 0) {
-    //     console.log("la lista de cuentos esta vacía");
-    //   }
-    // });
-  }
 
   async getCategoryRiddles(nameCategory: string) {
     const name = categoriesRiddles.find((cn: CategoryRiddle) => cn.nameCategory === nameCategory);

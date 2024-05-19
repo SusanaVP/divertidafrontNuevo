@@ -20,6 +20,7 @@ import { BlogEntryFormComponent } from './blog-entry-form/blog-entry-form.compon
 import { ViewStoriesComponent } from './view-stories/view-stories.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ViewRiddlesComponent } from './view-riddles/view-riddles.component';
+import { AdminComponent } from './admin/admin.component';
 
 
 
@@ -41,7 +42,8 @@ import { ViewRiddlesComponent } from './view-riddles/view-riddles.component';
         BlogEntryFormComponent,
         ViewStoriesComponent,
         SignInComponent,
-        ViewRiddlesComponent
+        ViewRiddlesComponent,
+        AdminComponent
     ],
     exports: [
         BlogComponent,
@@ -61,7 +63,8 @@ import { ViewRiddlesComponent } from './view-riddles/view-riddles.component';
         BlogEntryFormComponent,
         ViewStoriesComponent,
         SignInComponent,
-        ViewRiddlesComponent
+        ViewRiddlesComponent,
+        AdminComponent
     ],
     imports: [
         CommonModule,

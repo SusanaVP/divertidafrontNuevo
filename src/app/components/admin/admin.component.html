@@ -1,0 +1,30 @@
+<p>Entradas al blog para validar</p>
+
+<div class="row">
+    <ng-container *ngIf="blogEntries && blogEntries.length > 0">
+        <div class="col-md-6" *ngFor="let entry of blogEntries; let i = index">
+            <div class="card h-100 mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">{{ entry.title }}</h5>
+                </div>
+                <div class="card-body mb-3">
+                    <div class="image-container text-center mb-3">
+                        <img *ngIf="entry.image" [src]="entry.image" alt="Imagen de materiales de manualidades"
+                            class="img-fluid rounded align-items-center mb-3">
+                    </div>
+                    <div class="card-footer">
+                        <p>{{ entry.description }}</p>
+                        <button class="btn btn-primary  position-absolute bottom-0 end-0 m-3">
+                            <i class="fa-regular fa-hexagon-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <div *ngIf="blogEntries && blogEntries.length === 0" class="col-md-12">
+        <div class="alert alert-info" role="alert">
+            Todas las entradas al blog están validadas.
+        </div>
+    </div>
+</div>

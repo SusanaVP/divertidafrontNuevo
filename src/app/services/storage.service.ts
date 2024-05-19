@@ -1,28 +1,30 @@
 import { Injectable } from '@angular/core';
+import { JwtResponse } from '../components/interfaces/JwtResponse';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
- constructor() {
-    // No necesitas inicializar nada en el constructor
+  [x: string]: any;
+  private userIdKey = 'loggedInUserId';
+
+  constructor() {}
+
+  public setToken(jwtToken: string){
+    localStorage.setItem('token', jwtToken);
   }
 
-  public setUserId(key: string, id: number) {
-    localStorage.setItem(key, id.toString());
-  }
-
-  public getUserId(key: string): number | null {
-    const userIdString = localStorage.getItem(key);
-    if (userIdString !== null) {
-      return parseInt(userIdString, 10);
+  public getToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (token !== null) {
+      return token;
     } else {
       return null;
     }
   }
 
-  public removeUserId(key: string) {
-    localStorage.removeItem(key);
+  public removeUser() {
+    localStorage.removeItem(this.userIdKey);
   }
 }

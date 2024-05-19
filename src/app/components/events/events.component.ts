@@ -12,17 +12,19 @@ import { FavoritesService } from '../../services/favorites.service';
   styleUrl: './events.component.css'
 })
 export class EventsComponent {
-  eventsList: Event[] = [];
   latitudeUser: number = 0;
   longitudeUser: number = 0;
+  idUser: number | null = null;
+  isAdmin: boolean = false;
 
   favoriteEventsIds: Set<number> = new Set<number>();
   favoriteEventsList: Event[] = [];
   sortedEventsList: Event[] = [];
+  eventsList: Event[] = [];
+
   contentType: string = "event";
   contentId: number = 0;
   favoritesEvents: Event[] = [];
-  idUser: number | null = null;
   expandedEvents: { [id: number]: boolean } = {};
 
   constructor(private _eventService: EventService,
@@ -40,20 +42,23 @@ export class EventsComponent {
   }
 
   async ngOnInit() {
-    this.idUser = await this._storageService.getUserId('loggedInUser');
+   // this.idUser = this._storageService.getUserId();
+    //this.isAdmin = this._storageService.isAdmin();
     this.geolocationVerify();
     this.loadEvents();
     this.loadFavoriteEvents();
   }
 
   async loadEvents() {
-    // Carga de eventos desde el servicio
-    this._eventService.getEvents().subscribe(entries => {
-      this.eventsList = entries.map(event => ({ ...event, expand: false }));
-      this.sortEventsByDistance(); // Ordenar los eventos por distancia después de cargarlos
-    },
-    // Manejo de errores
-    );
+    try {
+      // Carga de eventos desde el servicio
+      this._eventService.getEvents().subscribe(entries => {
+        this.eventsList = entries.map(event => ({ ...event, expand: false }));
+        this.sortEventsByDistance();
+      });
+    } catch (error) {
+      console.error('Error al obtener los eventos', error);
+    }
   }
 
   async loadFavoriteEvents() {
@@ -61,7 +66,7 @@ export class EventsComponent {
       this.favoriteEventsList = await this._favoritesService.getFavoritesEvents(this.idUser!);
       this.favoriteEventsIds = new Set<number>(this.favoriteEventsList.map(event => event.id));
     } catch (error) {
-      console.error('Error al obtener los cuentos favoritos:', error);
+      console.error('Error al obtener los eventos favoritos:', error);
     }
   }
 
@@ -79,7 +84,7 @@ export class EventsComponent {
     }
   }
 
- 
+
   toggleExpandidedEvent(eventId: number) {
     this.expandedEvents[eventId] = !this.expandedEvents[eventId];
   }
@@ -147,20 +152,20 @@ export class EventsComponent {
     const lon1 = this.longitudeUser;
     const lat2 = event.latitude;
     const lon2 = event.longitude;
-  
+
     const dLat = this.deg2rad(lat2 - lat1);
     const dLon = this.deg2rad(lon2 - lon1);
-  
+
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distancia en kilómetros
+    const distance = R * c;
     return distance;
   }
-  
+
   deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
   }
-  
+
 }

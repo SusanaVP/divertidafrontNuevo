@@ -29,6 +29,7 @@ export class VideosComponent implements OnInit {
   contentId: number = 0;
   favoritesVideos: Video[] = [];
   idUser: number | null = null;
+  isAdmin: boolean = false;
 
   constructor(private _videosService: VideosService,
     private _favoritesService: FavoritesService,
@@ -48,7 +49,8 @@ export class VideosComponent implements OnInit {
 
   async ngOnInit() {
     this.showRecommendedVideos = true;
-    this.idUser = await this._storageService.getUserId('loggedInUser');
+   // this.idUser = this._storageService.getUserId();
+  //  this.isAdmin = this._storageService.isAdmin();
     this.loadFavoriteVideos();
   }
 

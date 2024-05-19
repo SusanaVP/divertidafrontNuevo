@@ -32,6 +32,7 @@ export class FavoritesComponent implements OnInit {
 
   isLoggedIn: boolean = false;
   idUser: number | null = null;
+  isAdmin: boolean = false;
   contentType: string = "";
   contentId: number = 0;
   currentIndex = 0;
@@ -57,7 +58,8 @@ export class FavoritesComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.idUser = this._storageService.getUserId('loggedInUser');
+   // this.idUser = this._storageService.getUserId();
+    //this.isAdmin = this._storageService.isAdmin();
 
     if (this.idUser !== null && this.idUser !== undefined) {
       await this.loadFavoritesUser();
@@ -113,6 +115,7 @@ export class FavoritesComponent implements OnInit {
       this.contentType = "video";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
       this.favoriteVideosIds.delete(idVideo);
+      this.favoriteVideosList = this.favoriteVideosList.filter(video => video.id !== idVideo);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {
@@ -130,6 +133,7 @@ export class FavoritesComponent implements OnInit {
       this.contentType = "story";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
       this.favoriteStoriesIds.delete(idStory);
+      this.favoriteStoriesList = this.favoriteStoriesList.filter(story => story.id !== idStory);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {
@@ -147,6 +151,7 @@ export class FavoritesComponent implements OnInit {
       this.contentType = "riddle";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
       this.favoriteRiddlesIds.delete(idRiddle);
+      this.favoriteRiddlesList = this.favoriteRiddlesList.filter(riddle => riddle.id !== idRiddle);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {
@@ -158,12 +163,13 @@ export class FavoritesComponent implements OnInit {
   }
 
   async editFavoriteEvent(idEvent: number) {
-    this.favoriteRiddlesIds = new Set<number>(this.favoriteRiddlesList.map(event => event.id));
+    this.favoriteEventsIds = new Set<number>(this.favoriteEventsList.map(event => event.id));
     try {
       this.contentId = idEvent;
       this.contentType = "event";
       await this._favoritesService.deleteFavorite(this.contentId, this.idUser!, this.contentType);
       this.favoriteEventsIds.delete(idEvent);
+      this.favoriteEventsList = this.favoriteEventsList.filter(event => event.id !== idEvent);
       this.openSnackBar('Eliminado correctamente de tu lista de favoritos.');
 
     } catch (err: any) {

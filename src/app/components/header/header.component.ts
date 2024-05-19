@@ -10,7 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class HeaderComponent implements OnInit {
 
-  userId: number | null = null;
+  idUser: number | null = null;
+  isAdmin: boolean = false;
   isLoggedIn: boolean = false;
 
   constructor(private _storageService: StorageService,
@@ -27,14 +28,11 @@ export class HeaderComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.userId = await this.loggedUser();
-    if (this.userId !== 0 && this.userId !== null) {
+   // this.idUser = this._storageService.getUserId();
+    //this.isAdmin = this._storageService.isAdmin();
+    if (  this.idUser !== 0 &&   this.idUser !== null) {
       this.isLoggedIn = true;
     }
-  }
-
-  async loggedUser() {
-    return this._storageService.getUserId('loggedInUser');
   }
 
   navigateToLogin() {
@@ -45,8 +43,7 @@ export class HeaderComponent implements OnInit {
 
   async logout() {
     try {
-      await this._storageService.removeUserId('loggedInUser');
-      this.userId = null;
+      await this._storageService.removeUser();
       this.isLoggedIn = false;
       window.location.reload();
     } catch (error) {

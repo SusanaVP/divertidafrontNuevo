@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { StorageService } from '../../services/storage.service';
 import * as bcrypt from 'bcryptjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -16,12 +17,14 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   isLoggedIn: boolean = false;
-
+  idUser: number | null = null;
+  isAdmin: boolean = false;
 
   constructor(private _userService: UserService,
     private _router: Router,
     private _storageService: StorageService,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private _authService: AuthService,) { }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {
@@ -36,9 +39,8 @@ export class LoginComponent {
   }
 
   async openSignInModal() {
-    const idUser = await this._storageService.getUserId('loggedInUser');
     return this._router.navigate(['/sign-in']).then(() => {
-      idUser
+      this.idUser
       window.location.reload();
     });
   }
@@ -52,26 +54,20 @@ export class LoginComponent {
       this.openSnackBar('El correo electrónico es incorrecto.');
       return;
     }
+
     try {
-      const user = await this._userService.getUserByEmail(this.email);
-
-      if (user && bcrypt.compareSync(this.password, user.password)) {
-        this._storageService.setUserId('loggedInUser', user.id);
-
+      const token = await this._authService.login(this.email, this.password);
+      console.log(token);
+      if (token.email !== null && token.email !== undefined) {
+        this.isLoggedIn = true;
         this.openSnackBar('Inicio de sesión correcto.');
-        this._router.navigate(['/home']).then(() => {
-          this.isLoggedIn = true;
-          window.location.reload();
-        });
+        this._router.navigate(['/home']);
       } else {
         this.openSnackBar('Email o contraseña incorrectos.');
       }
 
     } catch (error) {
-      this._router.navigate(['/error']).then(() => {
-        window.location.reload();
-      });
-      this.openSnackBar('Error al iniciar sesión.');
+      this.openSnackBar('Email o contraseña incorrectos.');
     }
   }
 }

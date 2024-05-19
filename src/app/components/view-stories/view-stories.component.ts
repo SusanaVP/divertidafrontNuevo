@@ -20,6 +20,7 @@ export class ViewStoriesComponent implements OnInit {
   contentType: string = "story";
   contentId: number = 0;
   idUser: number | null = null;
+  isAdmin: boolean = false;
 
   constructor(private _route: ActivatedRoute, private _router: Router, private _favoritesService: FavoritesService, private _storageService: StorageService, private _snackBar: MatSnackBar) {
     this.dividedParagraphs = [];
@@ -35,7 +36,8 @@ export class ViewStoriesComponent implements OnInit {
 
   async ngOnInit() {
     this.stories = history.state.stories;
-    this.idUser = await this._storageService.getUserId('loggedInUser');
+  //  this.idUser = this._storageService.getUserId();
+    //this.isAdmin = this._storageService.isAdmin();
     this.loadFavoriteStories();
   }
 
