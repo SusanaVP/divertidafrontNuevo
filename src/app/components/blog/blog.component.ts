@@ -44,6 +44,10 @@ export class BlogComponent {
       this.email = decode.email;
     }
 
+    this.loadBlogValidated();
+  }
+
+  loadBlogValidated() {
     this._blogService.getBlogValidated().subscribe(entries => {
       this.blogEntries = entries;
       this.loading = false;
@@ -67,7 +71,7 @@ export class BlogComponent {
       console.log("Error al obtener el usuario logueado");
     }
     if (this.idUser !== null && this.idUser !== undefined) {
-      return this._router.navigate(['/blog-entry-form', { idUser: this.idUser ,email: this.email}]);
+      return this._router.navigate(['/blog-entry-form', { idUser: this.idUser, email: this.email }]);
     } else {
       return this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
     }
@@ -90,21 +94,43 @@ export class BlogComponent {
       this.openSnackBar('Solo puedes dar a me gusta 3 veces.');
     } else {
 
-      if (this.idUser !== null && this.idUser !== undefined) {
-        const idBlog = entryId;
-        this._blogService.likePlus(idBlog)
-          .then(response => {
-            console.log(response);
-            console.log('Likes incrementados correctamente.');
+      try {
+        if (this.idUser !== null && this.idUser !== undefined) {
+          const idBlog = entryId;
+          const response: string = await this._blogService.likePlus(idBlog)
+          if (response === 'success') {
+            this.openSnackBar('Likes incrementados correctamente.');
             this.likesCont++;
-          })
-          .catch(error => {
-            console.error(error);
-            this.openSnackBar(`Error al incrementar los likes.`);
-          });
-      } else {
-        this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
+          } else {
+            this.openSnackBar('Error al incrementar los likes.');
+          }
+
+        } else {
+          this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
+        }
+      } catch (error) {
+        this.openSnackBar(`Error al incrementar los likes.`);
       }
     }
   }
-}
+
+  async deleteBlog(idBlog: number) {
+      const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta entrada del blog?');
+      if (confirmDelete) {
+        try {
+          const response: string = await this._blogService.deleteBlog(idBlog);
+          if (response === 'success') {
+            this.openSnackBar('Entrada del blog eliminada correctamente');
+            this.loadBlogValidated();
+          } else {
+            this.openSnackBar('Error al eliminar la entrada del blog');
+          }
+        } catch (error) {
+          console.error('Error al procesar la solicitud:', error);
+          this.openSnackBar('Error al eliminar la entrada del blog. Por favor, inténtelo de nuevo más tarde.');
+        }
+      } else {
+        return;
+      }
+    }
+  }

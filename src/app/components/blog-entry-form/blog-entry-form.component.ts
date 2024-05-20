@@ -84,9 +84,10 @@ export class BlogEntryFormComponent implements OnInit {
         try {
           const response: string = await this._blogService.addBlogEntry(this.blogEntryData);
           if (response === 'success') {
-            this.openSnackBar('Añadida al blog correctamente');
             this._router.navigate(['/blog']).then(() => {
               window.location.reload();
+              this.openSnackBar('');
+              const confirmDelete = window.confirm('Añadida al blog correctamente. En un plazo mázimo de 24h podrá visulizarla.');
             });
           } else {
             this.openSnackBar('Error al guardar la entrada del blog, inténtelo de nuevo más tarde.');

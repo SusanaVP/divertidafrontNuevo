@@ -57,6 +57,12 @@
           <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavorite(video.id)">
             <i class=" {{ favoriteVideosIds.has(video.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
           </button>
+          <div *ngIf="isAdmin">
+            <button class="btn btn-warning btn-deleted position-absolute bottom-0 m-3 "
+            (click)="editRecommended(video.id)">
+            <i class=" {{ videosRecommendedIds.has(video.id) ? 'fas fa-star' : 'far fa-star' }}"></i>
+        </button>
+          </div>
         </div>
       </div>
     </div>

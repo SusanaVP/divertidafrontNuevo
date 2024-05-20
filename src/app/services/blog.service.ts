@@ -37,7 +37,7 @@ export class BlogService {
       if (response && response?.status === 200) {
         return 'success';
       } else {
-        console.error('Error al guardar el usuario:', response);
+        console.log('Error al guardar el usuario:', response);
         return 'error';
       }
     } catch (error) {
@@ -47,12 +47,47 @@ export class BlogService {
   }
 
   async likePlus(idBlog: number): Promise<string> {
-    const response: string | undefined = await this._http.get(`${this.apiUrl}/likesBlog/${idBlog}`, { responseType: 'text' }).toPromise();
-    return response!;
+    try {
+      const response: string | undefined = await this._http.get(`${this.apiUrl}/likesBlog/${idBlog}`, { headers: this.getHeaders(), responseType: 'text' }).toPromise();
+      if (response) {
+        return 'success';
+      } else {
+        console.log('Error al dar like al blog', response);
+        return 'error';
+      }
+    } catch (error) {
+      console.error('Error al dar like al blog.', error);
+      return 'error';
+    }
   }
 
   async editValidation(idBlog: number): Promise<string> {
-    const response: string | undefined = await this._http.get(`${this.apiUrl}/editValidation/${idBlog}`, { responseType: 'text' }).toPromise();
-    return response!;
+    try {
+      const response: string | undefined = await this._http.get(`${this.apiUrl}/editValidation/${idBlog}`, { headers: this.getHeaders(), responseType: 'text' }).toPromise();
+      if (response) {
+        return 'success';
+      } else {
+        console.log('Error validar el blog', response);
+        return 'error';
+      }
+    } catch (error) {
+      console.error('Error al validar el blog.', error);
+      return 'error';
+    }
+  }
+
+  async deleteBlog(idBlog: number): Promise<string> {
+    try {
+      const response: string | undefined = await this._http.get(`${this.apiUrl}/deleteBlog/${idBlog}`, { headers: this.getHeaders(), responseType: 'text' }).toPromise();
+      if (response === '') {
+        return 'success';
+      } else {
+        console.log('Error al eliminar el blog', response);
+        return 'error';
+      }
+    } catch (error) {
+      console.error('Error al eliminar el blog.', error);
+      return 'error';
+    }
   }
 }

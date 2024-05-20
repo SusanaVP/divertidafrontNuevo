@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Blog } from '../interfaces/blog';
 import { BlogService } from '../../services/blog.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin',
@@ -36,10 +37,9 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  //Blog
   loadBlogNoValidated() {
     this._blogService.getBlogNoValidated().subscribe(blog => {
-       this.blogEntries = blog;
+      this.blogEntries = blog;
     },
       error => {
         this._router.navigate(['/error']).then(() => {
@@ -60,5 +60,25 @@ export class AdminComponent implements OnInit {
         console.error(error);
         this.openSnackBar(`Error al validar la entrada al blog.`);
       });
+  }
+
+  async deleteBlog(idBlog: number) {
+    const confirmDelete = window.confirm('¿Estás seguro de que deseas eliminar esta entrada del blog?');
+    if (confirmDelete) {
+      try {
+        const response: string = await this._blogService.deleteBlog(idBlog);
+        if (response === 'success') {
+          this.openSnackBar('Entrada del blog eliminada correctamente');
+          this.loadBlogNoValidated();
+        } else {
+          this.openSnackBar('Error al eliminar la entrada del blog');
+        }
+      } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        this.openSnackBar('Error al eliminar la entrada del blog. Por favor, inténtelo de nuevo más tarde.');
+      }
+    } else {
+      return;
+    }
   }
 }

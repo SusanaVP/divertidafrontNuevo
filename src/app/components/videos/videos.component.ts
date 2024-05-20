@@ -24,8 +24,10 @@ export class VideosComponent implements OnInit {
   public selectedOptions: string[] = [];
   filteredVideos: Video[] = [];
   videos: Video[] = [];
+  videosRecommendedIds:Set<number> = new Set<number>();
 
   public showRecommendedVideos: boolean = false;
+  recommended: boolean = false;
   favoriteVideosIds: Set<number> = new Set<number>();
   contentType: string = "video";
   contentId: number = 0;
@@ -69,7 +71,7 @@ export class VideosComponent implements OnInit {
       if (user !== null && user !== undefined) {
         this.idUser = user.id;
       } else {
-       console.log("Error al obtener el usuario logueado");
+        console.log("Error al obtener el usuario logueado");
       }
       const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser!);
       this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
@@ -152,5 +154,30 @@ export class VideosComponent implements OnInit {
     const videoId = this.extractVideoId(url);
 
     return this._sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}`);
+  }
+
+  async editRecommended(idVideo: number) {
+    try {
+      const videos = await this._videosService.getRecommendedVideos().toPromise();
+  
+      if (videos) {
+        this.videosRecommendedIds = new Set<number>(videos.map(video => video.id));
+      }
+  
+      const isRecommended = this.videosRecommendedIds.has(idVideo);
+  
+      if (isRecommended) {
+        await this._videosService.deleteRecommendedVideo(idVideo);
+        this.openSnackBar('Video eliminado de la lista de recomendados.');
+        this.videosRecommendedIds.delete(idVideo);
+      } else {
+        await this._videosService.addRecommendedVideo(idVideo);
+        this.openSnackBar('Video agregado a la lista de recomendados.');
+        this.videosRecommendedIds.add(idVideo);
+      }
+    } catch (error) {
+      console.error('Error al actualizar la lista de videos recomendados:', error);
+      this.openSnackBar('Error al actualizar la lista de videos recomendados. Por favor, inténtelo de nuevo más tarde.');
+    }
   }
 }

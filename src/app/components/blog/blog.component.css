@@ -66,3 +66,8 @@ p, h2 {
     background-color: rgb(232, 231, 229);
     box-shadow: 4px 2px 20px rgb(168, 101, 70);
 }
+
+.btn-deleted:hover {
+    background-color: red;
+    border: red;
+}
