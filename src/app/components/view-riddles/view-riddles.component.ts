@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FavoritesService } from '../../services/favorites.service';
 import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-view-riddles',
@@ -21,9 +23,15 @@ export class ViewRiddlesComponent {
   contentId: number = 0;
   idUser: number | null = null;
   isAdmin: boolean = false;
+  email: string = '';
 
-  constructor(private _route: ActivatedRoute,
-    private _router: Router, private _favoritesService: FavoritesService, private _storageService: StorageService, private _snackBar: MatSnackBar) {
+  constructor(
+    private _router: Router,
+    private _favoritesService: FavoritesService,
+    private _storageService: StorageService,
+    private _snackBar: MatSnackBar,
+    private _authService: AuthService,
+    private _userService: UserService) {
     this.dividedParagraphs = [];
   }
 
@@ -37,25 +45,35 @@ export class ViewRiddlesComponent {
 
   async ngOnInit() {
     this.riddles = history.state.riddles;
-    //this.idUser = this._storageService.getUserId();
-   // this.isAdmin = this._storageService.isAdmin();
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+      this.email = decode.email;
+    }
     this.loadFavoriteRiddles();
   }
 
   async loadFavoriteRiddles() {
     try {
+      const user = await this._userService.getUserByEmail(this.email);
+      if (user !== null && user !== undefined) {
+        this.idUser = user.id;
+      } else {
+       console.log('Error al obtener el usuario:');
+      }
       this.favoriteRiddlesList = await this._favoritesService.getFavoritesStories(this.idUser!);
       this.favoriteRiddlesIds = new Set<number>(this.favoriteRiddlesList.map(riddle => riddle.id));
     } catch (error) {
       console.error('Error al obtener los cuentos favoritos:', error);
     }
   }
-  
+
   chooseOtherCategory() {
     this._router.navigate(['/riddles']);
   }
 
-  
+
   async editFavoriteRiddle(idRiddle: number) {
     try {
       if (this.idUser !== null && this.idUser !== undefined) {

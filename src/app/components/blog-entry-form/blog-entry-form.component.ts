@@ -20,6 +20,17 @@ export class BlogEntryFormComponent implements OnInit {
   imageData: string | undefined;
   showPreview: boolean = false;
   submitting: boolean = false;
+  email: string = '';
+
+ blogEntryData: Blog = {
+    id: 0,
+    title: '',
+    description:'',
+    image: '',
+    user:{} as User,
+    heart: 0,
+    validado: false
+  };
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -39,6 +50,7 @@ export class BlogEntryFormComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.idUser = params['idUser'];
+      this.email = params['email'];
     });
   }
 
@@ -55,20 +67,22 @@ export class BlogEntryFormComponent implements OnInit {
       this.submitting = true;
 
       if (this.entryForm.valid && this.imageData && this.idUser) {
-        const user: User = await this._userService.getUserById(this.idUser);
- 
-        const blogEntryData: Blog = {
-          id: 0,
-          title: this.entryForm.value.title,
-          description: this.entryForm.value.description,
-          image: this.imageData,
-          user: user,
-          heart: 0,
-          validado: false
-        };
+        const user: User | undefined = await this._userService.getUserByEmail(this.email);
+        if (user !== null && user !== undefined) {
+          this.idUser = user.id;
+          this.blogEntryData = {
+            id: 0,
+            title: this.entryForm.value.title,
+            description: this.entryForm.value.description,
+            image: this.imageData,
+            user: user,
+            heart: 0,
+            validado: false
+          };
+        }
 
         try {
-          const response: string = await this._blogService.addBlogEntry(blogEntryData);
+          const response: string = await this._blogService.addBlogEntry(this.blogEntryData);
           if (response === 'success') {
             this.openSnackBar('Añadida al blog correctamente');
             this._router.navigate(['/blog']).then(() => {

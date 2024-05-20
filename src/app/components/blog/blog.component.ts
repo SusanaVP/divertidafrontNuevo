@@ -4,6 +4,8 @@ import { StorageService } from '../../services/storage.service';
 import { Blog } from '../interfaces/blog';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-blog',
@@ -17,11 +19,14 @@ export class BlogComponent {
   likesCont: number = 0;
   idUser: number | null = null;
   isAdmin: boolean = false;
+  email: string = '';
 
   constructor(private _blogService: BlogService,
     private _storageService: StorageService,
     private _router: Router,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private _userService: UserService,
+    private _authService: AuthService) { }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {
@@ -32,9 +37,12 @@ export class BlogComponent {
   }
 
   ngOnInit() {
-    this.loading = true;
-  //  this.idUser = this._storageService.getUserId();
-    //this.isAdmin = this._storageService.isAdmin();
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+      this.email = decode.email;
+    }
 
     this._blogService.getBlogValidated().subscribe(entries => {
       this.blogEntries = entries;
@@ -51,19 +59,25 @@ export class BlogComponent {
   }
 
   async openBlogEntryForm() {
-    if (this.idUser  !== null && this.idUser  !== undefined) {
-
-      return this._router.navigate(['/blog-entry-form', { idUser : this.idUser  }]);
-
+    this.loading = true;
+    const user = await this._userService.getUserByEmail(this.email);
+    if (user !== null && user !== undefined) {
+      this.idUser = user.id;
+    } else {
+      console.log("Error al obtener el usuario logueado");
+    }
+    if (this.idUser !== null && this.idUser !== undefined) {
+      return this._router.navigate(['/blog-entry-form', { idUser: this.idUser ,email: this.email}]);
     } else {
       return this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
     }
   }
 
   async openRanking() {
-    if (this.idUser  !== null && this.idUser  !== undefined) {
+    if (this.idUser !== null && this.idUser !== undefined) {
       return this._router.navigate(['/ranking']).then(() => {
-        this.idUser 
+        this.idUser
+        this.email
         window.location.reload();
       });
     } else {
@@ -76,7 +90,7 @@ export class BlogComponent {
       this.openSnackBar('Solo puedes dar a me gusta 3 veces.');
     } else {
 
-      if (this.idUser  !== null && this.idUser  !== undefined) {
+      if (this.idUser !== null && this.idUser !== undefined) {
         const idBlog = entryId;
         this._blogService.likePlus(idBlog)
           .then(response => {

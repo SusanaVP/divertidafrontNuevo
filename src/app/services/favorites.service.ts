@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.prod';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StorageService } from './storage.service';
 import { Video } from '../components/interfaces/videos';
 import { Favorites } from '../components/interfaces/favorites';
@@ -16,9 +16,14 @@ export class FavoritesService {
 
   constructor(private _http: HttpClient, private _storageService: StorageService) { }
 
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
   async addFavorite(contentId: number, idUser: number, contentType: string) {
     try {
-      await this._http.get<void>(`${this.apiUrl}/addFavorite/${contentId}/${idUser}/${contentType}`).toPromise();
+      await this._http.get<void>(`${this.apiUrl}/addFavorite/${contentId}/${idUser}/${contentType}`, { headers: this.getHeaders() }).toPromise();
       console.log('Agregado a favoritos correctamente');
     } catch (error) {
       console.error('Error al agregar a favoritos:', error);
@@ -28,7 +33,7 @@ export class FavoritesService {
 
   async deleteFavorite(contentId: number, idUser: number, contentType: string) {
     try {
-      await this._http.get<void>(`${this.apiUrl}/deleteFavorite/${contentId}/${idUser}/${contentType}`).toPromise();
+      await this._http.get<void>(`${this.apiUrl}/deleteFavorite/${contentId}/${idUser}/${contentType}`, { headers: this.getHeaders() }).toPromise();
       console.log('Eliminado de favoritos correctamente');
     } catch (error) {
       console.error('Error al eliminar de favoritos:', error);
@@ -37,7 +42,7 @@ export class FavoritesService {
 
   async getFavoritesVideos(idUser: number): Promise<Video[]> {
     try {
-      const result = await this._http.get<Video[]>(`${this.apiUrl}/favoritesVideos/${idUser}`).toPromise();
+      const result = await this._http.get<Video[]>(`${this.apiUrl}/favoritesVideos/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
       if (result?.length === 0 || result === undefined || result === null) {
         console.log('La respuesta del servidor es indefinida.');
@@ -52,7 +57,7 @@ export class FavoritesService {
 
   async getFavoritesStories(idUser: number): Promise<Stories[]> {
     try {
-      const result = await this._http.get<Stories[]>(`${this.apiUrl}/favoritesStories/${idUser}`).toPromise();
+      const result = await this._http.get<Stories[]>(`${this.apiUrl}/favoritesStories/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
       if (result?.length === 0 || result === undefined || result === null) {
         console.log('La respuesta del servidor es indefinida.');
@@ -67,7 +72,7 @@ export class FavoritesService {
 
   async getFavoritesRiddles(idUser: number): Promise<Riddles[]> {
     try {
-      const result = await this._http.get<Riddles[]>(`${this.apiUrl}/favoritesRiddles/${idUser}`).toPromise();
+      const result = await this._http.get<Riddles[]>(`${this.apiUrl}/favoritesRiddles/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
       if (result?.length === 0 || result === undefined || result === null) {
         console.log('La respuesta del servidor es indefinida.');
@@ -82,7 +87,7 @@ export class FavoritesService {
 
   async getFavoritesEvents(idUser: number): Promise<Event[]> {
     try {
-      const result = await this._http.get<Event[]>(`${this.apiUrl}/favoritesEvents/${idUser}`).toPromise();
+      const result = await this._http.get<Event[]>(`${this.apiUrl}/favoritesEvents/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
       if (result?.length === 0 || result === undefined || result === null) {
         console.log('La respuesta del servidor es indefinida.');
@@ -97,6 +102,6 @@ export class FavoritesService {
 
   /*cambiar nomenclatura*/
   getFavoritesIdUser(idUser: number) {
-    return this._http.get<Favorites[]>(`${this.apiUrl}/favoritesIdUser/${idUser}`);
+    return this._http.get<Favorites[]>(`${this.apiUrl}/favoritesIdUser/${idUser}`, { headers: this.getHeaders() });
   }
 }

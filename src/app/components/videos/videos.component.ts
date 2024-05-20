@@ -6,6 +6,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FavoritesService } from '../../services/favorites.service';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 type VideoProperty = "title" | "descriptions" | "category";
 @Component({
@@ -30,13 +32,16 @@ export class VideosComponent implements OnInit {
   favoritesVideos: Video[] = [];
   idUser: number | null = null;
   isAdmin: boolean = false;
+  email: string = '';
 
   constructor(private _videosService: VideosService,
     private _favoritesService: FavoritesService,
     private _storageService: StorageService,
     private _sanitizer: DomSanitizer,
     private _router: Router,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    private _authService: AuthService,
+    private _userService: UserService) {
   }
 
   openSnackBar(message: string) {
@@ -49,13 +54,23 @@ export class VideosComponent implements OnInit {
 
   async ngOnInit() {
     this.showRecommendedVideos = true;
-   // this.idUser = this._storageService.getUserId();
-  //  this.isAdmin = this._storageService.isAdmin();
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+      this.email = decode.email;
+    }
     this.loadFavoriteVideos();
   }
 
   async loadFavoriteVideos() {
     try {
+      const user = await this._userService.getUserByEmail(this.email);
+      if (user !== null && user !== undefined) {
+        this.idUser = user.id;
+      } else {
+       console.log("Error al obtener el usuario logueado");
+      }
       const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser!);
       this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
     } catch (error) {

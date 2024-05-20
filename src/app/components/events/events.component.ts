@@ -5,6 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Event } from '../interfaces/events';
 import { StorageService } from '../../services/storage.service';
 import { FavoritesService } from '../../services/favorites.service';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-events',
@@ -16,6 +18,7 @@ export class EventsComponent {
   longitudeUser: number = 0;
   idUser: number | null = null;
   isAdmin: boolean = false;
+  email: string = '';
 
   favoriteEventsIds: Set<number> = new Set<number>();
   favoriteEventsList: Event[] = [];
@@ -31,7 +34,9 @@ export class EventsComponent {
     private _router: Router,
     private _snackBar: MatSnackBar,
     private _storageService: StorageService,
-    private _favoritesService: FavoritesService) { }
+    private _favoritesService: FavoritesService,
+    private _authService: AuthService,
+    private _userService: UserService) { }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {
@@ -42,8 +47,12 @@ export class EventsComponent {
   }
 
   async ngOnInit() {
-   // this.idUser = this._storageService.getUserId();
-    //this.isAdmin = this._storageService.isAdmin();
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+      this.email = decode.email;
+    }
     this.geolocationVerify();
     this.loadEvents();
     this.loadFavoriteEvents();
@@ -63,6 +72,12 @@ export class EventsComponent {
 
   async loadFavoriteEvents() {
     try {
+      const user = await this._userService.getUserByEmail(this.email);
+      if (user !== null && user !== undefined) {
+        this.idUser = user.id;
+      } else {
+       console.log("Error al obtener el usuario logueado");
+      }
       this.favoriteEventsList = await this._favoritesService.getFavoritesEvents(this.idUser!);
       this.favoriteEventsIds = new Set<number>(this.favoriteEventsList.map(event => event.id));
     } catch (error) {

@@ -1,0 +1,4 @@
+.btn-validated:hover {
+    background-color: green;
+    border: green;
+}

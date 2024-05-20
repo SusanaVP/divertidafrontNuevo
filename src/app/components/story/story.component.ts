@@ -16,13 +16,6 @@ export class StoryComponent implements OnInit {
   stories: Stories[] | undefined = [];
   categorySelected: string | undefined;
   async ngOnInit() {
-
-    // this._storyService.getStory().subscribe((data: StoryCategory[]) => { 
-    //   this.stories = data;
-    //   if (this.stories.length === 0) {
-    //     console.log("la lista de cuentos esta vacía");
-    //   }
-    // });
   }
 
   async getCategoryStory(nameCategory: string) {

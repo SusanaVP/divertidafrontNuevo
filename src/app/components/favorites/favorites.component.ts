@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { Riddles } from '../interfaces/riddles';
 import { Stories } from '../interfaces/stories';
 import { Event } from '../interfaces/events';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-favorites',
@@ -37,6 +39,7 @@ export class FavoritesComponent implements OnInit {
   contentId: number = 0;
   currentIndex = 0;
   userId: number = 0;
+  email: string = "";
 
   expandedStories: { [id: number]: boolean } = {};
   expandedRiddles: { [id: number]: boolean } = {};
@@ -46,7 +49,9 @@ export class FavoritesComponent implements OnInit {
     private _storageService: StorageService,
     private _sanitizer: DomSanitizer,
     private _router: Router,
-    private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar,
+    private _authService: AuthService,
+    private _userService: UserService) {
   }
 
   openSnackBar(message: string) {
@@ -58,18 +63,22 @@ export class FavoritesComponent implements OnInit {
   }
 
   async ngOnInit() {
-   // this.idUser = this._storageService.getUserId();
-    //this.isAdmin = this._storageService.isAdmin();
-
-    if (this.idUser !== null && this.idUser !== undefined) {
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+      this.email = decode.email;
+    }
+    const user = await this._userService.getUserByEmail(this.email);
+    if (user !== null && user !== undefined) {
+      this.idUser = user.id;
       await this.loadFavoritesUser();
       this.isLoggedIn = true;
     } else {
-      console.log("ERROR: El ID de usuario es nulo o indefinido.");
       this.isLoggedIn = false;
+      this.openSnackBar("Error al obtener el usuario logueado");
     }
   }
-
 
   async loadFavoritesUser() {
     try {

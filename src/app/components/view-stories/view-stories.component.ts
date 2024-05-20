@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FavoritesService } from '../../services/favorites.service';
 import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-view-stories',
@@ -21,8 +23,15 @@ export class ViewStoriesComponent implements OnInit {
   contentId: number = 0;
   idUser: number | null = null;
   isAdmin: boolean = false;
+  email: string = '';
 
-  constructor(private _route: ActivatedRoute, private _router: Router, private _favoritesService: FavoritesService, private _storageService: StorageService, private _snackBar: MatSnackBar) {
+  constructor(
+    private _router: Router,
+    private _favoritesService: FavoritesService,
+    private _storageService: StorageService,
+    private _snackBar: MatSnackBar,
+    private _authService: AuthService,
+    private _userService: UserService) {
     this.dividedParagraphs = [];
   }
 
@@ -36,13 +45,24 @@ export class ViewStoriesComponent implements OnInit {
 
   async ngOnInit() {
     this.stories = history.state.stories;
-  //  this.idUser = this._storageService.getUserId();
-    //this.isAdmin = this._storageService.isAdmin();
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+      this.email = decode.email;
+    }
     this.loadFavoriteStories();
   }
 
   async loadFavoriteStories() {
     try {
+      const user = await this._userService.getUserByEmail(this.email);
+      if (user !== null && user !== undefined) {
+        this.idUser = user.id;
+      } else {
+        console.log('Error al obtener el usuario:');
+      }
+
       this.favoritesStories = await this._favoritesService.getFavoritesStories(this.idUser!);
       this.favoriteStoriesIds = new Set<number>(this.favoritesStories.map(story => story.id));
     } catch (error) {

@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { categoriesVideos } from '../interfaces/categoryVideo';
 import { FavoritesService } from '../../services/favorites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -25,6 +27,7 @@ export class RecommendedVideosComponent implements OnInit {
   contentId: number = 0;
   idUser: number | null = null;
   isAdmin: boolean = false;
+  email: string = '';
 
 
   constructor(private _videosService: VideosService,
@@ -32,7 +35,9 @@ export class RecommendedVideosComponent implements OnInit {
     private _sanitizer: DomSanitizer,
     private _router: Router,
     private _favoritesService: FavoritesService,
-    private _snackBar: MatSnackBar) { }
+    private _snackBar: MatSnackBar,
+    private _authService: AuthService,
+    private _userService: UserService) { }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {
@@ -44,14 +49,24 @@ export class RecommendedVideosComponent implements OnInit {
 
 
   async ngOnInit() {
+    const token = this._storageService.getToken();
+    if (token && token.length > 0) {
+      const decode = this._authService.decodeJwtToken(token);
+      this.isAdmin = decode.isAdmin;
+      this.email = decode.email;
+    }
     this.loadRecommendedVideos();
-   // this.idUser = this._storageService.getUserId();
-    //this.isAdmin = this._storageService.isAdmin();
     this.loadFavoriteVideos();
   }
 
   async loadRecommendedVideos() {
     try {
+      const user = await this._userService.getUserByEmail(this.email);
+      if (user !== null && user !== undefined) {
+        this.idUser = user.id;
+      } else {
+       console.log("Error al obtener el usuario logueado");
+      }
       const videos = await this._videosService.getRecommendedVideos().toPromise();
       this.recommendedVideos = videos || [];
     } catch (error) {
@@ -76,7 +91,6 @@ export class RecommendedVideosComponent implements OnInit {
 
   async editFavorite(idVideo: number) {
     try {
-
       if (this.idUser !== null && this.idUser !== undefined) {
         const favoritesVideos = await this._favoritesService.getFavoritesVideos(this.idUser);
         this.favoriteVideosIds = new Set<number>(favoritesVideos.map(video => video.id));
@@ -102,7 +116,7 @@ export class RecommendedVideosComponent implements OnInit {
       });
     }
   }
-  
+
   extractVideoId(url: string): string {
     const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regExp);

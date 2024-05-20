@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NavComponent implements OnInit {
   isAdmin: boolean = false;
+  idUser: number | null = null;
   isLoggedIn: boolean = false;
 
   constructor(private _authService: AuthService, private router: Router,   private _storageService: StorageService) { }
