@@ -14,16 +14,16 @@ export class BlogService {
   constructor(private _http: HttpClient) { }
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
   getBlog(): Observable<Blog[]> {
-    return this._http.get<Blog[]>(`${this.apiUrl}`, { headers: this.getHeaders() });
+    return this._http.get<Blog[]>(`${this.apiUrl}`);
   }
 
   getBlogValidated(): Observable<Blog[]> {
-    return this._http.get<Blog[]>(`${this.apiUrl}/blogValidated`, { headers: this.getHeaders() });
+    return this._http.get<Blog[]>(`${this.apiUrl}/blogValidated`);
   }
 
   getBlogNoValidated(): Observable<Blog[]> {

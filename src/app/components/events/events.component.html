@@ -6,7 +6,7 @@
           <div class="card-header">
             <h5 class="card-title">{{ event.title }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">Fecha: {{ event.date }}</h6>
-            <img [src]="event.image" class="card-img-top" alt="Event Image">
+            <img [src]="event.image" class="card-img-top" alt="{{ event.title }}">
           </div>
           <div class="card-body text-center">
             <div [innerHTML]="formatDescription(event.description, 30, expandedEvents[event.id] )"></div>

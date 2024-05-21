@@ -34,5 +34,30 @@
 </div>
 
 <div class="row">
-    <h1></h1>
+    <div class="col-12">
+        <h2>Añadir nuevo vídeo</h2>
+        <form [formGroup]="videoForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input formControlName="title" type="text" class="form-control" id="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea formControlName="description" class="form-control" id="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="url" class="form-label">URL</label>
+                <input formControlName="url" type="text" class="form-control" id="url" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría</label>
+                <select formControlName="category" class="form-select" id="category" [(ngModel)]="selectedCategory"
+                    required>
+                    <option *ngFor="let category of categoriesVideo" [value]="category.id">{{ category.nameCategory }}
+                    </option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Añadir vídeo</button>
+        </form>
+    </div>
 </div>

@@ -21,7 +21,7 @@
     <div class="row">
       <div *ngIf="showRecommendedVideos" class="recommended-videos">
         <div class="col-12 col-md-4 mb-3">
-          <strong>Vídeos recomendados!!!</strong>
+          <h1><strong>Vídeos recomendados!!!</strong></h1>
         </div>
         <app-recommended-videos></app-recommended-videos>
       </div>
@@ -35,7 +35,7 @@
           <p>No se han encontrado vídeos en tu búsqueda.</p>
         </div>
         <div class="col-12 w-100" *ngIf="filteredVideos.length > 0">
-          <p>Lista de vídeos seleccionada.</p>
+          <h1>Lista de vídeos seleccionada.</h1>
         </div>
       </div>
     </div>
@@ -52,16 +52,22 @@
         <div class="video-container">
           <iframe width="100%" height="315" [src]="getEmbeddedUrl(video.url)" frameborder="0" allowfullscreen></iframe>
         </div>
-        <div class="card-body">
+        <div class="card-body d-flex flex-column">
           <p class="card-text">{{ video.description }}</p>
-          <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavorite(video.id)">
-            <i class=" {{ favoriteVideosIds.has(video.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
-          </button>
-          <div *ngIf="isAdmin">
-            <button class="btn btn-warning btn-deleted position-absolute bottom-0 m-3 "
-            (click)="editRecommended(video.id)">
-            <i class=" {{ videosRecommendedIds.has(video.id) ? 'fas fa-star' : 'far fa-star' }}"></i>
-        </button>
+          <div class="mt-auto d-flex justify-content-between align-items-end">
+            <div *ngIf="isAdmin">
+              <button class="btn btn-warning btn-deleted m-3" (click)="deleteVideo(video)">
+                <i class='fas fa-bug'></i>
+              </button>
+            </div>
+            <div *ngIf="isAdmin">
+              <button class="btn btn-success  m-3" (click)="editRecommended(video.id)">
+                <i class=" {{ videosRecommendedIds.has(video.id) ? 'fas fa-star' : 'far fa-star' }}"></i>
+              </button>
+            </div>
+            <button class="btn btn-danger m-3" (click)="editFavorite(video.id)">
+              <i class=" {{ favoriteVideosIds.has(video.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
+            </button>
           </div>
         </div>
       </div>

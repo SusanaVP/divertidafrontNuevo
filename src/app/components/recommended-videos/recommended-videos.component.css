@@ -1,0 +1,9 @@
+.card {
+    background-color: rgb(250, 250, 176);
+    border-color: orangered;
+}
+
+.card-title {
+    text-align: center;
+    font-size: large;
+}

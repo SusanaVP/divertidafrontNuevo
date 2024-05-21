@@ -1,0 +1,42 @@
+.container-dia {
+    padding: 1%;
+    text-align: center;
+    background-color: beige;
+}
+.dialog-title {
+    color: #8E7C35;
+    font-weight: bold;
+}
+
+.dialog-content {
+    font-size: 16px;
+    color: #5C4F28;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0 10px 0;
+}
+
+.btn-cancel {
+    background-color: #F1E0B5;
+    color: #5C4F28;
+    margin-right: 10px;
+}
+
+.btn-confirm {
+    background-color: #F18F01;
+    color: #5C4F28;
+    margin:auto;
+}
+
+.btn-cancel{
+    margin:auto;
+    
+}
+
+.btn-cancel:hover,
+.btn-confirm:hover {
+    opacity: 0.8;
+}

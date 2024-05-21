@@ -76,7 +76,7 @@ export class FavoritesComponent implements OnInit {
       this.isLoggedIn = true;
     } else {
       this.isLoggedIn = false;
-      this.openSnackBar("Error al obtener el usuario logueado");
+      console.log("Error al obtener el usuario logueado");
     }
   }
 

@@ -5,7 +5,6 @@ import { VideosService } from '../../services/videos.service';
 import { StorageService } from '../../services/storage.service';
 import { Video } from '../interfaces/videos';
 import { Router } from '@angular/router';
-import { categoriesVideos } from '../interfaces/categoryVideo';
 import { FavoritesService } from '../../services/favorites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
@@ -55,7 +54,7 @@ export class RecommendedVideosComponent implements OnInit {
       this.isAdmin = decode.isAdmin;
       this.email = decode.email;
     }
-    this.loadRecommendedVideos();
+    await this.loadRecommendedVideos();
     this.loadFavoriteVideos();
   }
 
@@ -84,10 +83,6 @@ export class RecommendedVideosComponent implements OnInit {
     }
   }
 
-  getCategoriaVideo(categoryId: number): string {
-    const category = categoriesVideos.find(a => a.id === categoryId);
-    return category ? category.nameCategory : '';
-  }
 
   async editFavorite(idVideo: number) {
     try {

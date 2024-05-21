@@ -22,16 +22,6 @@
         </div>
     </div>
 
-    <div class="row md-4">
-        <div class="col-md-12">
-            <div class="d-flex spinner-container text-center">
-                <div *ngIf="loading" class="spinner-border spinner" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <ng-container *ngIf="blogEntries && blogEntries.length > 0">
             <div class="col-md-6 mb-3" *ngFor="let entry of blogEntries; let i = index">
@@ -41,7 +31,7 @@
                     </div>
                     <div class="card-body mb-3">
                         <div class="image-container text-center mb-3">
-                            <img *ngIf="entry.image" [src]="entry.image" alt="Imagen de materiales de manualidades"
+                            <img *ngIf="entry.image" [src]="entry.image" alt="{{ entry.title }}"
                                 class="img-fluid rounded align-items-center mb-3">
                         </div>
                         <div class="card-footer">
@@ -52,7 +42,7 @@
                             </button>
                             <div *ngIf="isAdmin">
                                 <button class="btn btn-warning btn-deleted position-absolute bottom-0  m-3"
-                                    (click)="deleteBlog(entry.id)">Eliminar
+                                    (click)="deleteBlog(entry.id)">
                                     <i class='fas fa-bug'></i>
                                 </button>
                             </div>

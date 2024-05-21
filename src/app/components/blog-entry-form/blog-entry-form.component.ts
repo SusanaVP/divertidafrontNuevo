@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Blog } from '../interfaces/blog';
 import { User } from '../interfaces/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogBlogComponent } from '../../confirm-dialog-blog/confirm-dialog-blog.component';
 
 @Component({
   selector: 'app-blog-entry-form',
@@ -19,15 +21,14 @@ export class BlogEntryFormComponent implements OnInit {
   public entryForm: FormGroup;
   imageData: string | undefined;
   showPreview: boolean = false;
-  submitting: boolean = false;
   email: string = '';
 
- blogEntryData: Blog = {
+  blogEntryData: Blog = {
     id: 0,
     title: '',
-    description:'',
+    description: '',
     image: '',
-    user:{} as User,
+    user: {} as User,
     heart: 0,
     validado: false
   };
@@ -38,7 +39,8 @@ export class BlogEntryFormComponent implements OnInit {
     private _userService: UserService,
     private _router: Router,
     private _snackBar: MatSnackBar,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private dialog: MatDialog) {
 
     this.entryForm = this._formBuilder.group({
       title: ['', Validators.required],
@@ -63,44 +65,43 @@ export class BlogEntryFormComponent implements OnInit {
   }
 
   async submitForm() {
-    if (!this.submitting) {
-      this.submitting = true;
+    if (this.entryForm.valid && this.imageData && this.idUser) {
+      const user: User | undefined = await this._userService.getUserByEmail(this.email);
+      if (user !== null && user !== undefined) {
+        this.idUser = user.id;
+        this.blogEntryData = {
+          id: 0,
+          title: this.entryForm.value.title,
+          description: this.entryForm.value.description,
+          image: this.imageData,
+          user: user,
+          heart: 0,
+          validado: false
+        };
+      }
 
-      if (this.entryForm.valid && this.imageData && this.idUser) {
-        const user: User | undefined = await this._userService.getUserByEmail(this.email);
-        if (user !== null && user !== undefined) {
-          this.idUser = user.id;
-          this.blogEntryData = {
-            id: 0,
-            title: this.entryForm.value.title,
-            description: this.entryForm.value.description,
-            image: this.imageData,
-            user: user,
-            heart: 0,
-            validado: false
-          };
-        }
-
-        try {
-          const response: string = await this._blogService.addBlogEntry(this.blogEntryData);
-          if (response === 'success') {
+      try {
+        const response: string = await this._blogService.addBlogEntry(this.blogEntryData);
+        if (response === 'success') {
+          const dialogRef = await this.dialog.open(ConfirmDialogBlogComponent);
+          dialogRef.afterClosed().subscribe(result => {
+            console.log("Diálogo aceptado.", result);
             this._router.navigate(['/blog']).then(() => {
               window.location.reload();
-              this.openSnackBar('');
-              const confirmDelete = window.confirm('Añadida al blog correctamente. En un plazo mázimo de 24h podrá visulizarla.');
             });
-          } else {
-            this.openSnackBar('Error al guardar la entrada del blog, inténtelo de nuevo más tarde.');
-          }
-        } catch (error) {
-          this.openSnackBar('Error al enviar al blog. Por favor, inténtelo de nuevo más tarde.');
+          });
+        } else {
+          this.openSnackBar('Error al guardar la entrada del blog, inténtelo de nuevo más tarde.');
         }
-      } else {
-        this.openSnackBar('Por favor, complete todos los campos y suba una foto.');
+      } catch (error) {
+        this.openSnackBar('Error al enviar al blog. Por favor, inténtelo de nuevo más tarde.');
       }
-      this.submitting = false;
+
+    } else {
+      this.openSnackBar('Por favor, complete todos los campos y suba una foto.');
     }
-  };
+  }
+
 
   onFileSelected(event: any) {
     const file = event.target.files[0];

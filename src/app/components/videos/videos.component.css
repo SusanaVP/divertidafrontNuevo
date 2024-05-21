@@ -13,3 +13,8 @@
 .row {
     width: 100%;
 }
+
+.deleted:hover {
+    background-color: red;
+    border: red;
+}

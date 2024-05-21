@@ -8,6 +8,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FavoritesService } from '../../services/favorites.service';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 type VideoProperty = "title" | "descriptions" | "category";
 @Component({
@@ -24,7 +26,8 @@ export class VideosComponent implements OnInit {
   public selectedOptions: string[] = [];
   filteredVideos: Video[] = [];
   videos: Video[] = [];
-  videosRecommendedIds:Set<number> = new Set<number>();
+  videosRecommendedIds: Set<number> = new Set<number>();
+  ListVideosRecommended: Video[] | undefined;
 
   public showRecommendedVideos: boolean = false;
   recommended: boolean = false;
@@ -43,7 +46,8 @@ export class VideosComponent implements OnInit {
     private _router: Router,
     private _snackBar: MatSnackBar,
     private _authService: AuthService,
-    private _userService: UserService) {
+    private _userService: UserService,
+    private dialog: MatDialog) {
   }
 
   openSnackBar(message: string) {
@@ -63,6 +67,16 @@ export class VideosComponent implements OnInit {
       this.email = decode.email;
     }
     this.loadFavoriteVideos();
+    this.loadRecommendedVideos();
+  }
+
+  async loadRecommendedVideos() {
+    try {
+      const videos = await this._videosService.getRecommendedVideos().toPromise();
+      this.videosRecommendedIds = new Set<number>(videos!.map(video => video.id));
+    } catch (error) {
+      console.log("Error al cargar los videos recomendados");
+    }
   }
 
   async loadFavoriteVideos() {
@@ -158,14 +172,8 @@ export class VideosComponent implements OnInit {
 
   async editRecommended(idVideo: number) {
     try {
-      const videos = await this._videosService.getRecommendedVideos().toPromise();
-  
-      if (videos) {
-        this.videosRecommendedIds = new Set<number>(videos.map(video => video.id));
-      }
-  
       const isRecommended = this.videosRecommendedIds.has(idVideo);
-  
+
       if (isRecommended) {
         await this._videosService.deleteRecommendedVideo(idVideo);
         this.openSnackBar('Video eliminado de la lista de recomendados.');
@@ -179,5 +187,26 @@ export class VideosComponent implements OnInit {
       console.error('Error al actualizar la lista de videos recomendados:', error);
       this.openSnackBar('Error al actualizar la lista de videos recomendados. Por favor, inténtelo de nuevo más tarde.');
     }
+  }
+
+  async deleteVideo(idVideo: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result === true) {
+        try {
+          const response: string = await this._videosService.deleteVideo(idVideo);
+          if (response === 'success') {
+            this.openSnackBar('Vídeo eliminado correctamente');
+            this.filteredVideos = this.filteredVideos.filter(v => v.id !== idVideo);
+          } else {
+            this.openSnackBar('Error al eliminar el vídeo');
+          }
+        } catch (error) {
+          console.error('Error al eliminar el vídeo', error);
+          this.openSnackBar('Error al eliminar el vídeo. Por favor, inténtelo de nuevo más tarde.');
+        }
+      }
+    });
   }
 }

@@ -13,7 +13,7 @@ export class UserService {
     constructor(private _http: HttpClient) { }
 
     private getHeaders(): HttpHeaders {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         return new HttpHeaders().set('Authorization', `Bearer ${token}`);
     }
 

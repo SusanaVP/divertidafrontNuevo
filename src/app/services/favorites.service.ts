@@ -17,7 +17,7 @@ export class FavoritesService {
   constructor(private _http: HttpClient, private _storageService: StorageService) { }
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
