@@ -6,6 +6,10 @@ import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { StoryService } from '../../services/story.service';
+import { CategoryStory } from '../interfaces/categoryStory';
 
 @Component({
   selector: 'app-view-stories',
@@ -24,6 +28,10 @@ export class ViewStoriesComponent implements OnInit {
   idUser: number | null = null;
   isAdmin: boolean = false;
   email: string = '';
+  selectedStory: Stories | null = null;
+  public isEditing: any;
+  public categoriesVideo: CategoryStory[] = [];
+
 
   constructor(
     private _router: Router,
@@ -31,7 +39,10 @@ export class ViewStoriesComponent implements OnInit {
     private _storageService: StorageService,
     private _snackBar: MatSnackBar,
     private _authService: AuthService,
-    private _userService: UserService) {
+    private _userService: UserService,
+    private dialog: MatDialog,
+    private _storyService: StoryService,
+    private route: ActivatedRoute) {
     this.dividedParagraphs = [];
   }
 
@@ -69,6 +80,7 @@ export class ViewStoriesComponent implements OnInit {
       console.error('Error al obtener los cuentos favoritos:', error);
     }
   }
+  
   chooseOtherCategory() {
     this._router.navigate(['/story']);
   }
@@ -125,4 +137,53 @@ export class ViewStoriesComponent implements OnInit {
     }
     return result;
   }
+
+  async deleteStory(idStory: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result === true) {
+        try {
+          const response: string = await this._storyService.deleteStory(idStory);
+          if (response === 'success') {
+            this.openSnackBar('Cuento eliminado correctamente');
+            this.stories = history.state.stories;
+          } else {
+            this.openSnackBar('Error al eliminar el cuento.');
+          }
+        } catch (error) {
+          console.error('Error al eliminar la entrada al blog', error);
+          this.openSnackBar('Error al eliminar el cuento. Por favor, inténtelo de nuevo más tarde.');
+        }
+      }
+    });
+  }
+
+  editStory(story: Stories) {
+    if (this.selectedStory && this.selectedStory.id === story.id) {
+      this.selectedStory = null;
+    } else {
+      this.selectedStory = story;
+    }
+  }
+
+  async saveEditedStory(story: Stories) {
+    try {
+      const response = await this._storyService.updateStory(story);
+      if (response === 'success') {
+        this.openSnackBar("Cuento editado correctamente.");
+        this.selectedStory = null;
+      } else {
+        this.openSnackBar("Error al editar el cuento. Por favor, inténtelo de nuevo más tarde.");
+      }
+    } catch (error) {
+      console.error("Error al editar el cuento:", error);
+      this.openSnackBar("Error al editar el cuento. Por favor, inténtelo de nuevo más tarde.");
+    }
+  }
+
+  cancelEditing() {
+    this.selectedStory = null;
+  }
+
 }

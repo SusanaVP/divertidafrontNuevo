@@ -29,7 +29,7 @@ export class BlogEntryFormComponent implements OnInit {
     description: '',
     image: '',
     user: {} as User,
-    heart: 0,
+    likes: 0,
     validado: false
   };
 
@@ -75,7 +75,7 @@ export class BlogEntryFormComponent implements OnInit {
           description: this.entryForm.value.description,
           image: this.imageData,
           user: user,
-          heart: 0,
+          likes: 0,
           validado: false
         };
       }

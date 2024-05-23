@@ -17,6 +17,12 @@
                                 <i
                                     class=" {{ favoriteStoriesIds.has(story.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
                             </button>
+                            <div *ngIf="isAdmin">
+                                <button class="btn btn-warning btn-deleted position-absolute bottom-0  m-3"
+                                    (click)="deleteStory(story.id)" title="Eliminar">
+                                    <i class='fas fa-bug'></i>
+                                </button>
+                                
                         </div>
                     </div>
                 </div>

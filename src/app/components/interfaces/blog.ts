@@ -5,7 +5,7 @@ export interface Blog {
   title: string;
   description: string;
   image: string;
-  heart: number;
+  likes: number;
   user: User;
   validado: boolean;
 }

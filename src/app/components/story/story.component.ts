@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { StoryService } from '../../services/story.service';
 import { Stories } from '../interfaces/stories';
-import { NavigationExtras, Router } from '@angular/router';
-import { CategoryStory, categoriesStories } from '../interfaces/categoryStory';
+import {  NavigationExtras, Router } from '@angular/router';
+import { CategoryStory } from '../interfaces/categoryStory';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-story',
@@ -11,37 +12,55 @@ import { CategoryStory, categoriesStories } from '../interfaces/categoryStory';
 })
 export class StoryComponent implements OnInit {
 
-  constructor(private _storyService: StoryService, private _router: Router) { }
+  constructor(private _storyService: StoryService,
+    private _router: Router,
+    private _snackBar: MatSnackBar,
+    ) { }
 
   stories: Stories[] | undefined = [];
-  categorySelected: string | undefined;
+  public selectedCategory: string = '';
+  public categoriesStory: CategoryStory[] = [];
+
   async ngOnInit() {
   }
 
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+  }
+
   async getCategoryStory(nameCategory: string) {
-    const name = categoriesStories.find((cn: CategoryStory )=> cn.nameCategory === nameCategory);
-    const categoryId = name ? name.id : 0;
-
     try {
-      const stories = await this._storyService.getStoriesByCategory(categoryId);
+      const categories = await this._storyService.getStoryCategories();
 
-      if (stories.length > 0 || stories !== undefined) {
-        const navigationExtras: NavigationExtras = {
-          state: {
-            stories: stories
+      if (categories && categories.length > 0) {
+        const selectedCategory = categories.find(cat => cat.nameCategory === nameCategory);
+
+        if (selectedCategory) {
+          const stories = await this._storyService.getStoriesByCategory(selectedCategory.id);
+
+          if (stories && stories.length > 0) {
+            const navigationExtras: NavigationExtras = {
+              state: {
+                stories: stories
+              }
+            };
+            this._router.navigate(['/view-stories'], navigationExtras);
+          } else {
+            this.openSnackBar("La lista de cuentos está vacía");
           }
-        };
-  
-        this._router.navigate(['/view-stories'], navigationExtras);
-      }else {
-        console.log("la lista de historias esta vacía");
+        } else {
+          this.openSnackBar("No se encontró la categoría especificada.");
+        }
+      } else {
+        this.openSnackBar("No se han podido cargar las categorías de los cuentos.");
       }
-
     } catch (error) {
-      console.error('Error al obtener historias por categoría:', error);
-      this._router.navigate(['/error']).then(() => {
-        window.location.reload();
-      });
+      this.openSnackBar("Error al cargar las categorías de los cuentos.");
     }
   }
+
 }

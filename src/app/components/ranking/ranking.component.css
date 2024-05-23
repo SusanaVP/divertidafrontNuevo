@@ -1,0 +1,38 @@
+.card-title {
+    font-weight: bold;
+}
+
+.text-danger i {
+    margin-left: 5px;
+}
+
+.card-img-top {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.img {
+    width: 100px;
+    height: 100px;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+
+table tbody td {
+    vertical-align: middle;
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+}
+
+span {
+    margin-left: 5px;
+    font-size: large;
+}

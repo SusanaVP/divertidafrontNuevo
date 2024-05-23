@@ -46,3 +46,7 @@
   .card-img-top{
     width: 80%;
   }
+
+  .card-body{
+   margin-bottom: 5px;
+  }

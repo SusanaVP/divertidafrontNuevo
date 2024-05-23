@@ -56,13 +56,13 @@
           <p class="card-text">{{ video.description }}</p>
           <div class="mt-auto d-flex justify-content-between align-items-end">
             <div *ngIf="isAdmin">
-              <button class="btn btn-warning btn-deleted m-3" (click)="deleteVideo(video)">
+              <button class="btn btn-warning btn-deleted m-3" (click)="deleteVideo(video)" title="Eliminar">
                 <i class='fas fa-bug'></i>
               </button>
             </div>
             <div *ngIf="isAdmin">
               <button class="btn btn-success  m-3" (click)="editRecommended(video.id)">
-                <i class=" {{ videosRecommendedIds.has(video.id) ? 'fas fa-star' : 'far fa-star' }}"></i>
+                <i class=" {{ videosRecommendedIds.has(video.id) ? 'fas fa-star' : 'far fa-star' }}" title="Recomendar"></i>
               </button>
             </div>
             <button class="btn btn-danger m-3" (click)="editFavorite(video.id)">

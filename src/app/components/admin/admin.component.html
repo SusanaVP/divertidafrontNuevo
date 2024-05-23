@@ -1,8 +1,8 @@
 <div class="row">
     <h1>Entradas del blog para validar!!!</h1>
     <ng-container *ngIf="blogEntries && blogEntries.length > 0">
-        <div class="col-md-6" *ngFor="let blog of blogEntries; let i = index">
-            <div class="card h-100 mb-3">
+        <div class="col-md-6 mb-3" *ngFor="let blog of blogEntries; let i = index">
+            <div class="card h-100 mb-4">
                 <div class="card-header">
                     <h5 class="card-title">{{ blog.title }}</h5>
                 </div>
@@ -14,7 +14,7 @@
                     <div class="card-footer">
                         <p>{{ blog.description }}</p>
                         <button class="btn btn btn-validated position-absolute bottom-0 end-0 m-3"
-                            (click)="editValidation(blog.id)">Validar
+                            (click)="editValidationBlog(blog.id)">Validar
                             <i class='far fa-check-square'></i>
                         </button>
                         <button class="btn btn-warning btn-deleted position-absolute bottom-0  m-3"
@@ -34,20 +34,12 @@
 </div>
 
 <div class="row">
-    <div class="col-12">
-        <h2>Añadir nuevo vídeo</h2>
-        <form [formGroup]="videoForm" (ngSubmit)="onSubmit()">
+    <div class="col-md-12 mb-3">
+        <h1>Añadir nuevo vídeo</h1>
+        <form [formGroup]="videoForm" (ngSubmit)="onSubmitVideo()">
             <div class="mb-3">
                 <label for="title" class="form-label">Título</label>
                 <input formControlName="title" type="text" class="form-control" id="title" required>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Descripción</label>
-                <textarea formControlName="description" class="form-control" id="description" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="url" class="form-label">URL</label>
-                <input formControlName="url" type="text" class="form-control" id="url" required>
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Categoría</label>
@@ -57,7 +49,79 @@
                     </option>
                 </select>
             </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea formControlName="description" class="form-control" id="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="url" class="form-label">URL</label>
+                <input formControlName="url" type="text" class="form-control" id="url" required>
+            </div>
             <button type="submit" class="btn btn-primary">Añadir vídeo</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 mb-3">
+        <h1>Añadir nuevo evento</h1>
+        <form [formGroup]="eventForm" (ngSubmit)="onSubmitEvent()">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input formControlName="title" type="text" class="form-control" id="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea formControlName="description" class="form-control" id="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="info" class="form-label">Información</label>
+                <textarea formControlName="info" class="form-control" id="info" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="url" class="form-label">URL</label>
+                <input formControlName="url" type="text" class="form-control" id="url" required>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="city" class="form-label">Ciudad</label>
+                    <input formControlName="city" type="text" class="form-control" id="city" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="town" class="form-label">Población</label>
+                    <input formControlName="town" type="text" class="form-control" id="town" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="date" class="form-label">Fecha</label>
+                    <input formControlName="date" type="date" class="form-control" id="date" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="longitude" class="form-label">Longitud</label>
+                    <input formControlName="longitude" type="text" class="form-control" id="longitude" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="latitude" class="form-label">Latitud</label>
+                    <input formControlName="latitude" type="text" class="form-control" id="latitude" required>
+                </div>
+            </div>
+            <div class="col-12 text-center">
+                <button type="button" class="btn btn-primary btn-event" (click)="fileInput.click()">Subir imagen</button>
+                <input id="fileInput" type="file" (change)="onFileSelected($event)" #fileInput style="display: none;">
+              </div>
+              
+            <div class="mb-3 text-center">
+                <img *ngIf="showPreview" [src]="imageData" alt="Vista previa de la imagen" class="img-fluid mt-3">
+            </div>
+            <div class="row">
+                <div class="col-12 d-flex justify-content-between">
+                  <button *ngIf="showPreview" (click)="cancelPicture()" class="btn btn-warning mt-3" type="button">Quitar imagen</button>
+                  <button (click)="cancelEvent()" class="btn btn-danger btn-event mt-3" type="button">Cancelar</button>
+                  <button (click)="onSubmitEvent()" class="btn btn-success btn-event mt-3" type="button">Añadir evento</button>
+                </div>
+              </div>
+              
         </form>
     </div>
 </div>

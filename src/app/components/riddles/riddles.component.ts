@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { RiddleService } from '../../services/riddle.service';
 import { Riddles } from '../interfaces/riddles';
-import { CategoryRiddle, categoriesRiddles } from '../interfaces/categoryRiddle';
+import { CategoryRiddle} from '../interfaces/categoryRiddle';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-riddles',
@@ -11,34 +12,58 @@ import { CategoryRiddle, categoriesRiddles } from '../interfaces/categoryRiddle'
 })
 export class RiddlesComponent {
 
-  constructor(private _riddleService: RiddleService, private _router: Router) { }
+
+  constructor(
+    private _riddleService: RiddleService,
+    private _router: Router,
+    private _snackBar: MatSnackBar,
+    private route: ActivatedRoute) { }
+
   riddles: Riddles[] | undefined = [];
-  categorySelected: string | undefined;
+  public selectedCategory: string = '';
 
+  async ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.riddles = params['riddles'];
+    });
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Cerrar', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
+  }
+ 
   async getCategoryRiddles(nameCategory: string) {
-    const name = categoriesRiddles.find((cn: CategoryRiddle) => cn.nameCategory === nameCategory);
-    const categoryId = name ? name.id : 0;
-
     try {
-      const riddles = await this._riddleService.getRiddlesByCategory(categoryId);
+      const categories = await this._riddleService.getRiddleCategories();
 
-      if (riddles.length > 0 || riddles !== undefined) {
-        const navigationExtras: NavigationExtras = {
-          state: {
-            riddles: riddles
+      if (categories && categories.length > 0) {
+        const selectedCategory = categories.find(cat => cat.nameCategory === nameCategory);
+
+        if (selectedCategory) {
+          const riddles = await this._riddleService.getRiddlesByCategory(selectedCategory.id);
+
+          if (riddles && riddles.length > 0) {
+            const navigationExtras: NavigationExtras = {
+              state: {
+                riddles: riddles
+              }
+            };
+            this._router.navigate(['/view-riddles'], navigationExtras);
+          } else {
+            this.openSnackBar("La lista de adivinanzas está vacía");
           }
-        };
-
-        this._router.navigate(['/view-riddles'], navigationExtras);
+        } else {
+          this.openSnackBar("No se encontró la categoría especificada.");
+        }
       } else {
-        console.log("la lista de adivinanzas esta vacía");
+        this.openSnackBar("No se han podido cargar las categorías de las adivinanzas.");
       }
-
     } catch (error) {
-      console.error('Error al obtener adivinanzas por categoría:', error);
-      this._router.navigate(['/error']).then(() => {
-        window.location.reload();
-      });
+      this.openSnackBar("Error al cargar las categorías las adivinanzas.");
     }
   }
 }

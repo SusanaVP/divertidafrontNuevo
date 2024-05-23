@@ -16,14 +16,47 @@
    background-color: rgb(60, 226, 195);
 }
 
+form {
+    border: 1px solid rgb(220, 136, 52);
+    border-radius: 10px;
+    padding: 15px;
+    height: auto;
+}
+
+.btn-event {
+    margin: 5%;
+}
+
+.buttons {
+    border-top: 1px solid rgb(225, 220, 220);
+}
+
+/* .img-fluid {
+    text-align: center;
+    margin: auto;
+    width: 50%;
+} */
+
 .image-container {
-    width: 90%;
+    width: 70%;
     height: 70%;
     margin: auto;
 }
 
 .image-container img {
-    max-width: 100%;
-    max-height: 90%;
+    max-width: 80%;
+    max-height: 80%;
     object-fit: contain;
+}
+
+.card-header {
+    background-image: url('/assets/imagenes/fondoJirafa.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.card-title {
+    text-align: center;
+    text-shadow: 0.5px 0.5px 0.5px black;
+    font-size: large;
 }

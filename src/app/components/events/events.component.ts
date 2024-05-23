@@ -7,6 +7,8 @@ import { StorageService } from '../../services/storage.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-events',
@@ -36,7 +38,8 @@ export class EventsComponent {
     private _storageService: StorageService,
     private _favoritesService: FavoritesService,
     private _authService: AuthService,
-    private _userService: UserService) { }
+    private _userService: UserService,
+    private dialog: MatDialog) { }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {
@@ -183,4 +186,24 @@ export class EventsComponent {
     return deg * (Math.PI / 180);
   }
 
+  async deleteEvent(idEvent: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result === true) {
+        try {
+          const response: string = await this._eventService.deleteEvent(idEvent);
+          if (response === 'success') {
+            this.openSnackBar('Evento eliminada correctamente');
+            this.loadEvents();
+          } else {
+            this.openSnackBar('Error al eliminar el evento');
+          }
+        } catch (error) {
+          console.error('Error al eliminar el evento', error);
+          this.openSnackBar('Error al eliminar el evento. Por favor, inténtelo de nuevo más tarde.');
+        }
+      }
+    });
+  }
 }

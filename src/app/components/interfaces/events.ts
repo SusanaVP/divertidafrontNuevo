@@ -7,5 +7,7 @@ export interface Event {
     date: Date;
     latitude: number;
     longitude: number;
+    town: string;
+    city: string;
     url: string;
   }

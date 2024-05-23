@@ -38,12 +38,18 @@ export class BlogComponent {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const token = this._storageService.getToken();
     if (token && token.length > 0) {
       const decode = this._authService.decodeJwtToken(token);
       this.isAdmin = decode.isAdmin;
       this.email = decode.email;
+    }
+    const user = await this._userService.getUserByEmail(this.email);
+    if (user !== null && user !== undefined) {
+      this.idUser = user.id;
+    } else {
+      console.log("Error al obtener el usuario logueado");
     }
 
     this.loadBlogValidated();
@@ -63,12 +69,6 @@ export class BlogComponent {
   }
 
   async openBlogEntryForm() {
-    const user = await this._userService.getUserByEmail(this.email);
-    if (user !== null && user !== undefined) {
-      this.idUser = user.id;
-    } else {
-      console.log("Error al obtener el usuario logueado");
-    }
     if (this.idUser !== null && this.idUser !== undefined) {
       return this._router.navigate(['/blog-entry-form', { idUser: this.idUser, email: this.email }]);
     } else {
@@ -84,8 +84,9 @@ export class BlogComponent {
         window.location.reload();
       });
     } else {
-      this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
+      return this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
     }
+
   }
 
   async likeBlog(entryId: number) {

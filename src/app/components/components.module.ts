@@ -26,6 +26,7 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RankingComponent } from './ranking/ranking.component';
 
 
 
@@ -48,7 +49,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         ViewStoriesComponent,
         SignInComponent,
         ViewRiddlesComponent,
-        AdminComponent
+        AdminComponent,
+        RankingComponent
     ],
     exports: [
         BlogComponent,
@@ -70,6 +72,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         SignInComponent,
         ViewRiddlesComponent,
         AdminComponent,
+        RankingComponent
     ],
     imports: [
         CommonModule,
