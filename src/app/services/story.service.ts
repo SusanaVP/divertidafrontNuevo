@@ -28,7 +28,7 @@ export class StoryService {
       const result = await this._http.get<Stories[]>(`${this.apiUrl}/storiesByCategory/${categoryId}`).toPromise();
 
       if (result?.length === 0 || result === undefined || result === null) {
-        console.error('La respuesta del servidor es indefinida.');
+        console.error('Error al obtener la categorías de los cuentos.');
         return [];
       }
 
@@ -88,13 +88,12 @@ export class StoryService {
 
     async getStoryCategories(): Promise<CategoryStory[]> {
       try {
-        const result = await this._http.get<CategoryStory[]>(`${this.apiUrl}/storyCategories`, { headers: this.getHeaders() }).toPromise();
+        const result = await this._http.get<CategoryStory[]>(`${this.apiUrl}/storyCategories`).toPromise();
         if (result?.length === 0 || result === undefined || result === null) {
-          console.error('La respuesta del servidor es indefinida.');
+          console.error('Error al obtener las categorías de los cuentos.');
           return [];
         }
-        return result;
-      } catch (error) {
+        return result;      } catch (error) {
         console.error('Error al obtener las categorías de los cuentos', error);
         return [];
       }

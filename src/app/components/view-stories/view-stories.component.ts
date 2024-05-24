@@ -17,7 +17,7 @@ import { CategoryStory } from '../interfaces/categoryStory';
   styleUrl: './view-stories.component.css'
 })
 export class ViewStoriesComponent implements OnInit {
-  stories: Stories[] | undefined = [];
+  stories: Stories[] =[];
   dividedParagraphs: string[];
   maxWordsToShow: number = 30;
   expandedStories: { [id: number]: boolean } = {};
@@ -55,7 +55,7 @@ export class ViewStoriesComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.stories = history.state.stories;
+    this.stories = history.state.stories || [];
     const token = this._storageService.getToken();
     if (token && token.length > 0) {
       const decode = this._authService.decodeJwtToken(token);
@@ -147,7 +147,7 @@ export class ViewStoriesComponent implements OnInit {
           const response: string = await this._storyService.deleteStory(idStory);
           if (response === 'success') {
             this.openSnackBar('Cuento eliminado correctamente');
-            this.stories = history.state.stories;
+           this.stories = this.stories?.filter(story => story.id !== idStory);
           } else {
             this.openSnackBar('Error al eliminar el cuento.');
           }

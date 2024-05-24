@@ -6,23 +6,24 @@
                 <div *ngFor="let story of stories">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <h5 class="card-title">{{ story.title }}</h5>
+                            <h2 class="card-title">{{ story.title }}</h2>
                             <div [innerHTML]="formatDescription(story.description, 50, expandedStories[story.id])">
                             </div>
                             <button class="btn btn-link" (click)="toggleExpandedStory(story.id)">
                                 <strong>{{ expandedStories[story.id] ? 'Leer menos' : 'Leer más' }}</strong>
                             </button>
-                            <button class="btn btn-danger position-absolute bottom-0 end-0 m-3"
-                                (click)="editFavoriteStory(story.id)">
-                                <i
-                                    class=" {{ favoriteStoriesIds.has(story.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
-                            </button>
-                            <div *ngIf="isAdmin">
-                                <button class="btn btn-warning btn-deleted position-absolute bottom-0  m-3"
-                                    (click)="deleteStory(story.id)" title="Eliminar">
-                                    <i class='fas fa-bug'></i>
+                            <div class="mt-auto d-flex justify-content-between align-items-end">
+                                <div *ngIf="isAdmin">
+                                    <button class="btn btn-warning btn-deleted " (click)="deleteStory(story.id)"
+                                        title="Eliminar">
+                                        <i class='fas fa-bug'></i>
+                                    </button>
+                                </div>
+                                <button class="btn btn-danger " (click)="editFavoriteStory(story.id)">
+                                    <i
+                                        class=" {{ favoriteStoriesIds.has(story.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
                                 </button>
-                                
+                            </div>
                         </div>
                     </div>
                 </div>

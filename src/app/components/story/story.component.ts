@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StoryService } from '../../services/story.service';
 import { Stories } from '../interfaces/stories';
-import {  NavigationExtras, Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { CategoryStory } from '../interfaces/categoryStory';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -15,7 +15,7 @@ export class StoryComponent implements OnInit {
   constructor(private _storyService: StoryService,
     private _router: Router,
     private _snackBar: MatSnackBar,
-    ) { }
+  ) { }
 
   stories: Stories[] | undefined = [];
   public selectedCategory: string = '';
@@ -42,16 +42,12 @@ export class StoryComponent implements OnInit {
         if (selectedCategory) {
           const stories = await this._storyService.getStoriesByCategory(selectedCategory.id);
 
-          if (stories && stories.length > 0) {
-            const navigationExtras: NavigationExtras = {
-              state: {
-                stories: stories
-              }
-            };
-            this._router.navigate(['/view-stories'], navigationExtras);
-          } else {
-            this.openSnackBar("La lista de cuentos está vacía");
-          }
+          const navigationExtras: NavigationExtras = {
+            state: {
+              stories: stories
+            }
+          };
+          this._router.navigate(['/view-stories'], navigationExtras);
         } else {
           this.openSnackBar("No se encontró la categoría especificada.");
         }

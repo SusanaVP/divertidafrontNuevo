@@ -22,6 +22,8 @@ export class BlogComponent {
   isAdmin: boolean = false;
   email: string = '';
 
+  localStorageLikesKey = 'blogLikes';
+
   constructor(private _blogService: BlogService,
     private _storageService: StorageService,
     private _router: Router,
@@ -90,27 +92,46 @@ export class BlogComponent {
   }
 
   async likeBlog(entryId: number) {
-    if (this.likesCont === 3) {
-      this.openSnackBar('Solo puedes dar a me gusta 3 veces.');
-    } else {
+    if (this.idUser === null || this.idUser === undefined) {
+      this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
+      return;
+    }
 
+    const likesBlog = JSON.parse(this._storageService.getLocalStorageItem(this.localStorageLikesKey) || '{}');
+    const currentTime = new Date().getTime();
+   // const oneDay = 24 * 60 * 60 * 1000; // Milisegundos en un día
+    const oneDay = 5 * 60 * 1000; 
+
+    if (!likesBlog[this.idUser]) {
+      likesBlog[this.idUser] = { count: 0, lastLikeTime: 0 };
+    }
+
+    const { count, lastLikeTime } = likesBlog[this.idUser];
+
+    // Verificar si han pasado 24 horas desde el último like
+    if ((currentTime - lastLikeTime) > oneDay) {
+      likesBlog[this.idUser].count = 0; // Resetear el conteo si han pasado más de 24 horas
+    }
+
+    if (likesBlog[this.idUser].count < 3) {
       try {
-        if (this.idUser !== null && this.idUser !== undefined) {
-          const idBlog = entryId;
-          const response: string = await this._blogService.likePlus(idBlog)
-          if (response === 'success') {
-            this.openSnackBar('Likes incrementados correctamente.');
-            this.likesCont++;
-          } else {
-            this.openSnackBar('Error al incrementar los likes.');
-          }
+        const idBlog = entryId;
+        const response: string = await this._blogService.likePlus(idBlog);
+        if (response === 'success') {
+          this.openSnackBar('Likes incrementados correctamente.');
 
+          // Incrementa el conteo de likes y actualiza la marca de tiempo
+          likesBlog[this.idUser].count++;
+          likesBlog[this.idUser].lastLikeTime = currentTime;
+          this._storageService.setLocalStorageItem(this.localStorageLikesKey, JSON.stringify(likesBlog));
         } else {
-          this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
+          this.openSnackBar('Error al incrementar los likes.');
         }
       } catch (error) {
         this.openSnackBar(`Error al incrementar los likes.`);
       }
+    } else {
+      this.openSnackBar('Solo puedes dar a me gusta 3 veces cada 24 horas.');
     }
   }
 

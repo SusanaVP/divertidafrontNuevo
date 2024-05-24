@@ -57,7 +57,6 @@ export class LoginComponent {
 
     try {
       const token = await this._authService.login(this.email, this.password);
-      console.log(token);
       if (token.email !== null && token.email !== undefined) {
         this.isLoggedIn = true;
         this.isAdmin = token.isAdmin;

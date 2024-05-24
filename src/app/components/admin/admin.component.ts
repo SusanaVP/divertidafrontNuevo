@@ -12,6 +12,12 @@ import { CategoryVideo } from '../interfaces/categoryVideo';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EventService } from '../../services/event.service';
+import { CategoryRiddle } from '../interfaces/categoryRiddle';
+import { CategoryStory } from '../interfaces/categoryStory';
+import { RiddleService } from '../../services/riddle.service';
+import { StoryService } from '../../services/story.service';
+import { Riddles } from '../interfaces/riddles';
+import { Stories } from '../interfaces/stories';
 
 
 @Component({
@@ -30,13 +36,22 @@ export class AdminComponent implements OnInit {
   showPreview: boolean = false;
 
   public videoForm: FormGroup;
+  public riddleForm: FormGroup;
+  public storyForm: FormGroup;
   public eventForm: FormGroup;
+
   public filteredVideos: Video[] = [];
   public searchTerm: string = '';
-  public selectedCategory: string = '';
+
+  public selectedCategoryVideo: string = '';
+  public selectedCategoryRiddle: string = '';
+  public selectedCategoryStory: string = '';
+
   public favoriteVideosIds: Set<number> = new Set<number>();
   public videosRecommendedIds: Set<number> = new Set<number>();
   public categoriesVideo: CategoryVideo[] = [];
+  public categoriesRiddles: CategoryRiddle[] = [];
+  public categoriesStory: CategoryStory[] = [];
 
   urlPattern = /^(https?:\/\/)?(www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$/;
   datePattern = /^\d{4}-\d{2}-\d{2}$/;
@@ -48,7 +63,9 @@ export class AdminComponent implements OnInit {
     private fb: FormBuilder,
     private _videosService: VideosService,
     private dialog: MatDialog,
-    private _eventService: EventService) {
+    private _eventService: EventService,
+    private _riddlesService: RiddleService,
+    private _storyService: StoryService) {
 
     this.videoForm = this.fb.group({
       title: ['', Validators.required],
@@ -71,14 +88,28 @@ export class AdminComponent implements OnInit {
       city: ['', Validators.required],
       image: ['']
     });
+
+    this.riddleForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      category: ['', Validators.required]
+    });
+
+    this.storyForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      category: ['', Validators.required]
+    });
   }
 
   async ngOnInit() {
     this.loadBlogNoValidated();
-    this.loadCategories();
+    this.loadCategoriesVideo();
+    this.loadCategoriesRiddle();
+    this.loadCategoriesStory();
   }
 
-  async loadCategories() {
+  async loadCategoriesVideo() {
     try {
       const categories = await this._videosService.getVideoCategories();
       if (categories !== null && categories !== undefined) {
@@ -89,6 +120,34 @@ export class AdminComponent implements OnInit {
       }
     } catch (error) {
       this.openSnackBar("Error al cargar las categorías de los vídeos.")
+    }
+  }
+
+  async loadCategoriesRiddle() {
+    try {
+      const categories = await this._riddlesService.getRiddleCategories();
+      if (categories !== null && categories !== undefined) {
+        this.categoriesRiddles = categories;
+
+      } else {
+        this.openSnackBar("No se han podido cargar las categorías de las adivinanzas.");
+      }
+    } catch (error) {
+      this.openSnackBar("Error al cargar las categorías de las adivinanzas.")
+    }
+  }
+
+  async loadCategoriesStory() {
+    try {
+      const categories = await this._storyService.getStoryCategories();
+      if (categories !== null && categories !== undefined) {
+        this.categoriesStory = categories;
+
+      } else {
+        this.openSnackBar("No se han podido cargar las categorías de los cuentos.");
+      }
+    } catch (error) {
+      this.openSnackBar("Error al cargar las categorías de los cuentos.")
     }
   }
 
@@ -148,7 +207,7 @@ export class AdminComponent implements OnInit {
 
   async onSubmitVideo() {
     if (this.videoForm.valid) {
-      const selectedCategory = this.categoriesVideo.find(cat => cat.id === +this.selectedCategory);
+      const selectedCategoryVideo = this.categoriesVideo.find(cat => cat.id === +this.selectedCategoryVideo);
 
       const newVideo: Video = {
         id: 0,
@@ -156,7 +215,7 @@ export class AdminComponent implements OnInit {
         description: this.videoForm.value.description,
         url: this.videoForm.value.url,
         recommended: false,
-        categoriesVideo: selectedCategory || { id: 0, nameCategory: '' }
+        categoriesVideo: selectedCategoryVideo || { id: 0, nameCategory: '' }
       };
 
       try {
@@ -267,6 +326,90 @@ export class AdminComponent implements OnInit {
     return true;
   }
 
+  async onSubmitRiddle() {
+    if (this.riddleForm.valid) {
+      const selectedCategoryRiddle = this.categoriesRiddles.find(cat => cat.id === +this.selectedCategoryRiddle);
+
+      const newRiddle: Riddles = {
+        id: 0,
+        title: this.riddleForm.value.title,
+        description: this.riddleForm.value.description,
+        categoriesRiddles: selectedCategoryRiddle || { id: 0, nameCategory: '' }
+      };
+
+      try {
+        if (this.isDataValidRiddle(newRiddle)) {
+          console.log(newRiddle)
+          const response = await this._riddlesService.addRiddle(newRiddle);
+
+          if (response === 'success') {
+            this.openSnackBar("Adivinanza añadida correctamente.")
+            this.riddleForm.reset();
+          } else {
+            this.openSnackBar("Error, la adivinanza no se ha podido añadir. Por favor, intentelo de nuevo más tarde.")
+          }
+        }
+      } catch (error) {
+        this.openSnackBar("Error al añadir la adivinanza. Por favor, intentelo de nuevo más tarde.");
+      }
+    } else {
+      this.openSnackBar("Todos los campos son obligatorios.")
+    }
+  }
+
+  isDataValidRiddle(riddle: Riddles): boolean {
+    if (riddle.title.length > 150) {
+      this.openSnackBar("El título es demasiado largo.");
+      return false;
+    }
+    if (riddle.description.length > 255) {
+      this.openSnackBar("La descripción es demasiado larga.");
+      return false;
+    }
+    return true;
+  }
+
+  async onSubmitStory() {
+    if (this.storyForm.valid) {
+      const selectedCategoryStory = this.categoriesStory.find(cat => cat.id === +this.selectedCategoryStory);
+
+      const newStory: Stories = {
+        id: 0,
+        title: this.storyForm.value.title,
+        description: this.storyForm.value.description,
+        categoriesStory: selectedCategoryStory || { id: 0, nameCategory: '' }
+      };
+
+      try {
+        if (this.isDataValidStory(newStory)) {
+          const response = await this._storyService.addStory(newStory);
+
+          if (response === 'success') {
+            this.openSnackBar("Cuento añadido correctamente.")
+            this.storyForm.reset();
+          } else {
+            this.openSnackBar("Error, el cuento no se ha podido añadir. Por favor, intentelo de nuevo más tarde.")
+          }
+        }
+      } catch (error) {
+        this.openSnackBar("Error al añadir el cuento. Por favor, intentelo de nuevo más tarde.");
+      }
+    } else {
+      this.openSnackBar("Todos los campos son obligatorios.")
+    }
+  }
+
+  isDataValidStory(story: Stories): boolean {
+    if (story.title.length > 150) {
+      this.openSnackBar("El título es demasiado largo.");
+      return false;
+    }
+    if (story.description.length > 255) {
+      this.openSnackBar("La descripción es demasiado larga.");
+      return false;
+    }
+    return true;
+  }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];

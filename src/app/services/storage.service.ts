@@ -23,4 +23,17 @@ export class StorageService {
   public removeUser() {
     sessionStorage.removeItem('token');
   }
+
+  // Métodos para el localStorage
+  public setLocalStorageItem(key: string, value: string) {
+    localStorage.setItem(key, value);
+  }
+
+  public getLocalStorageItem(key: string): string | null {
+    return localStorage.getItem(key);
+  }
+
+  public removeLocalStorageItem(key: string) {
+    localStorage.removeItem(key);
+  }
 }

@@ -43,7 +43,7 @@
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Categoría</label>
-                <select formControlName="category" class="form-select" id="category" [(ngModel)]="selectedCategory"
+                <select formControlName="category" class="form-select" id="category" [(ngModel)]="selectedCategoryVideo"
                     required>
                     <option *ngFor="let category of categoriesVideo" [value]="category.id">{{ category.nameCategory }}
                     </option>
@@ -107,21 +107,71 @@
                 </div>
             </div>
             <div class="col-12 text-center">
-                <button type="button" class="btn btn-primary btn-event" (click)="fileInput.click()">Subir imagen</button>
+                <button type="button" class="btn btn-primary btn-event" (click)="fileInput.click()">Subir
+                    imagen</button>
                 <input id="fileInput" type="file" (change)="onFileSelected($event)" #fileInput style="display: none;">
-              </div>
-              
+            </div>
+
             <div class="mb-3 text-center">
                 <img *ngIf="showPreview" [src]="imageData" alt="Vista previa de la imagen" class="img-fluid mt-3">
             </div>
             <div class="row">
                 <div class="col-12 d-flex justify-content-between">
-                  <button *ngIf="showPreview" (click)="cancelPicture()" class="btn btn-warning mt-3" type="button">Quitar imagen</button>
-                  <button (click)="cancelEvent()" class="btn btn-danger btn-event mt-3" type="button">Cancelar</button>
-                  <button (click)="onSubmitEvent()" class="btn btn-success btn-event mt-3" type="button">Añadir evento</button>
+                    <button *ngIf="showPreview" (click)="cancelPicture()" class="btn btn-warning mt-3"
+                        type="button">Quitar imagen</button>
+                    <button (click)="cancelEvent()" class="btn btn-danger btn-event mt-3"
+                        type="button">Cancelar</button>
+                    <button (click)="onSubmitEvent()" class="btn btn-success btn-event mt-3" type="button">Añadir
+                        evento</button>
                 </div>
-              </div>
-              
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <h1>Añadir nuevo cuento</h1>
+        <form [formGroup]="storyForm" (ngSubmit)="onSubmitStory()">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input formControlName="title" type="text" class="form-control" id="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría</label>
+                <select formControlName="category" class="form-select" id="category" [(ngModel)]="selectedCategoryStory"
+                    required>
+                    <option *ngFor="let category of categoriesStory" [value]="category.id">{{ category.nameCategory }}
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea formControlName="description" class="form-control" id="description" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Añadir cuento</button>
+        </form>
+    </div>
+    <div class="col-md-6 mb-3">
+        <h1>Añadir nueva adivinanza</h1>
+        <form [formGroup]="riddleForm" (ngSubmit)="onSubmitRiddle()">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input formControlName="title" type="text" class="form-control" id="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría</label>
+                <select formControlName="category" class="form-select" id="category" [(ngModel)]="selectedCategoryRiddle"
+                    required>
+                    <option *ngFor="let category of categoriesRiddles" [value]="category.id">{{ category.nameCategory }}
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea formControlName="description" class="form-control" id="description" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Añadir Adivinanza</button>
         </form>
     </div>
 </div>

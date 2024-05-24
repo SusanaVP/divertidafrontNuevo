@@ -18,6 +18,10 @@
     font-weight: bold;
 }
 
+.card-tittle {
+  text-align: center;
+}
+
 .card-subtitle {
     font-size: medium;
 }

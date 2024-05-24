@@ -2,7 +2,7 @@ export interface Riddles {
   id: number;
   title: string;
   description: string;
-  categoriesVideo: {
+  categoriesRiddles: {
     "id": number,
     "nameCategory": string
   }

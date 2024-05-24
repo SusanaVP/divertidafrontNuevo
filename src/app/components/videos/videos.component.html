@@ -62,7 +62,7 @@
             </div>
             <div *ngIf="isAdmin">
               <button class="btn btn-success  m-3" (click)="editRecommended(video.id)">
-                <i class=" {{ videosRecommendedIds.has(video.id) ? 'fas fa-star' : 'far fa-star' }}" title="Recomendar"></i>
+                <i class=" {{ videosRecommendedIds.has(video.id) ? 'far fa-star' : 'fas fa-star' }}" title="Recomendar"></i>
               </button>
             </div>
             <button class="btn btn-danger m-3" (click)="editFavorite(video.id)">

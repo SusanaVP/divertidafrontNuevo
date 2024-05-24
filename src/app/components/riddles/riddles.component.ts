@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { RiddleService } from '../../services/riddle.service';
 import { Riddles } from '../interfaces/riddles';
-import { CategoryRiddle} from '../interfaces/categoryRiddle';
+import { CategoryRiddle } from '../interfaces/categoryRiddle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -35,7 +35,7 @@ export class RiddlesComponent {
       verticalPosition: 'bottom',
     });
   }
- 
+
   async getCategoryRiddles(nameCategory: string) {
     try {
       const categories = await this._riddleService.getRiddleCategories();
@@ -45,17 +45,12 @@ export class RiddlesComponent {
 
         if (selectedCategory) {
           const riddles = await this._riddleService.getRiddlesByCategory(selectedCategory.id);
-
-          if (riddles && riddles.length > 0) {
-            const navigationExtras: NavigationExtras = {
-              state: {
-                riddles: riddles
-              }
-            };
-            this._router.navigate(['/view-riddles'], navigationExtras);
-          } else {
-            this.openSnackBar("La lista de adivinanzas está vacía");
-          }
+          const navigationExtras: NavigationExtras = {
+            state: {
+              riddles: riddles
+            }
+          };
+          this._router.navigate(['/view-riddles'], navigationExtras);
         } else {
           this.openSnackBar("No se encontró la categoría especificada.");
         }

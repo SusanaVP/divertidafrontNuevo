@@ -27,18 +27,17 @@ export class RiddleService {
       const result = await this._http.get<Riddles[]>(`${this.apiUrl}/riddlesByCategory/${categoryId}`).toPromise();
 
       if (result?.length === 0 || result === undefined || result === null) {
-        console.error('La respuesta del servidor es indefinida.');
+        console.error('Error al obtener las categorías de las adivinanzas.');
         return [];
       }
 
       return result;
     } catch (error) {
-      console.error('Error al obtener las adivinanzas de la categoría ${category}', error);
+      console.error('Error al obtener las adivinanzas de la categoría: ${category}', error);
       return [];
     }
   }
 
-  
   async addRiddle(riddle: Riddles): Promise<string> {
     try {
       const response: HttpResponse<string> | undefined = await this._http.post<string>(
@@ -72,9 +71,9 @@ export class RiddleService {
 
   async getRiddleCategories(): Promise<CategoryRiddle[]> {
     try {
-      const result = await this._http.get<CategoryRiddle[]>(`${this.apiUrl}/riddleCategories`, { headers: this.getHeaders() }).toPromise();
+      const result = await this._http.get<CategoryRiddle[]>(`${this.apiUrl}/riddlesCategories`).toPromise();
       if (result?.length === 0 || result === undefined || result === null) {
-        console.error('La respuesta del servidor es indefinida.');
+        console.error('Error al obtener las categorías de las adivinanzas.');
         return [];
       }
       return result;
