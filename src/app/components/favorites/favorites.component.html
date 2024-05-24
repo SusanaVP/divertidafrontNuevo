@@ -103,8 +103,8 @@
             <div class="card border card-background-event">
               <div class="card-header">
                 <h2 class="card-title">{{ event.title }}</h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">Fecha: {{ event.date }}</h6>
-                <h5 class="card-tittle mb-2 text align-items-center">Localización: {{ event.town }}, {{ event.city }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted text-center">Fecha: {{ formatSpanishDate(event.date) }}</h6>
+                <h5 class="card-tittle mb-2 text ">Localización: {{ event.town }}, {{ event.city }}</h5>
                 <img [src]="event.image" class="card-img-top" alt="Event Image">
               </div>
               <div class="card-body text-center">

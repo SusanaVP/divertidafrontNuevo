@@ -1,45 +1,70 @@
 <div class="container-events">
-  <div *ngIf="eventsList.length > 0" class="d-flex align-items-stretch">
-    <div class="row">
-      <div class="col-md-6" *ngFor="let event of sortedEventsList">
-        <div class="card border card-background h-100 mb-4">
-          <div class="card-header">
-            <h2 class="card-title">{{ event.title }}</h2>
-            <h6 class="card-subtitle mb-2 text-muted">Fecha: {{ event.date }}</h6>
-            <h5 class="card-tittle mb-2 ">Localización: {{ event.town }}, {{ event.city }}</h5>
-            <img [src]="event.image" class="card-img-top" alt="{{ event.title }}">
-          </div>
-          <div class="card-body text-center">
-            <div [innerHTML]="formatDescription(event.description, 30, expandedEvents[event.id] )"></div>
-            <button (click)="toggleExpandidedEvent(event.id)" class="btn btn-primary botton-read">
-              <strong>{{ expandedEvents[event.id] ? 'Leer menos' : 'Leer más' }}</strong>
-            </button>
-            <div *ngIf="expandedEvents[event.id]" class="info-container">
-              <p><strong>Información:</strong> {{ event.info }}</p>
-            </div>
-          </div>
-          <div class="card-footer">
-            <p class="web-link text-start"><a href="{{ event.url }}" target="_blank">Ir a la WEB</a></p>
-            <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavoriteEvent(event.id)">
-              <i class=" {{ favoriteEventsIds.has(event.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
-            </button>
-            <div *ngIf="isAdmin">
-              <button class="btn btn-warning btn-deleted position-absolute bottom-0 m-3" (click)="deleteEvent(event.id)"
-                title="Eliminar">
-                <i class='fas fa-bug'></i>
-              </button>
-            </div>
-          </div>
+  <div class="row">
+    <div class="col-12 w-100">
+      <div class="row">
+        <div class="col-6 mb-3 text-start">
+          <label class="form-label">Buscar por:</label>
+          <select class="form-select" [(ngModel)]="selectedCategoryEvents"  (change)="onChangeSelected()">
+            <option value="town">Población</option>
+            <option value="nearby" selected>Más cercanos</option>
+            <option value="far">Más lejanos</option>
+            <option value="closestDate">Fecha más cercana</option>
+          </select>
+        </div>
+        <div class="col-6 mb-3 text-start" [hidden]="selectedCategoryEvents !== 'town'">
+          <label class="form-label">Selecciona una población:</label>
+          <select class="form-select" [(ngModel)]="townSelected" (change)="filterEvents()">
+            <option *ngFor="let town of ListTowns" [value]="town">{{ town }}</option>
+          </select>
         </div>
       </div>
     </div>
   </div>
 
-  <div *ngIf="eventsList.length === 0">
-    <div class="col-md-12 ">
-      <div class="alert alert-info" role="alert">
-        <p> No hay Eventos en este momento, disculpen las molestias.</p>
-        <img src="assets/imagenes/eventos.png" class="img" alt="Jirafa con carte de 'No hay eventos'">
+
+  <div class="row d-flex justify-content-center align-items-center h-100">
+    <div *ngIf="eventsList.length > 0" class="d-flex align-items-stretch">
+      <div class="row">
+        <div class="col-md-6" *ngFor="let event of sortedEventsList">
+          <div class="card border card-background h-100 mb-4">
+            <div class="card-header">
+              <h2 class="card-title">{{ event.title }}</h2>
+              <h6 class="card-subtitle mb-2 text-muted">Fecha:{{ formatSpanishDate(event.date) }}</h6>
+              <h5 class="card-tittle mb-2 ">Localización: {{ event.town }}, {{ event.city }}</h5>
+              <img [src]="event.image" class="card-img-top" alt="{{ event.title }}">
+            </div>
+            <div class="card-body text-center">
+              <div [innerHTML]="formatDescription(event.description, 30, expandedEvents[event.id] )"></div>
+              <button (click)="toggleExpandidedEvent(event.id)" class="btn btn-primary botton-read">
+                <strong>{{ expandedEvents[event.id] ? 'Leer menos' : 'Leer más' }}</strong>
+              </button>
+              <div *ngIf="expandedEvents[event.id]" class="info-container">
+                <p><strong>Información:</strong> {{ event.info }}</p>
+              </div>
+            </div>
+            <div class="card-footer">
+              <p class="web-link text-start"><a href="{{ event.url }}" target="_blank">Ir a la WEB</a></p>
+              <button class="btn btn-danger position-absolute bottom-0 end-0 m-3" (click)="editFavoriteEvent(event.id)">
+                <i class=" {{ favoriteEventsIds.has(event.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
+              </button>
+              <div *ngIf="isAdmin">
+                <button class="btn btn-warning btn-deleted position-absolute bottom-0 m-3"
+                  (click)="deleteEvent(event.id)" title="Eliminar">
+                  <i class='fas fa-bug'></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="eventsList.length === 0">
+      <div class="col-md-12 ">
+        <div class="alert alert-info" role="alert">
+          <p> No hay Eventos en este momento, disculpen las molestias.</p>
+          <img src="assets/imagenes/eventos.png" class="img" alt="Jirafa con carte de 'No hay eventos'">
+        </div>
       </div>
     </div>
   </div>

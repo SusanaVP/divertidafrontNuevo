@@ -22,10 +22,14 @@ export class EventsComponent {
   isAdmin: boolean = false;
   email: string = '';
 
+
   favoriteEventsIds: Set<number> = new Set<number>();
   favoriteEventsList: Event[] = [];
+  selectedCategoryEvents: string = 'nearby';
   sortedEventsList: Event[] = [];
   eventsList: Event[] = [];
+  townSelected: string = '';
+  ListTowns: string[] = [];
 
   contentType: string = "event";
   contentId: number = 0;
@@ -55,22 +59,46 @@ export class EventsComponent {
       const decode = this._authService.decodeJwtToken(token);
       this.isAdmin = decode.isAdmin;
       this.email = decode.email;
+      this.loadFavoriteEvents();
     }
     this.geolocationVerify();
     this.loadEvents();
-    this.loadFavoriteEvents();
   }
 
   async loadEvents() {
     try {
-      // Carga de eventos desde el servicio
       this._eventService.getEvents().subscribe(entries => {
         this.eventsList = entries.map(event => ({ ...event, expand: false }));
-        this.sortEventsByDistance();
+        this.sortEventsByDistanceNearby();
+        this.ListTowns = this.eventsList.map(event => event.town);
       });
     } catch (error) {
       console.error('Error al obtener los eventos', error);
     }
+  }
+
+  onChangeSelected() {
+    if (this.selectedCategoryEvents === 'nearby' || this.selectedCategoryEvents === 'far') {
+      if (this.latitudeUser === 0 && this.longitudeUser === 0) {
+        this.openSnackBar('Debes permitir el acceso a tu ubicación para buscar eventos cercanos o lejanos.');
+        this.selectedCategoryEvents = 'town';
+        return;
+      }
+    }
+    if (this.selectedCategoryEvents === 'nearby') {
+      this.sortEventsByDistanceNearby();
+      this.townSelected = '';
+    } else if (this.selectedCategoryEvents === 'far') {
+      this.sortEventsByDistanceFar();
+      this.townSelected = '';
+    } else if (this.selectedCategoryEvents === 'closestDate') {
+      this.sortEventsByClosestDate();
+      this.townSelected = '';
+    } else {
+      this.ListTowns;
+      this.townSelected = this.ListTowns[0];
+    }
+
   }
 
   async loadFavoriteEvents() {
@@ -79,7 +107,7 @@ export class EventsComponent {
       if (user !== null && user !== undefined) {
         this.idUser = user.id;
       } else {
-       console.log("Error al obtener el usuario logueado");
+        console.log("Error al obtener el usuario logueado");
       }
       this.favoriteEventsList = await this._favoritesService.getFavoritesEvents(this.idUser!);
       this.favoriteEventsIds = new Set<number>(this.favoriteEventsList.map(event => event.id));
@@ -88,20 +116,19 @@ export class EventsComponent {
     }
   }
 
-  geolocationVerify() {
+  async geolocationVerify() {
     if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
+      await navigator.geolocation.getCurrentPosition(position => {
         this.latitudeUser = position.coords.latitude;
         this.longitudeUser = position.coords.longitude;
       }, error => {
-        this.openSnackBar('Error al obtener la ubicación:');
+        this.openSnackBar('Has cancelado la geolocalización para obtener la ubicación:');
 
       });
     } else {
       this.openSnackBar('La geolocalización no es compatible con este navegador.');
     }
   }
-
 
   toggleExpandidedEvent(eventId: number) {
     this.expandedEvents[eventId] = !this.expandedEvents[eventId];
@@ -157,10 +184,23 @@ export class EventsComponent {
     }
   }
 
-  sortEventsByDistance() {
-    // Ordenar los eventos por distancia
+  sortEventsByDistanceNearby() {
     this.sortedEventsList = [...this.eventsList].sort((a, b) => {
       return this.calculateDistance(a) - this.calculateDistance(b);
+    });
+  }
+
+  sortEventsByDistanceFar() {
+    this.sortedEventsList = [...this.eventsList].sort((a, b) => {
+      return this.calculateDistance(b) - this.calculateDistance(a);
+    });
+  }
+
+  sortEventsByClosestDate() {
+    this.sortedEventsList = [...this.eventsList].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return Math.abs(dateA.getTime() - new Date().getTime()) - Math.abs(dateB.getTime() - new Date().getTime());
     });
   }
 
@@ -205,5 +245,29 @@ export class EventsComponent {
         }
       }
     });
+  }
+
+  filterEvents() {
+    if (this.selectedCategoryEvents === 'town' && this.townSelected.trim() !== '') {
+      this.sortedEventsList = this.eventsList.filter(event => event.town.toLowerCase() === this.townSelected.toLowerCase());
+    } else {
+      this.sortEventsByDistanceNearby();
+    }
+  }
+
+  formatSpanishDate(dateString: Date): string {
+    // Obtener la fecha como objeto Date
+    const date = new Date(dateString);
+    // Obtener el día, mes y año
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    // Array de nombres de meses en español
+    const spanishMonths = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    // Formatear la fecha en el formato deseado
+    return `${day}-${spanishMonths[monthIndex]}-${year}`;
   }
 }

@@ -262,4 +262,16 @@ export class FavoritesComponent implements OnInit {
     }
     return result;
   }
+
+  formatSpanishDate(dateString: Date): string {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    const spanishMonths = [
+      "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+      "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    return `${day}-${spanishMonths[monthIndex]}-${year}`;
+  }
 }
