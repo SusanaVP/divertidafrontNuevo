@@ -3,10 +3,12 @@
     bottom: 0;
     left: 0;
     right: 0;
+    height: 12%;
     width: 100%;
     margin-top: 5%;
     padding: 1%;
     background-color: rgb(239, 195, 100);
+
 }
 
 .social-icons-widget a{
@@ -28,6 +30,6 @@ li a {
 }
 
 .container-footer .nav-link {
-    padding: 5px 5px; 
-    margin: 0 10px;
+    padding: 2px 10px;
+    margin: 0 5px;
 }

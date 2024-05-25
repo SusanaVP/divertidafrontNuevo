@@ -40,7 +40,7 @@ export class UserService {
 
     async getUserByEmail(email: string): Promise<User | undefined> {
         try {
-            const result: User | undefined = await this._http.get<User>(`${this.apiUrl}/findByEmail?email=${email}`).toPromise();
+            const result: User | undefined = await this._http.get<User>(`${this.apiUrl}/findByEmail/${email}`).toPromise();
             if (!result) {
                 console.log('No se encontró ningún usuario con el correo electrónico proporcionado.');
                 return undefined;

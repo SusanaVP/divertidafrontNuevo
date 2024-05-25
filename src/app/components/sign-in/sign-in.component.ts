@@ -91,7 +91,7 @@ export class SignInComponent {
 
       if (result === 'success') {
         try {
-          const login = await this._authService.login(this.userData.password, this.userData.email);
+          const login = await this._authService.login(this.userData.email,this.userData.password);
 
           if (login !== null || !login) {
             this._router.navigate(['/home']).then(() => {
