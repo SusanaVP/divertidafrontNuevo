@@ -7,33 +7,64 @@ export class StorageService {
 
   constructor() { }
 
+  
+  private isSessionStorageAvailable(): boolean {
+    return typeof window !== 'undefined' && typeof sessionStorage !== 'undefined';
+  }
+
+  private isLocalStorageAvailable(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
+
   public setToken(jwtToken: string) {
-    sessionStorage.setItem('token', jwtToken);
+    if (this.isSessionStorageAvailable()) {
+      sessionStorage.setItem('token', jwtToken);
+    } else {
+
+      console.warn('SessionStorage no está disponible');
+    }
   }
 
   public getToken(): string | null {
-    const token = sessionStorage.getItem('token');
-    if (token !== null) {
-      return token;
+    if (this.isSessionStorageAvailable()) {
+      return sessionStorage.getItem('token');
     } else {
+      console.warn('SessionStorage no está disponible');
       return null;
     }
   }
 
   public removeUser() {
-    sessionStorage.removeItem('token');
+    if (this.isSessionStorageAvailable()) {
+      sessionStorage.removeItem('token');
+    } else {
+      console.warn('SessionStorage no está disponible');
+    }
   }
 
   // Métodos para el localStorage
   public setLocalStorageItem(key: string, value: string) {
-    localStorage.setItem(key, value);
+    if (this.isLocalStorageAvailable()) {
+      localStorage.setItem(key, value);
+    } else {
+      console.warn('localStorage is not available');
+    }
   }
 
   public getLocalStorageItem(key: string): string | null {
-    return localStorage.getItem(key);
+    if (this.isLocalStorageAvailable()) {
+      return localStorage.getItem(key);
+    } else {
+      console.warn('localStorage is not available');
+      return null;
+    }
   }
 
   public removeLocalStorageItem(key: string) {
-    localStorage.removeItem(key);
+    if (this.isLocalStorageAvailable()) {
+      localStorage.removeItem(key);
+    } else {
+      console.warn('localStorage is not available');
+    }
   }
 }

@@ -110,7 +110,7 @@ export class BlogComponent {
 
     // Verificar si han pasado 24 horas desde el último like
     if ((currentTime - lastLikeTime) > oneDay) {
-      likesBlog[this.idUser].count = 0; // Resetear el conteo si han pasado más de 24 horas
+      likesBlog[this.idUser].count = 0;
     }
 
     if (likesBlog[this.idUser].count < 3) {
