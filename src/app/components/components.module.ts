@@ -28,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RankingComponent } from './ranking/ranking.component';
 import { GeneratorPDFComponent } from './generator-pdf/generator-pdf.component';
+import { ConfirmDialogBlogComponent } from './confirm-dialog-blog/confirm-dialog-blog.component';
 
 
 
@@ -52,7 +53,9 @@ import { GeneratorPDFComponent } from './generator-pdf/generator-pdf.component';
         ViewRiddlesComponent,
         AdminComponent,
         RankingComponent,
-        GeneratorPDFComponent
+        GeneratorPDFComponent,
+        ConfirmDialogComponent,
+        ConfirmDialogBlogComponent
     ],
     exports: [
         BlogComponent,
@@ -75,7 +78,9 @@ import { GeneratorPDFComponent } from './generator-pdf/generator-pdf.component';
         ViewRiddlesComponent,
         AdminComponent,
         RankingComponent,
-        GeneratorPDFComponent
+        GeneratorPDFComponent,
+        ConfirmDialogComponent,
+        ConfirmDialogBlogComponent
     ],
     imports: [
         CommonModule,

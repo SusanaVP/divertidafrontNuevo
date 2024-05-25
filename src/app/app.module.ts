@@ -8,15 +8,11 @@ import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar'; 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ConfirmDialogBlogComponent } from './components/confirm-dialog-blog/confirm-dialog-blog.component';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        ConfirmDialogComponent,
-        ConfirmDialogBlogComponent
+        AppComponent
     ],
     providers: [
         provideClientHydration(),

@@ -9,19 +9,21 @@ export class StorageService {
 
   
   private isSessionStorageAvailable(): boolean {
-    return typeof window !== 'undefined' && typeof sessionStorage !== 'undefined';
-  }
-
-  private isLocalStorageAvailable(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+    try {
+      const testKey = '__test__';
+      sessionStorage.setItem(testKey, testKey);
+      sessionStorage.removeItem(testKey);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   public setToken(jwtToken: string) {
     if (this.isSessionStorageAvailable()) {
       sessionStorage.setItem('token', jwtToken);
     } else {
-
-      console.warn('SessionStorage no está disponible');
+      console.error('SessionStorage no está disponible');
     }
   }
 
@@ -29,7 +31,7 @@ export class StorageService {
     if (this.isSessionStorageAvailable()) {
       return sessionStorage.getItem('token');
     } else {
-      console.warn('SessionStorage no está disponible');
+      console.error('SessionStorage no está disponible');
       return null;
     }
   }
@@ -38,33 +40,19 @@ export class StorageService {
     if (this.isSessionStorageAvailable()) {
       sessionStorage.removeItem('token');
     } else {
-      console.warn('SessionStorage no está disponible');
+      console.error('SessionStorage no está disponible');
     }
   }
 
-  // Métodos para el localStorage
   public setLocalStorageItem(key: string, value: string) {
-    if (this.isLocalStorageAvailable()) {
-      localStorage.setItem(key, value);
-    } else {
-      console.warn('localStorage is not available');
-    }
+    localStorage.setItem(key, value);
   }
 
   public getLocalStorageItem(key: string): string | null {
-    if (this.isLocalStorageAvailable()) {
-      return localStorage.getItem(key);
-    } else {
-      console.warn('localStorage is not available');
-      return null;
-    }
+    return localStorage.getItem(key);
   }
 
   public removeLocalStorageItem(key: string) {
-    if (this.isLocalStorageAvailable()) {
-      localStorage.removeItem(key);
-    } else {
-      console.warn('localStorage is not available');
-    }
+    localStorage.removeItem(key);
   }
 }
