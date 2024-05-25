@@ -57,8 +57,8 @@ export class BlogComponent {
     this.loadBlogValidated();
   }
 
-  loadBlogValidated() {
-    this._blogService.getBlogValidated().subscribe(entries => {
+  async loadBlogValidated() {
+    await this._blogService.getBlogValidated().subscribe(entries => {
       this.blogEntries = entries;
     },
       error => {
@@ -83,6 +83,7 @@ export class BlogComponent {
       return this._router.navigate(['/ranking']).then(() => {
         this.idUser
         this.email
+        this.loadBlogValidated();
         window.location.reload();
       });
     } else {
