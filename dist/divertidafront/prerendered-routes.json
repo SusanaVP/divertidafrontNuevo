@@ -1,0 +1,20 @@
+{
+  "routes": [
+    "/admin",
+    "/blog",
+    "/blog-entry-form",
+    "/error",
+    "/events",
+    "/favorites",
+    "/generator-pdf",
+    "/home",
+    "/login",
+    "/ranking",
+    "/riddles",
+    "/sign-in",
+    "/story",
+    "/videos",
+    "/view-riddles",
+    "/view-stories"
+  ]
+}
