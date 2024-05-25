@@ -1,7 +1,10 @@
 <div class="container-generator-pdf">
     <div class="row">
-    <p>generator-pdf works!</p>
-    <button >Generar PDF</button>
+        <iframe [src]="pdfSrc" width="100%" height="500px"></iframe>
+    </div>
+    <div class="row">
+        <button class="download-button">
+            <a [href]="pdfSrc" download="ddivertida.pdf">Descargar PDF</a>
+        </button>
     </div>
 </div>
-

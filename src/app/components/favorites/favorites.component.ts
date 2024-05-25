@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, OnInit, ViewContainerRef } from '@angular/core';
 import { Video } from '../interfaces/videos';
 import { VideosService } from '../../services/videos.service';
 import { FavoritesService } from '../../services/favorites.service';
@@ -52,7 +52,9 @@ export class FavoritesComponent implements OnInit {
     private _router: Router,
     private _snackBar: MatSnackBar,
     private _authService: AuthService,
-    private _userService: UserService) {
+    private _userService: UserService,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private viewContainerRef: ViewContainerRef) {
   }
 
   openSnackBar(message: string) {
@@ -283,7 +285,12 @@ export class FavoritesComponent implements OnInit {
     const favoriteRiddles = this.favoriteRiddlesList;
     const favoriteEvents = this.favoriteEventsList;
 
-    //this.  _generatorPdfComponent.generatePdf(favoriteVideos, favoriteStories, favoriteRiddles, favoriteEvents);
+    // Crea una instancia del componente GeneratorPDFComponent
+    const factory = this.componentFactoryResolver.resolveComponentFactory(GeneratorPDFComponent);
+    const componentRef: ComponentRef<GeneratorPDFComponent> = this.viewContainerRef.createComponent(factory);
+
+    // Llama al método generatePdf() del componente para generar el PDF
+    componentRef.instance.generatePdf(favoriteVideos, favoriteStories, favoriteRiddles, favoriteEvents);
   }
 
 }

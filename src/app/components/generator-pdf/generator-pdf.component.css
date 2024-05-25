@@ -1,7 +1,35 @@
 .container-generator-pdf {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.row {
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    margin: auto;
+    margin-bottom: 20px;
+}
+
+.download-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #eac80a;
+    color: rgb(16, 15, 15);
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 20%;
+}
+
+.download-button a {
+    color: white;
+    text-decoration: none;
+    width: 10%;
+}
+
+.download-button:hover {
+    background-color: rgb(8, 154, 8);
 }

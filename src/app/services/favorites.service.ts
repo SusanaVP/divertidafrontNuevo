@@ -7,6 +7,7 @@ import { Favorites } from '../components/interfaces/favorites';
 import { Stories } from '../components/interfaces/stories';
 import { Riddles } from '../components/interfaces/riddles';
 import { Event } from '../components/interfaces/events';
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -104,4 +105,5 @@ export class FavoritesService {
   getFavoritesIdUser(idUser: number) {
     return this._http.get<Favorites[]>(`${this.apiUrl}/favoritesIdUser/${idUser}`, { headers: this.getHeaders() });
   }
+
 }

@@ -1,9 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BlogService } from '../../services/blog.service';
-import { StorageService } from '../../services/storage.service';
-
-import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import pdfMake from 'pdfmake/build/pdfmake';
@@ -12,6 +8,7 @@ import { Video } from '../interfaces/videos';
 import { Stories } from '../interfaces/stories';
 import { Riddles } from '../interfaces/riddles';
 import { Event } from '../interfaces/events';
+import { FavoritesService } from '../../services/favorites.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -22,21 +19,22 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 export class GeneratorPDFComponent implements OnInit {
 
   @Input() idUser: number | undefined;
-  
+
   @Input() favoriteVideos: Video[] = [];
   @Input() favoriteStories: Stories[] = [];
   @Input() favoriteRiddles: Riddles[] = [];
   @Input() favoriteEvents: Event[] = [];
   email: string = '';
 
-  constructor(private _blogService: BlogService,
-    private _storageService: StorageService,
-    private _router: Router,
-    private _userService: UserService,
-    private _authService: AuthService,
+  pdfSrc: any;
+  pdfUrl: SafeUrl | undefined;
+
+  constructor(
+    private _favoritesService: FavoritesService,
     private _snackBar: MatSnackBar,
-    private route: ActivatedRoute
-  ) { 
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer
+  ) {
   }
 
   openSnackBar(message: string) {
@@ -48,58 +46,81 @@ export class GeneratorPDFComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.idUser = params['idUser'];
-      this.email = params['email'];
-    });
-    // Verifica si se recibieron datos de favoritos
-    if (this.favoriteVideos && this.favoriteStories && this.favoriteRiddles && this.favoriteEvents) {
-      // Lógica para generar el PDF con los datos de favoritos
-      this.generatePdf(this.favoriteVideos, this.favoriteStories, this.favoriteRiddles, this.favoriteEvents);
-    } else {
-      console.error('No se recibieron datos de favoritos');
-    }
+
   }
 
-  
   generatePdf(favoriteVideos: Video[], favoriteStories: Stories[], favoriteRiddles: Riddles[], favoriteEvents: Event[]) {
-    // Lógica para construir el contenido del PDF con los datos recibidos
+    // Verificar que los datos no sean undefined o null
+    const validFavoriteVideos = favoriteVideos || [];
+    const validFavoriteStories = favoriteStories || [];
+    const validFavoriteRiddles = favoriteRiddles || [];
+    const validFavoriteEvents = favoriteEvents || [];
+
     const documentDefinition = {
       content: [
-        { text: 'Resumen de favoritos', style: 'header' },
+        { text: 'Resumen de mis favoritos en la web D de Divertida', style: 'header' },
+        { text: 'Fecha: ' + new Date()!.toLocaleDateString(), style: 'subheader' },
         { text: 'Videos favoritos:', style: 'subheader' },
-        ...favoriteVideos.map(video => {
-          return { text: `${video.title} - ${video.description}` };
-        }),
+        ...validFavoriteVideos.flatMap(video => [
+          { text: 'Título del vídeo:', bold: true },
+          { text: video.title },
+          { text: 'Descripción:', bold: true },
+          { text: video.description },
+          { text: 'URL:', bold: true },
+          { text: video.url },
+          { text: 'Categoría:', bold: true },
+          { text: video.categoriesVideo.nameCategory },
+          { text: '---'}
+        ]),
         { text: 'Cuentos favoritos:', style: 'subheader' },
-        ...favoriteStories.map(story => {
-          return { text: `${story.title} - ${story.description}` };
-        }),
+        ...validFavoriteStories.map(story => [
+          { text: 'Título del cuento:', bold: true }, ({ text: story.title })]),
         { text: 'Adivinanzas favoritas:', style: 'subheader' },
-        ...favoriteRiddles.map(riddle => {
-          return { text: `${riddle.title} - ${riddle.description}` };
-        }),
+        { text: '---'},
+        ...validFavoriteRiddles.map(riddle => [{ text: 'Título de la adivinanza:', bold: true },
+        ({ text: riddle.title })]), { text: '---'},
         { text: 'Eventos favoritos:', style: 'subheader' },
-        ...favoriteEvents.map(event => {
-          return { text: `${event.title} - ${event.description}` };
-        })
+        ...validFavoriteEvents.flatMap(event => [
+          { text: 'Título del evento:', bold: true },
+          { text: event.title },
+          { text: 'Descripción:', bold: true },
+          { text: event.description },
+          { text: 'Ciudad:', bold: true },
+          { text: event.city },
+          { text: 'Información adicional:', bold: true },
+          { text: event.info },
+          { text: '---'}
+        ])
       ],
       styles: {
         header: {
-          fontSize: 18,
+          fontSize: 20,
           bold: true,
-          margin: [0, 0, 0, 10] as [number, number, number, number] 
+          margin: [0, 0, 0, 10] as [number, number, number, number],
+          
+
         },
         subheader: {
           fontSize: 16,
           bold: true,
-          margin: [0, 10, 0, 5] as [number, number, number, number] 
+          margin: [0, 10, 0, 5] as [number, number, number, number]
         }
       }
     };
 
-    // Genera el PDF utilizando pdfMake
-    pdfMake.createPdf(documentDefinition).open();
+
+    // Genera el PDF utilizando pdfMake y lo convierte en un blob
+    const pdfDocGenerator = pdfMake.createPdf(documentDefinition);
+    pdfDocGenerator.getBlob((blob: Blob) => {
+      // Convierte el blob en una URL segura utilizando DomSanitizer
+      this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+    });
+  }
+
+
+  downloadPdf() {
+    // Descarga el PDF
+    // Lógica para descargar el PDF
   }
 
 }
