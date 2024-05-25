@@ -1,4 +1,3 @@
-
 <div class="container-favorites">
   <ng-container *ngIf="isLoggedIn">
     <div class="Videos">
@@ -42,7 +41,7 @@
                 <h5 class="card-title">{{ story.title }}</h5>
                 <div [innerHTML]="formatDescription(story.description, 50, expandedRiddles[story.id])"></div>
                 <button class="btn btn-link" (click)="toggleExpandedRiddles(story.id)">
-                    <strong>{{  expandedRiddles[story.id] ? 'Leer menos' : 'Leer más' }}</strong>
+                  <strong>{{ expandedRiddles[story.id] ? 'Leer menos' : 'Leer más' }}</strong>
                 </button>
                 <button class="btn btn-danger position-absolute bottom-0 end-0 m-3"
                   (click)="editFavoriteStory(story.id)">
@@ -74,7 +73,7 @@
                   <h5 class="card-title">{{ riddle.title }}</h5>
                   <div [innerHTML]="formatDescription(riddle.description, 50, expandedRiddles[riddle.id])"></div>
                   <button class="btn btn-link" (click)="toggleExpandedRiddles(riddle.id)">
-                      <strong>{{  expandedRiddles[riddle.id] ? 'Leer menos' : 'Leer más' }}</strong>
+                    <strong>{{ expandedRiddles[riddle.id] ? 'Leer menos' : 'Leer más' }}</strong>
                   </button>
                   <button class="btn btn-danger position-absolute bottom-0 end-0 m-3"
                     (click)="editFavoriteRiddle(riddle.id)">
@@ -95,12 +94,14 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="Eventos">
-        <h1>Eventos favoritos!!!</h1>
-        <div *ngIf="favoriteEventsList.length > 0">
-          <div class="col-md-6" *ngFor="let event of favoriteEventsList">
-            <div class="card border card-background-event">
+
+    <div class="Eventos">
+      <h1>Eventos favoritos!!!</h1>
+      <div *ngIf="favoriteEventsList.length > 0">
+        <div class="row">
+          <div class="col-12 col-md-{{ favoriteEventsList.length === 1 ? '6' : '6' }} mb-3"
+            *ngFor="let event of favoriteEventsList">
+            <div class="card h-100 mb-4 border card-background-event">
               <div class="card-header">
                 <h2 class="card-title">{{ event.title }}</h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">Fecha: {{ formatSpanishDate(event.date) }}</h6>
@@ -110,7 +111,7 @@
               <div class="card-body text-center">
                 <div [innerHTML]="formatDescription(event.description, 30, expandedEvents[event.id] )"></div>
                 <button (click)="toggleExpandidedEvent(event.id)" class="btn btn-primary botton-read">
-                  <strong>{{ expandedEvents[event.id]  ? 'Leer menos' : 'Leer más' }}</strong>
+                  <strong>{{ expandedEvents[event.id] ? 'Leer menos' : 'Leer más' }}</strong>
                 </button>
                 <div *ngIf="expandedEvents[event.id]" class="info-container">
                   <p><strong>Información:</strong> {{ event.info }}</p>
@@ -133,6 +134,17 @@
           No tienes Eventos favoritos. ¡Añade alguno!
         </div>
         <button class="btn btn-per" (click)="goToEventsPage()">Ir a Eventos</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="generatorPDF">
+        <h1>Generar PDF</h1>
+        <div class="col-12 mb-3">
+          <p>Si quieres obtener un resumen de tu paso por la web D de Divertida, puedes obtenerlo en PDF pulsando el botón "Generar PDF":
+          </p>
+          <button class="btn btn-per" (click)="generatePdfFromFavorites()">Generar PDF</button>
+        </div>
       </div>
     </div>
 

@@ -6,7 +6,7 @@ import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { RiddleService } from '../../services/riddle.service';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -140,7 +140,7 @@ export class ViewRiddlesComponent {
         try {
           const response: string = await this._riddlesService.deleteRiddle(idRiddle);
           if (response === 'success') {
-            this.openSnackBar('Cuento eliminado correctamente');
+            this.openSnackBar('Adivinanza eliminada correctamente');
             this.riddles = this.riddles?.filter(riddle => riddle.id !== idRiddle);
           } else {
             this.openSnackBar('Error al eliminar la adivinanza.');

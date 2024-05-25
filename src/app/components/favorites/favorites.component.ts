@@ -11,6 +11,7 @@ import { Stories } from '../interfaces/stories';
 import { Event } from '../interfaces/events';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { GeneratorPDFComponent } from '../generator-pdf/generator-pdf.component';
 
 @Component({
   selector: 'app-favorites',
@@ -274,4 +275,15 @@ export class FavoritesComponent implements OnInit {
     ];
     return `${day}-${spanishMonths[monthIndex]}-${year}`;
   }
+
+  generatePdfFromFavorites() {
+    // Recupera los datos de favoritos necesarios
+    const favoriteVideos = this.favoriteVideosList;
+    const favoriteStories = this.favoriteStoriesList;
+    const favoriteRiddles = this.favoriteRiddlesList;
+    const favoriteEvents = this.favoriteEventsList;
+
+    //this.  _generatorPdfComponent.generatePdf(favoriteVideos, favoriteStories, favoriteRiddles, favoriteEvents);
+  }
+
 }

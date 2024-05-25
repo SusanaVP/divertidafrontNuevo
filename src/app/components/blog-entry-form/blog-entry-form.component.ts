@@ -7,7 +7,7 @@ import { Blog } from '../interfaces/blog';
 import { User } from '../interfaces/user';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogBlogComponent } from '../../confirm-dialog-blog/confirm-dialog-blog.component';
+import { ConfirmDialogBlogComponent } from '../confirm-dialog-blog/confirm-dialog-blog.component';
 
 @Component({
   selector: 'app-blog-entry-form',

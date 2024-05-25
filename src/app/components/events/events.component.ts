@@ -8,7 +8,7 @@ import { FavoritesService } from '../../services/favorites.service';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-events',

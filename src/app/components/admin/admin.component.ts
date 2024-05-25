@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Video } from '../interfaces/videos';
 import { VideosService } from '../../services/videos.service';
 import { CategoryVideo } from '../interfaces/categoryVideo';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EventService } from '../../services/event.service';
 import { CategoryRiddle } from '../interfaces/categoryRiddle';

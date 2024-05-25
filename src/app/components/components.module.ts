@@ -21,12 +21,13 @@ import { ViewStoriesComponent } from './view-stories/view-stories.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ViewRiddlesComponent } from './view-riddles/view-riddles.component';
 import { AdminComponent } from './admin/admin.component';
-import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RankingComponent } from './ranking/ranking.component';
+import { GeneratorPDFComponent } from './generator-pdf/generator-pdf.component';
 
 
 
@@ -50,7 +51,8 @@ import { RankingComponent } from './ranking/ranking.component';
         SignInComponent,
         ViewRiddlesComponent,
         AdminComponent,
-        RankingComponent
+        RankingComponent,
+        GeneratorPDFComponent
     ],
     exports: [
         BlogComponent,
@@ -72,7 +74,8 @@ import { RankingComponent } from './ranking/ranking.component';
         SignInComponent,
         ViewRiddlesComponent,
         AdminComponent,
-        RankingComponent
+        RankingComponent,
+        GeneratorPDFComponent
     ],
     imports: [
         CommonModule,

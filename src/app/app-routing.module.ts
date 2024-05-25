@@ -15,6 +15,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { ViewRiddlesComponent } from './components/view-riddles/view-riddles.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { RankingComponent } from './components/ranking/ranking.component';
+import { GeneratorPDFComponent } from './components/generator-pdf/generator-pdf.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -32,7 +33,8 @@ const routes: Routes = [
   { path: 'sign-in', component: SignInComponent },
   { path: 'view-riddles', component: ViewRiddlesComponent },
   { path: 'admin', component: AdminComponent },
-  { path: 'ranking', component: RankingComponent}
+  { path: 'ranking', component: RankingComponent},
+  { path: 'generator-pdf', component: GeneratorPDFComponent}
 ];
 
 @NgModule({

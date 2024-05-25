@@ -26,8 +26,11 @@ export class RiddleService {
     try {
       const result = await this._http.get<Riddles[]>(`${this.apiUrl}/riddlesByCategory/${categoryId}`).toPromise();
 
-      if (result?.length === 0 || result === undefined || result === null) {
+      if (result === undefined || result === null) {
         console.error('Error al obtener las categorías de las adivinanzas.');
+        return [];
+      } else if (result?.length === 0) {
+        console.log('Categorías de las adivinanzas vacías.');
         return [];
       }
 

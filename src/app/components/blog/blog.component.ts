@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({

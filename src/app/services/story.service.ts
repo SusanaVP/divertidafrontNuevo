@@ -27,8 +27,11 @@ export class StoryService {
     try {
       const result = await this._http.get<Stories[]>(`${this.apiUrl}/storiesByCategory/${categoryId}`).toPromise();
 
-      if (result?.length === 0 || result === undefined || result === null) {
+      if (result === undefined || result === null) {
         console.error('Error al obtener la categorías de los cuentos.');
+        return [];
+      } else if (result?.length === 0) {
+        console.log('Categorías de los cuentos vacías.');
         return [];
       }
 
@@ -38,64 +41,68 @@ export class StoryService {
       return [];
     }
   }
-    
-    async addStory(story: Stories): Promise<string> {
-      try {
-        const response: HttpResponse<string> | undefined = await this._http.post<string>(
-          `${this.apiUrl}/addStory`, story, { headers: this.getHeaders(), observe: 'response' }).toPromise();
-        if (response && response?.status === 200) {
-          return 'success';
-        } else {
-          console.log('Error al guardar el cuento:', response);
-          return 'error';
-        }
-      } catch (error) {
-        console.error('Error al procesar la solicitud del cuento:', error);
-        return 'error';
-      }
-    }
-  
-    async deleteStory(idStory: number): Promise<string> {
-      try {
-        const response: string | undefined = await this._http.get(`${this.apiUrl}/deleteStory/${idStory}`, { headers: this.getHeaders(), responseType: 'text' }).toPromise();
-        if (response === '') {
-          return 'success';
-        } else {
-          console.log('Error al eliminar el evento', response);
-          return 'error';
-        }
-      } catch (error) {
-        console.error('Error al eliminar el evento.', error);
-        return 'error';
-      }
-    }
 
-    async updateStory(story: Stories): Promise<string> {
-      try {
-        const response: HttpResponse<string> | undefined = await this._http.put<string>(
-          `${this.apiUrl}/updateStory/${story.id}`, story, { headers: this.getHeaders(), observe: 'response' }).toPromise();
-        if (response && response?.status === 200) {
-          return 'success';
-        } else {
-          console.log('Error al actualizar el cuento:', response);
-          return 'error';
-        }
-      } catch (error) {
-        console.error('Error al procesar la solicitud del cuento:', error);
+  async addStory(story: Stories): Promise<string> {
+    try {
+      const response: HttpResponse<string> | undefined = await this._http.post<string>(
+        `${this.apiUrl}/addStory`, story, { headers: this.getHeaders(), observe: 'response' }).toPromise();
+      if (response && response?.status === 200) {
+        return 'success';
+      } else {
+        console.log('Error al guardar el cuento:', response);
         return 'error';
       }
+    } catch (error) {
+      console.error('Error al procesar la solicitud del cuento:', error);
+      return 'error';
     }
+  }
 
-    async getStoryCategories(): Promise<CategoryStory[]> {
-      try {
-        const result = await this._http.get<CategoryStory[]>(`${this.apiUrl}/storyCategories`).toPromise();
-        if (result?.length === 0 || result === undefined || result === null) {
-          console.error('Error al obtener las categorías de los cuentos.');
-          return [];
-        }
-        return result;      } catch (error) {
-        console.error('Error al obtener las categorías de los cuentos', error);
+  async deleteStory(idStory: number): Promise<string> {
+    try {
+      const response: string | undefined = await this._http.get(`${this.apiUrl}/deleteStory/${idStory}`, { headers: this.getHeaders(), responseType: 'text' }).toPromise();
+      if (response === '') {
+        return 'success';
+      } else {
+        console.log('Error al eliminar el evento', response);
+        return 'error';
+      }
+    } catch (error) {
+      console.error('Error al eliminar el evento.', error);
+      return 'error';
+    }
+  }
+
+  async updateStory(story: Stories): Promise<string> {
+    try {
+      const response: HttpResponse<string> | undefined = await this._http.put<string>(
+        `${this.apiUrl}/updateStory/${story.id}`, story, { headers: this.getHeaders(), observe: 'response' }).toPromise();
+      if (response && response?.status === 200) {
+        return 'success';
+      } else {
+        console.log('Error al actualizar el cuento:', response);
+        return 'error';
+      }
+    } catch (error) {
+      console.error('Error al procesar la solicitud del cuento:', error);
+      return 'error';
+    }
+  }
+
+  async getStoryCategories(): Promise<CategoryStory[]> {
+    try {
+      const result = await this._http.get<CategoryStory[]>(`${this.apiUrl}/storyCategories`).toPromise();
+      if (result === undefined || result === null) {
+        console.error('Error al obtener las categorías de los cuentos.');
+        return [];
+      } else if (result?.length === 0) {
+        console.error('Categorías de los cuentos vacías.');
         return [];
       }
+      return result;
+    } catch (error) {
+      console.error('Error al obtener las categorías de los cuentos', error);
+      return [];
     }
+  }
 }

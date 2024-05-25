@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { StoryService } from '../../services/story.service';
 import { CategoryStory } from '../interfaces/categoryStory';
 

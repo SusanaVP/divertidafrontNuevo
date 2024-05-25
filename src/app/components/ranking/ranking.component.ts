@@ -26,7 +26,6 @@ export class RankingComponent {
     private _storageService: StorageService,
     private _router: Router,
     private _snackBar: MatSnackBar,
-    private _userService: UserService,
     private _authService: AuthService
   ) { }
 
@@ -71,5 +70,9 @@ export class RankingComponent {
         });
       }
     );
+  }
+
+  goToBlogPage() {
+    this._router.navigate(['/blog']);
   }
 }
