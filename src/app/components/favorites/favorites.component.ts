@@ -66,11 +66,12 @@ export class FavoritesComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const token = this._storageService.getToken();
+    const token = await this._storageService.getToken();
     if (token && token.length > 0) {
       const decode = this._authService.decodeJwtToken(token);
       this.isAdmin = decode.isAdmin;
       this.email = decode.email;
+      this.isLoggedIn = true;
     }
     const user = await this._userService.getUserByEmail(this.email);
     if (user !== null && user !== undefined) {
@@ -101,7 +102,7 @@ export class FavoritesComponent implements OnInit {
 
       const favoritesRiddles = await this._favoritesService.getFavoritesRiddles(this.idUser!);
       if (favoritesRiddles.length == 0) {
-        console.log('No tienes aivinanzas favoritas, añade alguna!!!');
+        console.log('No tienes adivinanzas favoritas, añade alguna!!!');
       }
       else {
         this.favoriteRiddlesList = favoritesRiddles;

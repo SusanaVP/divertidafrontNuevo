@@ -45,8 +45,10 @@ export class FavoritesService {
     try {
       const result = await this._http.get<Video[]>(`${this.apiUrl}/favoritesVideos/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
-      if (result?.length === 0 || result === undefined || result === null) {
-        console.log('La respuesta del servidor es indefinida.');
+      if (result === undefined || result === null) {
+        console.log('La respuesta del servidor es indefinida para los vídeos favoritos.');
+        return [];
+      } else if (result?.length === 0) {
         return [];
       }
       return result;
@@ -60,8 +62,10 @@ export class FavoritesService {
     try {
       const result = await this._http.get<Stories[]>(`${this.apiUrl}/favoritesStories/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
-      if (result?.length === 0 || result === undefined || result === null) {
-        console.log('La respuesta del servidor es indefinida.');
+      if (result === undefined || result === null) {
+        console.log('La respuesta del servidor es indefinida para los cuentos favoritos.');
+        return [];
+      } else if (result?.length === 0) {
         return [];
       }
       return result;
@@ -75,8 +79,10 @@ export class FavoritesService {
     try {
       const result = await this._http.get<Riddles[]>(`${this.apiUrl}/favoritesRiddles/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
-      if (result?.length === 0 || result === undefined || result === null) {
-        console.log('La respuesta del servidor es indefinida.');
+      if (result === undefined || result === null) {
+        console.log('La respuesta del servidor es indefinida para las adivinanzas favoritas.');
+        return [];
+      } else if (result?.length === 0) {
         return [];
       }
       return result;
@@ -90,8 +96,10 @@ export class FavoritesService {
     try {
       const result = await this._http.get<Event[]>(`${this.apiUrl}/favoritesEvents/${idUser}`, { headers: this.getHeaders() }).toPromise();
 
-      if (result?.length === 0 || result === undefined || result === null) {
-        console.log('La respuesta del servidor es indefinida.');
+      if (result === undefined || result === null) {
+        console.log('La respuesta del servidor es indefinida para los eventos favoritos.');
+        return [];
+      }else if (result?.length === 0 ){
         return [];
       }
       return result;

@@ -32,8 +32,10 @@ export class VideosService {
     try {
       const result = await this._http.get<Video[]>(`${this.apiUrl}/categories/${category}`).toPromise();
 
-      if (result?.length === 0 || result === undefined || result === null) {
-        console.error('La respuesta del servidor es indefinida.');
+      if (result === undefined || result === null) {
+        console.error('La respuesta del servidor es indefinida para las categorías de los vídeos.');
+        return [];
+      } else if (result?.length === 0) {
         return [];
       }
 
@@ -68,8 +70,10 @@ export class VideosService {
   async getVideoCategories(): Promise<CategoryVideo[]> {
     try {
       const result = await this._http.get<CategoryVideo[]>(`${this.apiUrl}/videoCategories`, { headers: this.getHeaders() }).toPromise();
-      if (result?.length === 0 || result === undefined || result === null) {
-        console.error('La respuesta del servidor es indefinida.');
+      if (result === undefined || result === null) {
+        console.error('La respuesta del servidor es indefinida para las categorías de los vídeos.');
+        return [];
+      } else if (result?.length === 0) {
         return [];
       }
       return result;

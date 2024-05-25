@@ -62,12 +62,12 @@ export class EventsComponent {
       this.loadFavoriteEvents();
     }
     this.geolocationVerify();
-    this.loadEvents();
+   await this.loadEvents();
   }
 
   async loadEvents() {
     try {
-      this._eventService.getEvents().subscribe(entries => {
+     await this._eventService.getEvents().subscribe(entries => {
         this.eventsList = entries.map(event => ({ ...event, expand: false }));
         this.sortEventsByDistanceNearby();
         this.ListTowns = this.eventsList.map(event => event.town);
