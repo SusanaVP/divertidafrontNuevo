@@ -8,4 +8,5 @@ export interface User {
   date: string;
   postalCode: string;
   admin: boolean;
+  emailValidated: boolean;
 }

@@ -21,7 +21,8 @@ export class SignInComponent {
     password: '',
     date: '',
     postalCode: '',
-    admin: false
+    admin: false,
+    emailValidated: false
   };
 
   password2: string = '';
