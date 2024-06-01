@@ -18,12 +18,30 @@
                                         title="Eliminar">
                                         <i class='fas fa-bug'></i>
                                     </button>
+                                    <button class="btn btn-dark color-light btn-edit " (click)="startEditing(story.id)"
+                                    title="Modificar">
+                                    <i class='fas fa-pen-square'></i>
+                                </button>
                                 </div>
                                 <button class="btn btn-danger " (click)="editFavoriteStory(story.id)">
                                     <i
                                         class=" {{ favoriteStoriesIds.has(story.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
                                 </button>
                             </div>
+                        </div>
+                        <div *ngIf="editingStoryId === story.id" class="card-body">
+                            <form (ngSubmit)="saveEditStory(story)">
+                                <div class="form-group">
+                                    <label for="title-{{ story.id }}">Título</label>
+                                    <input type="text" class="form-control" id="title-{{ story.id }}" [(ngModel)]="story.title" name="title">
+                                </div>
+                                <div class="form-group">
+                                    <label for="description-{{ story.id }}">Descripción</label>
+                                    <textarea class="form-control" id="description-{{ story.id }}" [(ngModel)]="story.description" name="description"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                                <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
+                            </form>
                         </div>
                     </div>
                 </div>

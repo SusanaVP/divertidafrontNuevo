@@ -73,10 +73,10 @@ export class StoryService {
     }
   }
 
-  async updateStory(story: Stories): Promise<string> {
+  async editStory(story: Stories): Promise<string> {
     try {
       const response: HttpResponse<string> | undefined = await this._http.put<string>(
-        `${this.apiUrl}/updateStory/${story.id}`, story, { headers: this.getHeaders(), observe: 'response' }).toPromise();
+        `${this.apiUrl}/editStory`, story, { headers: this.getHeaders(), observe: 'response' }).toPromise();
       if (response && response?.status === 200) {
         return 'success';
       } else {

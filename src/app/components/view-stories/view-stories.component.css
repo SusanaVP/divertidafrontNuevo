@@ -30,3 +30,7 @@
   .btn-category:hover {
     transform: scale(1.1);
   }
+
+  .btn-edit {
+    margin-left: 10px;
+  }

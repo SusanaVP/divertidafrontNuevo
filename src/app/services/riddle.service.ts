@@ -85,4 +85,20 @@ export class RiddleService {
       return [];
     }
   }
+
+
+  async editRiddle(riddle: Riddles): Promise<string> {
+    try {
+      const response: HttpResponse<string> | undefined = await this._http.put<string>(`${this.apiUrl}/editRiddle`,  riddle , { headers: this.getHeaders(), observe: 'response' }).toPromise();
+      if (response && response?.status === 200) {
+        return 'success';
+      }else {
+        console.error('Error al guardar la adivinanza modificada.');
+        return 'error';
+      }
+    } catch (error) {
+      console.error('Error al guardar la adivinanza modificada.', error);
+      return 'error';
+    }
+  }
 }

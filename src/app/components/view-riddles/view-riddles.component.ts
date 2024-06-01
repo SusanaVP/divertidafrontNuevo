@@ -25,6 +25,7 @@ export class ViewRiddlesComponent {
   idUser: number | null = null;
   isAdmin: boolean = false;
   email: string = '';
+  editingRiddleId: number | null = null;
 
   constructor(
     private _router: Router,
@@ -75,7 +76,6 @@ export class ViewRiddlesComponent {
   chooseOtherCategory() {
     this._router.navigate(['/riddles']);
   }
-
 
   async editFavoriteRiddle(idRiddle: number) {
     try {
@@ -129,4 +129,33 @@ export class ViewRiddlesComponent {
       }
     });
   }
+
+  startEditing(id: number) {
+    this.editingRiddleId = id;
+  }
+
+  async saveEditRiddle(riddle: Riddles) {
+    this.editingRiddleId = null;
+
+    try {
+        const response: string = await this._riddlesService.editRiddle(riddle);
+        if (response === 'success') {
+            this.openSnackBar('Adivinanza modificada correctamente');
+            this.riddles = this.riddles!.map(existingRiddle => 
+                existingRiddle.id === riddle.id ? riddle : existingRiddle
+            );
+        } else {
+            this.openSnackBar('Error al modificar la adivinanza.');
+        }
+    } catch (error) {
+        console.error('Error al modificar la adivinanza', error);
+        this.openSnackBar('Error al modificar la adivinanza. Por favor, inténtelo de nuevo más tarde.');
+    }
+}
+
+
+  cancelEdit() {
+    this.editingRiddleId = null;
+  }
+
 }

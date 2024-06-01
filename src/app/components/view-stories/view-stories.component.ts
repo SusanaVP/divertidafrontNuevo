@@ -17,7 +17,7 @@ import { CategoryStory } from '../interfaces/categoryStory';
   styleUrl: './view-stories.component.css'
 })
 export class ViewStoriesComponent implements OnInit {
-  stories: Stories[] =[];
+  stories: Stories[] = [];
   dividedParagraphs: string[];
   maxWordsToShow: number = 30;
   expandedStories: { [id: number]: boolean } = {};
@@ -31,6 +31,7 @@ export class ViewStoriesComponent implements OnInit {
   selectedStory: Stories | null = null;
   public isEditing: any;
   public categoriesVideo: CategoryStory[] = [];
+  editingStoryId: number | null = null;
 
 
   constructor(
@@ -80,7 +81,7 @@ export class ViewStoriesComponent implements OnInit {
       console.error('Error al obtener los cuentos favoritos:', error);
     }
   }
-  
+
   chooseOtherCategory() {
     this._router.navigate(['/story']);
   }
@@ -147,7 +148,7 @@ export class ViewStoriesComponent implements OnInit {
           const response: string = await this._storyService.deleteStory(idStory);
           if (response === 'success') {
             this.openSnackBar('Cuento eliminado correctamente');
-           this.stories = this.stories?.filter(story => story.id !== idStory);
+            this.stories = this.stories?.filter(story => story.id !== idStory);
           } else {
             this.openSnackBar('Error al eliminar el cuento.');
           }
@@ -159,31 +160,32 @@ export class ViewStoriesComponent implements OnInit {
     });
   }
 
-  editStory(story: Stories) {
-    if (this.selectedStory && this.selectedStory.id === story.id) {
-      this.selectedStory = null;
-    } else {
-      this.selectedStory = story;
-    }
+  startEditing(id: number) {
+    this.editingStoryId = id;
   }
 
-  async saveEditedStory(story: Stories) {
+  async saveEditStory(story: Stories) {
+    this.editingStoryId = null;
+
     try {
-      const response = await this._storyService.updateStory(story);
+      const response: string = await this._storyService.editStory(story);
       if (response === 'success') {
-        this.openSnackBar("Cuento editado correctamente.");
-        this.selectedStory = null;
+        this.openSnackBar('Cuento modificado correctamente');
+        this.stories = this.stories!.map(existingStory =>
+          existingStory.id === story.id ? story : existingStory
+        );
       } else {
-        this.openSnackBar("Error al editar el cuento. Por favor, inténtelo de nuevo más tarde.");
+        this.openSnackBar('Error al modificar el cuento.');
       }
     } catch (error) {
-      console.error("Error al editar el cuento:", error);
-      this.openSnackBar("Error al editar el cuento. Por favor, inténtelo de nuevo más tarde.");
+      console.error('Error al modificar el cuento', error);
+      this.openSnackBar('Error al modificar el cuento. Por favor, inténtelo de nuevo más tarde.');
     }
   }
 
-  cancelEditing() {
-    this.selectedStory = null;
+
+  cancelEdit() {
+    this.editingStoryId = null;
   }
 
 }
