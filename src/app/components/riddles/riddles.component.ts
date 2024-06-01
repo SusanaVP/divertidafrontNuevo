@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { RiddleService } from '../../services/riddle.service';
 import { Riddles } from '../interfaces/riddles';
-import { CategoryRiddle } from '../interfaces/categoryRiddle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({

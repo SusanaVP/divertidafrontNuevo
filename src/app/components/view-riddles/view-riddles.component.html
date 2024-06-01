@@ -1,38 +1,39 @@
 <div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h1>Adivinanzas</h1>
-            <div *ngIf="riddles && riddles.length > 0">
-                <div *ngFor="let riddle of riddles">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h2 class="card-title">{{ riddle.title }}</h2>
-                            <div [innerHTML]="formatDescription(riddle.description, 50, expandedRiddles[riddle.id])">
-                            </div>
-                            <button class="btn btn-link" (click)="toggleExpandedRiddles(riddle.id)">
-                                <strong>{{ expandedRiddles[riddle.id] ? 'Leer menos' : 'Leer más' }}</strong>
-                            </button>
-                            <div class="mt-auto d-flex justify-content-between align-items-end">
-                                <div *ngIf="isAdmin">
-                                    <button class="btn btn-warning btn-deleted " (click)="deleteRiddle(riddle.id)"
-                                        title="Eliminar">
-                                        <i class='fas fa-bug'></i>
-                                    </button>
-                                </div>
-                                <button class="btn btn-danger " (click)="editFavoriteRiddle(riddle.id)">
-                                    <i
-                                        class=" {{ favoriteRiddlesIds.has(riddle.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
+    <h1>Adivinanzas</h1>
+    <div *ngIf="riddles && riddles.length > 0">
+        <div class="row">
+            <div class="col-md-6 mb-3" *ngFor="let riddle of riddles">
+                <div class="card h-100 mb-3">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ riddle.title }}</h2>
+                        <div class="description">{{riddle.description}}
+                        </div>
+                        <button class="btn btn-success solution" (click)="toggleExpandedSolution(riddle.id)">
+                            {{ expandedSolution[riddle.id] ? 'Ocultar solución' : 'Ver solución' }}
+                        </button>
+                        <div *ngIf="expandedSolution[riddle.id]">
+                            <p>{{ riddle.solution }}</p>
+                        </div>
+                        <div class="mt-auto d-flex justify-content-between align-items-end">
+                            <div *ngIf="isAdmin">
+                                <button class="btn btn-warning btn-deleted " (click)="deleteRiddle(riddle.id)"
+                                    title="Eliminar">
+                                    <i class='fas fa-bug'></i>
                                 </button>
                             </div>
+                            <button class="btn btn-danger " (click)="editFavoriteRiddle(riddle.id)">
+                                <i
+                                    class=" {{ favoriteRiddlesIds.has(riddle.id) ? 'far fa-heart' : 'fas fa-heart' }}"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div *ngIf="!riddles || riddles.length === 0">
-                <p>No hay adivinanzas disponibles en esta categoría. Disculpen las molestias.</p>
-                <img src="assets/imagenes/Story/inolibro.jpg" class="img-fluid mx-auto d-block">
-            </div>
-            <button class="btn btn-category" (click)="chooseOtherCategory()">Elegir otra categoría</button>
         </div>
+        <div *ngIf="!riddles || riddles.length === 0">
+            <p>No hay adivinanzas disponibles en esta categoría. Disculpen las molestias.</p>
+            <img src="assets/imagenes/Story/inolibro.jpg" class="img-fluid mx-auto d-block">
+        </div>
+        <button class="btn btn-category" (click)="chooseOtherCategory()">Elegir otra categoría</button>
     </div>
 </div>

@@ -92,6 +92,7 @@ export class AdminComponent implements OnInit {
     this.riddleForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      solution: ['', Validators.required],
       category: ['', Validators.required]
     });
 
@@ -334,6 +335,7 @@ export class AdminComponent implements OnInit {
         id: 0,
         title: this.riddleForm.value.title,
         description: this.riddleForm.value.description,
+        solution: this.riddleForm.value.solution,
         categoriesRiddles: selectedCategoryRiddle || { id: 0, nameCategory: '' }
       };
 
@@ -364,6 +366,10 @@ export class AdminComponent implements OnInit {
     }
     if (riddle.description.length > 255) {
       this.openSnackBar("La descripción es demasiado larga.");
+      return false;
+    }
+    if (riddle.solution.length > 255){
+      this.openSnackBar("La solución es demasiado larga.");
       return false;
     }
     return true;

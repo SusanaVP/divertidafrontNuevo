@@ -17,9 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ViewRiddlesComponent {
   riddles: Riddles[] | undefined = [];
-  dividedParagraphs: string[];
-  maxWordsToShow: number = 30;
-  expandedRiddles: { [id: number]: boolean } = {};
+  expandedSolution: { [id: number]: boolean } = {};
   favoriteRiddlesIds: Set<number> = new Set<number>();
   favoriteRiddlesList: Riddles[] = [];
   contentType: string = "riddle";
@@ -35,9 +33,9 @@ export class ViewRiddlesComponent {
     private _snackBar: MatSnackBar,
     private _authService: AuthService,
     private _userService: UserService,
-  private _riddlesService: RiddleService,
-  private dialog: MatDialog) {
-    this.dividedParagraphs = [];
+    private _riddlesService: RiddleService,
+    private dialog: MatDialog) {
+
   }
 
   openSnackBar(message: string) {
@@ -65,7 +63,7 @@ export class ViewRiddlesComponent {
       if (user !== null && user !== undefined) {
         this.idUser = user.id;
       } else {
-       console.log('Error al obtener el usuario:');
+        console.log('Error al obtener el usuario:');
       }
       this.favoriteRiddlesList = await this._favoritesService.getFavoritesRiddles(this.idUser!);
       this.favoriteRiddlesIds = new Set<number>(this.favoriteRiddlesList.map(riddle => riddle.id));
@@ -107,29 +105,8 @@ export class ViewRiddlesComponent {
     }
   }
 
-  toggleExpandedRiddles(riddleId: number): void {
-    this.expandedRiddles[riddleId] = !this.expandedRiddles[riddleId];
-  }
-
-  formatDescription(description: string, wordsToShow: number, expand: boolean): string {
-    const words = description.split(' ');
-    let result = '';
-    let currentWordsCount = 0;
-
-    for (let i = 0; i < words.length; i++) {
-      result += words[i] + ' ';
-      currentWordsCount++;
-      if (currentWordsCount === wordsToShow && !expand) {
-        result += '<br><br>';
-        break;
-      }
-
-      if (words[i].endsWith('.') && expand) {
-        result += '<br><br>';
-        currentWordsCount = 0;
-      }
-    }
-    return result;
+  toggleExpandedSolution(riddleId: number): void {
+    this.expandedSolution[riddleId] = !this.expandedSolution[riddleId];
   }
 
   async deleteRiddle(idRiddle: number) {

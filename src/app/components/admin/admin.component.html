@@ -34,7 +34,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12 mb-3">
+    <div class="col-md-6 mb-3">
         <h1>Añadir nuevo vídeo</h1>
         <form [formGroup]="videoForm" (ngSubmit)="onSubmitVideo()">
             <div class="mb-3">
@@ -58,6 +58,32 @@
                 <input formControlName="url" type="text" class="form-control" id="url" required>
             </div>
             <button type="submit" class="btn btn-primary">Añadir vídeo</button>
+        </form>
+    </div>
+    <div class="col-md-6 mb-3">
+        <h1>Añadir nueva adivinanza</h1>
+        <form [formGroup]="riddleForm" (ngSubmit)="onSubmitRiddle()">
+            <div class="mb-3">
+                <label for="title" class="form-label">Título</label>
+                <input formControlName="title" type="text" class="form-control" id="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Categoría</label>
+                <select formControlName="category" class="form-select" id="category"
+                    [(ngModel)]="selectedCategoryRiddle" required>
+                    <option *ngFor="let category of categoriesRiddles" [value]="category.id">{{ category.nameCategory }}
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea formControlName="description" class="form-control" id="description" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="solution" class="form-label">Solución:</label>
+                <input formControlName="solution" type="text" class="form-control" id="solution" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Añadir Adivinanza</button>
         </form>
     </div>
 </div>
@@ -130,7 +156,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6 mb-3">
+    <div class="col-md-12 mb-3">
         <h1>Añadir nuevo cuento</h1>
         <form [formGroup]="storyForm" (ngSubmit)="onSubmitStory()">
             <div class="mb-3">
@@ -150,28 +176,6 @@
                 <textarea formControlName="description" class="form-control" id="description" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Añadir cuento</button>
-        </form>
-    </div>
-    <div class="col-md-6 mb-3">
-        <h1>Añadir nueva adivinanza</h1>
-        <form [formGroup]="riddleForm" (ngSubmit)="onSubmitRiddle()">
-            <div class="mb-3">
-                <label for="title" class="form-label">Título</label>
-                <input formControlName="title" type="text" class="form-control" id="title" required>
-            </div>
-            <div class="mb-3">
-                <label for="category" class="form-label">Categoría</label>
-                <select formControlName="category" class="form-select" id="category" [(ngModel)]="selectedCategoryRiddle"
-                    required>
-                    <option *ngFor="let category of categoriesRiddles" [value]="category.id">{{ category.nameCategory }}
-                    </option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Descripción</label>
-                <textarea formControlName="description" class="form-control" id="description" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Añadir Adivinanza</button>
         </form>
     </div>
 </div>
