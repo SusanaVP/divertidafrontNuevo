@@ -4,6 +4,7 @@
     flex-wrap: wrap;
     justify-content: space-between;
     margin: auto;
+    margin-bottom: 9%;
 }
 
 .form-label {
@@ -17,4 +18,8 @@
 .deleted:hover {
     background-color: red;
     border: red;
+}
+
+.recommended-videos {
+    margin-bottom: 9%;
 }

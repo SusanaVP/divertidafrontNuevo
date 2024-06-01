@@ -9,6 +9,7 @@ import { UserService } from '../../services/user.service';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { RiddleService } from '../../services/riddle.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CategoryRiddle } from '../interfaces/categoryRiddle';
 
 @Component({
   selector: 'app-view-riddles',
@@ -16,7 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './view-riddles.component.css'
 })
 export class ViewRiddlesComponent {
-  riddles: Riddles[] | undefined = [];
+  riddles: Riddles[] = [];
   expandedSolution: { [id: number]: boolean } = {};
   favoriteRiddlesIds: Set<number> = new Set<number>();
   favoriteRiddlesList: Riddles[] = [];
@@ -26,6 +27,8 @@ export class ViewRiddlesComponent {
   isAdmin: boolean = false;
   email: string = '';
   editingRiddleId: number | null = null;
+  public selectedCategoryRiddle: string = '';
+  public categoriesRiddles: CategoryRiddle[] = [];
 
   constructor(
     private _router: Router,
@@ -56,6 +59,11 @@ export class ViewRiddlesComponent {
       this.email = decode.email;
     }
     this.loadFavoriteRiddles();
+    this.loadCategoriesRiddle();
+
+    if ( this.riddles.length > 0 ) {
+      this.selectedCategoryRiddle = this.riddles[0].categoriesRiddles.id.toString();
+    }
   }
 
   async loadFavoriteRiddles() {
@@ -70,6 +78,20 @@ export class ViewRiddlesComponent {
       this.favoriteRiddlesIds = new Set<number>(this.favoriteRiddlesList.map(riddle => riddle.id));
     } catch (error) {
       console.error('Error al obtener los cuentos favoritos:', error);
+    }
+  }
+
+  async loadCategoriesRiddle() {
+    try {
+      const categories = await this._riddlesService.getRiddleCategories();
+      if (categories !== null && categories !== undefined) {
+        this.categoriesRiddles = categories;
+
+      } else {
+        this.openSnackBar("No se han podido cargar las categorías de las adivinanzas.");
+      }
+    } catch (error) {
+      this.openSnackBar("Error al cargar las categorías de las adivinanzas.")
     }
   }
 
@@ -134,16 +156,26 @@ export class ViewRiddlesComponent {
     this.editingRiddleId = id;
   }
 
+  onCategoryChange(event: any) {
+    const newCategory = event.target.value;
+    if (newCategory !== this.selectedCategoryRiddle) {
+      this.riddles = this.riddles.filter(riddle => riddle.categoriesRiddles.id !== +newCategory);
+      this.selectedCategoryRiddle = newCategory;
+    }
+  }
+
   async saveEditRiddle(riddle: Riddles) {
     this.editingRiddleId = null;
+
+    const selectedCategoryRiddle = this.categoriesRiddles.find(cat => cat.id === +this.selectedCategoryRiddle);
+
+    riddle.categoriesRiddles = selectedCategoryRiddle!;
 
     try {
         const response: string = await this._riddlesService.editRiddle(riddle);
         if (response === 'success') {
             this.openSnackBar('Adivinanza modificada correctamente');
-            this.riddles = this.riddles!.map(existingRiddle => 
-                existingRiddle.id === riddle.id ? riddle : existingRiddle
-            );
+            this.riddles = this.riddles!.filter(existingRiddle => existingRiddle.id !== riddle.id);
         } else {
             this.openSnackBar('Error al modificar la adivinanza.');
         }

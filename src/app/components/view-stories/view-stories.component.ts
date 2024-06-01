@@ -32,6 +32,8 @@ export class ViewStoriesComponent implements OnInit {
   public isEditing: any;
   public categoriesVideo: CategoryStory[] = [];
   editingStoryId: number | null = null;
+  public selectedCategoryStory: string = '';
+  public categoriesStory: CategoryStory[] = [];
 
 
   constructor(
@@ -64,6 +66,11 @@ export class ViewStoriesComponent implements OnInit {
       this.email = decode.email;
     }
     this.loadFavoriteStories();
+    this.loadCategoriesStory();
+
+    if (this.stories.length > 0) {
+      this.selectedCategoryStory = this.stories[0].categoriesStory.id.toString();
+    }
   }
 
   async loadFavoriteStories() {
@@ -79,6 +86,20 @@ export class ViewStoriesComponent implements OnInit {
       this.favoriteStoriesIds = new Set<number>(this.favoritesStories.map(story => story.id));
     } catch (error) {
       console.error('Error al obtener los cuentos favoritos:', error);
+    }
+  }
+
+  async loadCategoriesStory() {
+    try {
+      const categories = await this._storyService.getStoryCategories();
+      if (categories !== null && categories !== undefined) {
+        this.categoriesStory = categories;
+
+      } else {
+        this.openSnackBar("No se han podido cargar las categorías de los cuentos.");
+      }
+    } catch (error) {
+      this.openSnackBar("Error al cargar las categorías de los cuentos.")
     }
   }
 
@@ -164,16 +185,26 @@ export class ViewStoriesComponent implements OnInit {
     this.editingStoryId = id;
   }
 
+  onCategoryChange(event: any) {
+    const newCategory = event.target.value;
+    if (newCategory !== this.selectedCategoryStory) {
+      this.stories = this.stories.filter(story => story.categoriesStory.id !== +newCategory);
+      this.selectedCategoryStory = newCategory;
+    }
+  }
+
   async saveEditStory(story: Stories) {
     this.editingStoryId = null;
 
+    const selectedCategoryStory = this.categoriesStory.find(cat => cat.id === +this.selectedCategoryStory);
+
+    story.categoriesStory = selectedCategoryStory!;
     try {
       const response: string = await this._storyService.editStory(story);
       if (response === 'success') {
         this.openSnackBar('Cuento modificado correctamente');
-        this.stories = this.stories!.map(existingStory =>
-          existingStory.id === story.id ? story : existingStory
-        );
+        this.stories = this.stories!.filter(existingStory => existingStory.id !== story.id);
+
       } else {
         this.openSnackBar('Error al modificar el cuento.');
       }

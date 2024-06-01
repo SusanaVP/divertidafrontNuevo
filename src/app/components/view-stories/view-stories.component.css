@@ -24,7 +24,6 @@
     background-color: #170c00;
     border: none;
     box-shadow: none;
-    margin-bottom: 10px;
   }
 
   .btn-category:hover {
@@ -33,4 +32,8 @@
 
   .btn-edit {
     margin-left: 10px;
+  }
+
+  .container{
+    padding-bottom: 9%;
   }

@@ -1,6 +1,7 @@
 <div class="container">
     <h1>Adivinanzas</h1>
-    <div *ngIf="riddles && riddles.length > 0">
+    <div class="riddles" *ngIf="riddles && riddles.length > 0">
+        <h2>Categoría: {{ riddles[0].categoriesRiddles.nameCategory }}</h2>
         <div class="row">
             <div class="col-md-6 mb-3" *ngFor="let riddle of riddles">
                 <div class="card h-100 mb-3">
@@ -33,21 +34,27 @@
                     </div>
                     <div *ngIf="editingRiddleId === riddle.id" class="card-body">
                         <form (ngSubmit)="saveEditRiddle(riddle)">
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="title-{{ riddle.id }}">Título</label>
                                 <input type="text" class="form-control" id="title-{{ riddle.id }}"
                                     [(ngModel)]="riddle.title" name="title">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="description-{{ riddle.id }}">Descripción</label>
                                 <textarea class="form-control" id="description-{{ riddle.id }}"
                                     [(ngModel)]="riddle.description" name="description"></textarea>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="solution-{{ riddle.id }}">Solución</label>
                                 <textarea class="form-control" id="solution-{{ riddle.id }}"
                                     [(ngModel)]="riddle.solution" name="solution"></textarea>
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="category" class="form-label">Categoría</label>
+                                <select class="form-select" id="category" [(ngModel)]="selectedCategoryRiddle"  (change)="onCategoryChange($event)" name="category" required>
+                                    <option *ngFor="let category of categoriesRiddles" [value]="category.id">{{ category.nameCategory }}</option>
+                                </select>
+                            </div>      
                             <button type="submit" class="btn btn-success">Guardar</button>
                             <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
                         </form>
