@@ -81,39 +81,33 @@ export class SignInComponent {
       return;
     }
 
-    const emailExists = await this._userService.getUserByEmail(this.userData.email);
+    const user = await this._userService.getUserByEmail(this.userData.email);
 
-    if (emailExists != null) {
+    if (user != null) {
       this.openSnackBar('Este correo electrónico ya está en uso.');
       return;
     } else {
 
-      const result = await this._userService.userDataSave(this.userData);
+      try {
+        const result = await this._userService.userDataSave(this.userData);
 
-      if (result === 'success') {
-        try {
-          const login = await this._authService.login(this.userData.email,this.userData.password);
-
-          if (login !== null || !login) {
-            this._router.navigate(['/home']).then(() => {
-              window.location.reload();
-              this.openSnackBar('Registro exitoso.');
-            });
-          } else {
-            this.openSnackBar('Error al iniciar sesión.');
-          }
-          // }
-        } catch (error) {
-          console.log('Error al iniciar sesión:');
-
+        if (result === 'success') {
+          this._router.navigate(['/login']).then(() => {
+            this.openSnackBar('Registro exitoso. Confirme su cuenta en el correo electrónico para poder loguearte.');
+          });
+          return;
+        } else {
+          this.openSnackBar('Error al guardar los datos del usuario.');
+          return;
         }
-      } else {
+      } catch (error) {
+        console.log('Error al iniciar sesión:');
         console.log('Error al guardar los datos del usuario.');
         this._router.navigate(['/error']).then(() => {
           window.location.reload();
         });
+        return;
       }
-      return;
     }
   }
 }

@@ -30,7 +30,7 @@ export class AuthService {
             this.isLoggedInSubject.next(true);
             resolve(decodedToken);
           } else {
-            reject(new Error('Token not found in response'));
+            reject(new Error('Tokenno encontrado en la respuesta.'));
           }
         },
         error => {

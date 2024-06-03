@@ -56,18 +56,23 @@ export class LoginComponent {
     }
 
     try {
-      const token = await this._authService.login(this.email, this.password);
-      if (token.email !== null && token.email !== undefined) {
-        this.isLoggedIn = true;
-        this.isAdmin = token.isAdmin;
-        this.openSnackBar('Inicio de sesión correcto.');
-        this._router.navigate(['/home', { isLoggedIn: this.isLoggedIn, isAdmin: this.isAdmin, }]).then(() => {
-          window.location.reload();
-        });
+      const user = await this._userService.getUserByEmail(this.email);
+      if (!user?.emailValidated) {
+        this.openSnackBar('Cuenta no confirmada, por favor confirme el en el correo electrónico antes de loguearse.');
+        return;
       } else {
-        this.openSnackBar('Email o contraseña incorrectos.');
+        const token = await this._authService.login(this.email, this.password);
+        if (token.email !== null && token.email !== undefined) {
+          this.isLoggedIn = true;
+          this.isAdmin = token.isAdmin;
+          this.openSnackBar('Inicio de sesión correcto.');
+          this._router.navigate(['/home', { isLoggedIn: this.isLoggedIn, isAdmin: this.isAdmin, }]).then(() => {
+            window.location.reload();
+          });
+        } else {
+          this.openSnackBar('Email o contraseña incorrectos.');
+        }
       }
-
     } catch (error) {
       this.openSnackBar('Email o contraseña incorrectos.');
     }
