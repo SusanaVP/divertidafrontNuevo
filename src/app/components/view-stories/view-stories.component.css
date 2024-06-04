@@ -1,39 +1,53 @@
 .img-fluid {
-    width: 25%;
+  width: 25%;
 }
 
-.btn-link{
-    font-size: 18px;
-    font-weight: bold;
-    color: rgb(16, 16, 16);
-    background-color: #e07407;
-    border: none;
-    box-shadow: none;
-    margin-bottom: 10px;
-    text-decoration: none;
-  }
+.btn-link {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(16, 16, 16);
+  background-color: #e07407;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
 
-  .btn-link:hover {
-    transform: scale(1.1);
-  }
+.btn-link:hover {
+  transform: scale(1.1);
+}
 
-  .btn-category {
-    font-size: 18px;
-    font-weight: bold;
-    color: rgb(234, 134, 12);
-    background-color: #170c00;
-    border: none;
-    box-shadow: none;
-  }
+.btn-category {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(234, 134, 12);
+  background-color: #170c00;
+  border: none;
+  box-shadow: none;
+}
 
-  .btn-category:hover {
-    transform: scale(1.1);
-  }
+.btn-category:hover {
+  transform: scale(1.1);
+}
 
-  .btn-edit {
-    margin-left: 10px;
-  }
+.btn-edit {
+  margin-left: 10px;
+}
 
-  .container{
-    padding-bottom: 9%;
-  }
+.container {
+  padding-bottom: 9%;
+}
+
+img {
+  width: 50%;
+  height: 50%;
+}
+
+.card {
+  box-shadow: 4px 2px 8px rgb(209, 204, 194);
+background-color: beige;
+}
+
+.description {
+  margin-bottom: 10px;
+}

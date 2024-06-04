@@ -26,14 +26,17 @@ import { Stories } from '../interfaces/stories';
   styleUrl: './admin.component.css'
 })
 export class AdminComponent implements OnInit {
-  @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild('fileInputStory', { static: false }) fileInputStory!: ElementRef;
+  @ViewChild('fileInputEvent', { static: false }) fileInputEvent!: ElementRef;
 
   idUser: number | null = null;
   isAdmin: boolean = false;
   blogEntries: Blog[] | undefined;
 
-  imageData: string | undefined;
-  showPreview: boolean = false;
+  imageDataEvent: string = '';
+  imageDataStory: string = '';
+  showPreviewEvent: boolean = false;
+  showPreviewStory: boolean = false;
 
   public videoForm: FormGroup;
   public riddleForm: FormGroup;
@@ -99,7 +102,8 @@ export class AdminComponent implements OnInit {
     this.storyForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
-      category: ['', Validators.required]
+      category: ['', Validators.required],
+      image: ['']
     });
   }
 
@@ -255,7 +259,7 @@ export class AdminComponent implements OnInit {
   }
 
   async onSubmitEvent() {
-    if (this.eventForm.valid && this.imageData) {
+    if (this.eventForm.valid && this.imageDataEvent) {
       const newEvent: Event = {
         id: 0,
         title: this.eventForm.value.title,
@@ -267,7 +271,7 @@ export class AdminComponent implements OnInit {
         longitude: this.eventForm.value.longitude,
         town: this.eventForm.value.town,
         city: this.eventForm.value.city,
-        image: this.imageData
+        image: this.imageDataEvent
       };
 
       try {
@@ -278,7 +282,7 @@ export class AdminComponent implements OnInit {
             this.openSnackBar("Evento añadido correctamente.")
             this.eventForm.reset();
             this.cancelPicture()
-            this.imageData = '';
+            this.imageDataEvent = '';
           } else {
             this.openSnackBar("Error, el evento no se ha podido añadir. Por favor, intentelo de nuevo más tarde.")
           }
@@ -383,6 +387,7 @@ export class AdminComponent implements OnInit {
         id: 0,
         title: this.storyForm.value.title,
         description: this.storyForm.value.description,
+        image: this.imageDataStory,
         categoriesStory: selectedCategoryStory || { id: 0, nameCategory: '' }
       };
 
@@ -393,6 +398,8 @@ export class AdminComponent implements OnInit {
           if (response === 'success') {
             this.openSnackBar("Cuento añadido correctamente.")
             this.storyForm.reset();
+            this.cancelPicture()
+            this.imageDataStory = '';
           } else {
             this.openSnackBar("Error, el cuento no se ha podido añadir. Por favor, intentelo de nuevo más tarde.")
           }
@@ -410,8 +417,9 @@ export class AdminComponent implements OnInit {
       this.openSnackBar("El título es demasiado largo.");
       return false;
     }
-    if (story.description.length > 255) {
-      this.openSnackBar("La descripción es demasiado larga.");
+
+    if (story.image === '' || story.image.length < 0) {
+      this.openSnackBar("Debes añadir una imagen.");
       return false;
     }
     return true;
@@ -422,16 +430,37 @@ export class AdminComponent implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.imageData = e.target.result;
-        this.showPreview = true;
+        this.imageDataEvent = e.target.result;
+        this.showPreviewEvent = true;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onFileSelectedStory(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imageDataStory = e.target.result;
+        this.showPreviewStory = true;
       };
       reader.readAsDataURL(file);
     }
   }
 
   cancelPicture() {
-    this.showPreview = false;
-    this.imageData = undefined;
+    this.showPreviewEvent = false;
+    this.imageDataEvent = '';
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
+  cancelPictureStory() {
+    this.showPreviewStory = false;
+    this.imageDataStory = '';
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -441,5 +470,10 @@ export class AdminComponent implements OnInit {
   cancelEvent() {
     this.eventForm.reset();
   }
+
+  cancelStory() {
+    this.storyForm.reset();
+  }
+
 
 }

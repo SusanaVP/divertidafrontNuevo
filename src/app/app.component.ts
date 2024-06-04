@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-
+import { Router, NavigationEnd } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,6 +8,14 @@ import { Component, HostListener } from '@angular/core';
 export class AppComponent {
   title = 'divertidafront';
   showArrow: boolean = false;
+
+    constructor(private router: Router) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        window.scrollTo(0, 0);
+      }
+    });
+  }
   
   @HostListener('window:scroll', [])
   onWindowScroll() {

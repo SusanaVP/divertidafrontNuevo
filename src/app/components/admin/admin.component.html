@@ -112,7 +112,26 @@
                     <label for="description" class="form-label">Descripción</label>
                     <textarea formControlName="description" class="form-control" id="description" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Añadir cuento</button>
+                <div class="col-12 text-center">
+                    <button type="button" class="btn btn-primary btn-event" (click)="fileInputStory.click()">Subir
+                        imagen</button>
+                    <input id="fileInputStory" type="file" (change)="onFileSelectedStory($event)" #fileInputStory
+                        style="display: none;">
+                </div>
+
+                <div class="mb-3 text-center">
+                    <img *ngIf="showPreviewStory" [src]="imageDataStory" alt="Vista previa de la imagen" class="img-fluid mt-3">
+                </div>
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-between">
+                        <button *ngIf="showPreviewStory" (click)="cancelPictureStory()" class="btn btn-warning mt-3"
+                            type="button">Quitar imagen</button>
+                        <button (click)="cancelStory()" class="btn btn-danger btn-event mt-3"
+                            type="button">Cancelar</button>
+                        <button type="submit" class="btn btn-success">Añadir cuento</button>
+                    </div>
+                </div>
+
             </form>
         </div>
     </div>
@@ -162,18 +181,18 @@
                     </div>
                 </div>
                 <div class="col-12 text-center">
-                    <button type="button" class="btn btn-primary btn-event" (click)="fileInput.click()">Subir
+                    <button type="button" class="btn btn-primary btn-event" (click)="fileInputEvent.click()">Subir
                         imagen</button>
-                    <input id="fileInput" type="file" (change)="onFileSelected($event)" #fileInput
+                    <input id="fileInputEvent" type="file" (change)="onFileSelected($event)" #fileInputEvent
                         style="display: none;">
                 </div>
 
                 <div class="mb-3 text-center">
-                    <img *ngIf="showPreview" [src]="imageData" alt="Vista previa de la imagen" class="img-fluid mt-3">
+                    <img *ngIf="showPreviewEvent" [src]="imageDataEvent" alt="Vista previa de la imagen" class="img-fluid mt-3">
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex justify-content-between">
-                        <button *ngIf="showPreview" (click)="cancelPicture()" class="btn btn-warning mt-3"
+                        <button *ngIf="showPreviewEvent" (click)="cancelPicture()" class="btn btn-warning mt-3"
                             type="button">Quitar imagen</button>
                         <button (click)="cancelEvent()" class="btn btn-danger btn-event mt-3"
                             type="button">Cancelar</button>

@@ -43,3 +43,8 @@
 .riddles {
   margin-bottom: 9%;
 }
+
+.card {
+  box-shadow: 4px 2px 8px rgb(205, 231, 160);
+  background-color: rgb(221, 240, 221);
+}

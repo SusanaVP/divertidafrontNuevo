@@ -7,8 +7,12 @@
                 <div *ngFor="let story of stories">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <h2 class="card-title">{{ story.title }}</h2>
-                            <div [innerHTML]="formatDescription(story.description, 50, expandedStories[story.id])">
+                            <h2 class="card-title text-center">{{ story.title }}</h2>
+                            <div class="image-container text-center mb-3">
+                                <img *ngIf="story.image" [src]="story.image" alt="{{ story.title }}"
+                                    class="img-fluid rounded align-items-center mb-3">
+                            </div>
+                            <div class="description" [innerHTML]="formatDescription(story.description, 50, expandedStories[story.id])">
                             </div>
                             <button class="btn btn-link" (click)="toggleExpandedStory(story.id)">
                                 <strong>{{ expandedStories[story.id] ? 'Leer menos' : 'Leer más' }}</strong>
