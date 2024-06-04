@@ -3,7 +3,9 @@ import { StorageService } from '../../services/storage.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../services/user.service';
+
+
+
 
 @Component({
   selector: 'app-header',
@@ -16,12 +18,13 @@ export class HeaderComponent implements OnInit {
   isAdmin: boolean = false;
   isLoggedIn: boolean = false;
   email: string = '';
+  showConfirmDialog: boolean = false;
 
   constructor(private _storageService: StorageService,
     private _router: Router,
     private _snackBar: MatSnackBar,
     private _authService: AuthService,
-    private _userService: UserService) { }
+  ) { }
 
 
   openSnackBar(message: string) {
@@ -55,7 +58,7 @@ export class HeaderComponent implements OnInit {
       return this._router.navigate(['/home']).then(() => {
         window.location.reload();
       })
-      
+
     } catch (error) {
       return this._router.navigate(['/error']).then(() => {
         window.location.reload();

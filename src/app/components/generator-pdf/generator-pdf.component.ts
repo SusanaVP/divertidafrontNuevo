@@ -30,12 +30,9 @@ export class GeneratorPDFComponent implements OnInit {
   pdfUrl: SafeUrl | undefined;
 
   constructor(
-    private _favoritesService: FavoritesService,
     private _snackBar: MatSnackBar,
-    private route: ActivatedRoute,
     private sanitizer: DomSanitizer
-  ) {
-  }
+  ) { }
 
   openSnackBar(message: string) {
     this._snackBar.open(message, 'Cerrar', {
@@ -70,15 +67,15 @@ export class GeneratorPDFComponent implements OnInit {
           { text: video.url },
           { text: 'Categoría:', bold: true },
           { text: video.categoriesVideo.nameCategory },
-          { text: '---'}
+          { text: '---' }
         ]),
         { text: 'Cuentos favoritos:', style: 'subheader' },
         ...validFavoriteStories.map(story => [
           { text: 'Título del cuento:', bold: true }, ({ text: story.title })]),
         { text: 'Adivinanzas favoritas:', style: 'subheader' },
-        { text: '---'},
+        { text: '---' },
         ...validFavoriteRiddles.map(riddle => [{ text: 'Título de la adivinanza:', bold: true },
-        ({ text: riddle.title })]), { text: '---'},
+        ({ text: riddle.title })]), { text: '---' },
         { text: 'Eventos favoritos:', style: 'subheader' },
         ...validFavoriteEvents.flatMap(event => [
           { text: 'Título del evento:', bold: true },
@@ -89,7 +86,7 @@ export class GeneratorPDFComponent implements OnInit {
           { text: event.city },
           { text: 'Información adicional:', bold: true },
           { text: event.info },
-          { text: '---'}
+          { text: '---' }
         ])
       ],
       styles: {
@@ -97,7 +94,7 @@ export class GeneratorPDFComponent implements OnInit {
           fontSize: 20,
           bold: true,
           margin: [0, 0, 0, 10] as [number, number, number, number],
-          
+
 
         },
         subheader: {
@@ -116,11 +113,4 @@ export class GeneratorPDFComponent implements OnInit {
       this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
     });
   }
-
-
-  downloadPdf() {
-    // Descarga el PDF
-    // Lógica para descargar el PDF
-  }
-
 }

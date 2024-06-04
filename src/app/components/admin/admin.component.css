@@ -58,3 +58,8 @@ form {
     text-shadow: 0.5px 0.5px 0.5px black;
     font-size: large;
 }
+
+p{
+    text-align: start;
+} 
+

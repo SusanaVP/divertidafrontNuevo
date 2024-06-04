@@ -30,12 +30,12 @@
 }
 
 .login {
-    font-size: 35px;
+    font-size: 15px;
     transition: all 0.3s ease;
 }
 
 .login a:hover {
-    transform: scale(5);
+    transform: scale(1.2);
 }
 
 .green-icon {

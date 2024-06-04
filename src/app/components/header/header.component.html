@@ -18,7 +18,7 @@
                                 <a target="_blank" href="https://www.instagram.com/" rel="noopener"><i class="fab fa-instagram"></i></a>
                                 <a class="login"  [ngClass]="isLoggedIn ? 'green-icon' : 'red-icon'"  (click)="isLoggedIn ? logout() : navigateToLogin()">
                                     <i class="fas fa-user"></i>
-                                    {{ isLoggedIn ? 'Cerrar sesión' : 'Iniciar sesión' }}
+                                    {{ isLoggedIn ? email : 'Iniciar sesión' }}
                                 </a>
                             </div>
                         </div>
@@ -28,3 +28,4 @@
         </div>
     </div>
 </header>
+
