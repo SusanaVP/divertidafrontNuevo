@@ -100,8 +100,8 @@ export class BlogComponent {
 
     const likesBlog = JSON.parse(this._storageService.getLocalStorageItem(this.localStorageLikesKey) || '{}');
     const currentTime = new Date().getTime();
-   // const oneDay = 24 * 60 * 60 * 1000; // Milisegundos en un día
-    const oneDay = 5 * 60 * 1000; // Para probar con 5 minutos
+    const oneDay = 24 * 60 * 60 * 1000;
+    //const oneDay = 5 * 60 * 1000; // Para probar con 5 minutos
 
     if (!likesBlog[this.idUser]) {
       likesBlog[this.idUser] = { count: 0, lastLikeTime: 0 };
