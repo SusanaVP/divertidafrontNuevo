@@ -18,6 +18,10 @@
       </div>
     </div>
 
+    <div>
+      <h2>¿Estás aburrido y no sabes qué hacer con tus hijos? ¡Aquí tienes ideas para <strong>alegrarte el día</strong>!</h2>
+    </div>
+
     <div class="row">
       <div *ngIf="showRecommendedVideos" class="recommended-videos">
         <div class="col-12 col-md-4 mb-3">
@@ -62,7 +66,8 @@
             </div>
             <div *ngIf="isAdmin">
               <button class="btn btn-success  m-3" (click)="editRecommended(video.id)">
-                <i class=" {{ videosRecommendedIds.has(video.id) ? 'far fa-star' : 'fas fa-star' }}" title="Recomendar"></i>
+                <i class=" {{ videosRecommendedIds.has(video.id) ? 'far fa-star' : 'fas fa-star' }}"
+                  title="Recomendar"></i>
               </button>
             </div>
             <button class="btn btn-danger m-3" (click)="editFavorite(video.id)">

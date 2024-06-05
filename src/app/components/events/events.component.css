@@ -60,3 +60,7 @@
 .row {
   width: 100%;
 }
+
+h3 {
+  font-weight: bold;
+}

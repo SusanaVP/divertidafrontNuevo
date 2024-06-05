@@ -1,9 +1,13 @@
 .container-home {
-    text-align: center;
+    text-align: start;
 }
 
 .img-home {
     text-align: center;
     margin: auto;
-    width: 50%;
+    width: 40%;
+}
+
+h1 {
+    text-align: center;
 }
