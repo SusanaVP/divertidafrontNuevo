@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.prod';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Blog } from '../components/interfaces/blog';
-import { Observable } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,20 @@ export class BlogService {
   }
 
   getBlogValidated(): Observable<Blog[]> {
-    return this._http.get<Blog[]>(`${this.apiUrl}/blogValidated`);
+    return this._http.get<Blog[]>(`${this.apiUrl}/blogValidated`).pipe(
+      map(response => {
+        if (response) {
+          return response;
+        } else {
+          console.error('Error al obtener los blogs validados:', response);
+          return [];
+        }
+      }),
+      catchError(error => {
+        console.error('Error al obtener los blogs validados.', error);
+        return of([]);
+      })
+    );
   }
 
   getBlogNoValidated(): Observable<Blog[]> {

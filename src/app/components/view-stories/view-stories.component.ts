@@ -198,13 +198,18 @@ export class ViewStoriesComponent implements OnInit {
 
     const selectedCategoryStory = this.categoriesStory.find(cat => cat.id === +this.selectedCategoryStory);
 
+    const previousCategoryId = story.categoriesStory.id;
+
+    // Asignar la nueva categoría a la adivinanza
     story.categoriesStory = selectedCategoryStory!;
+
     try {
       const response: string = await this._storyService.editStory(story);
       if (response === 'success') {
         this.openSnackBar('Cuento modificado correctamente');
-        this.stories = this.stories!.filter(existingStory => existingStory.id !== story.id);
-
+        if (story.categoriesStory.id !== previousCategoryId) {
+          this.stories = this.stories!.filter(existingStory => existingStory.id !== story.id);
+        }
       } else {
         this.openSnackBar('Error al modificar el cuento.');
       }

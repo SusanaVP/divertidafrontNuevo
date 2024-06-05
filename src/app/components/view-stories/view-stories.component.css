@@ -51,3 +51,11 @@ background-color: beige;
 .description {
   margin-bottom: 10px;
 }
+
+.btn-success {
+  margin:5px;
+}
+
+.btn-secundary {
+  margin:5px;
+}

@@ -169,13 +169,18 @@ export class ViewRiddlesComponent {
 
     const selectedCategoryRiddle = this.categoriesRiddles.find(cat => cat.id === +this.selectedCategoryRiddle);
 
+    const previousCategoryId = riddle.categoriesRiddles.id;
+
+    // Asignar la nueva categoría a la adivinanza
     riddle.categoriesRiddles = selectedCategoryRiddle!;
 
     try {
         const response: string = await this._riddlesService.editRiddle(riddle);
         if (response === 'success') {
             this.openSnackBar('Adivinanza modificada correctamente');
-            this.riddles = this.riddles!.filter(existingRiddle => existingRiddle.id !== riddle.id);
+            if (riddle.categoriesRiddles.id !== previousCategoryId) {
+              this.riddles = this.riddles!.filter(existingRiddle => existingRiddle.id !== riddle.id);
+          }
         } else {
             this.openSnackBar('Error al modificar la adivinanza.');
         }
