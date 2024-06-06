@@ -20,7 +20,7 @@ export class RankingComponent {
   idUser: number | null = null;
   isAdmin: boolean = false;
   email: string = '';
-  rankingList: { title: string, likes: number, position: number, image: string, description: string}[] = [];
+  rankingList: { title: string, likes: number, position: number, image: string, description: string }[] = [];
 
   constructor(private _blogService: BlogService,
     private _storageService: StorageService,
@@ -37,20 +37,19 @@ export class RankingComponent {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const token = this._storageService.getToken();
     if (token && token.length > 0) {
       const decode = this._authService.decodeJwtToken(token);
       this.isAdmin = decode.isAdmin;
       this.email = decode.email;
     }
-
-    this.loadBlogValidated();
+    await this.loadBlogValidated();
   }
 
 
-  loadBlogValidated(): void {
-    this._blogService.getBlogValidated().subscribe(
+  async loadBlogValidated() {
+    await this._blogService.getBlogValidated().subscribe(
       entries => {
         this.blogEntries = entries;
         const filteredData = entries
@@ -58,7 +57,7 @@ export class RankingComponent {
           .sort((a, b) => b.likes - a.likes);
         this.rankingList = filteredData.map((blog, index) => ({
           title: blog.title,
-          description: blog.description, 
+          description: blog.description,
           likes: blog.likes,
           image: blog.image,
           position: index + 1

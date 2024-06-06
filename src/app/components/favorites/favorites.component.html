@@ -39,6 +39,10 @@
             <div class="card mb-3">
               <div class="card-body">
                 <h5 class="card-title">{{ story.title }}</h5>
+                <div class="image-container text-center mb-3">
+                  <img *ngIf="story.image" [src]="story.image" alt="{{ story.title }}"
+                    class="img-fluid rounded align-items-center mb-3">
+                </div>
                 <div [innerHTML]="formatDescription(story.description, 50, expandedRiddles[story.id])"></div>
                 <button class="btn btn-link" (click)="toggleExpandedRiddles(story.id)">
                   <strong>{{ expandedRiddles[story.id] ? 'Leer menos' : 'Leer más' }}</strong>
@@ -51,7 +55,6 @@
             </div>
           </div>
         </div>
-
 
         <div *ngIf="favoriteStoriesList.length === 0">
           <div class="alert alert-warning" role="alert">
@@ -141,7 +144,8 @@
       <div class="generatorPDF">
         <h1>Generar PDF</h1>
         <div class="col-12 mb-3">
-          <p>Si quieres obtener un resumen de tu paso por la web D de Divertida, puedes obtenerlo en PDF pulsando el botón "Generar PDF":
+          <p>Si quieres obtener un resumen de tu paso por la web D de Divertida, puedes obtenerlo en PDF pulsando el
+            botón "Generar PDF":
           </p>
           <button class="btn btn-per" (click)="generatePdfFromFavorites()">Generar PDF</button>
         </div>
