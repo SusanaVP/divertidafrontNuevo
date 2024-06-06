@@ -210,6 +210,14 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  validateAll(blogEntries: Blog[]) {
+    for (const blog of blogEntries) {
+      this.editValidationBlog(blog.id);
+    }
+
+    this.loadBlogNoValidated();
+  }
+
   async onSubmitVideo() {
     if (this.videoForm.valid) {
       const selectedCategoryVideo = this.categoriesVideo.find(cat => cat.id === +this.selectedCategoryVideo);
@@ -372,7 +380,7 @@ export class AdminComponent implements OnInit {
       this.openSnackBar("La descripción es demasiado larga.");
       return false;
     }
-    if (riddle.solution.length > 255){
+    if (riddle.solution.length > 255) {
       this.openSnackBar("La solución es demasiado larga.");
       return false;
     }

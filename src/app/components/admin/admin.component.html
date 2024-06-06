@@ -1,7 +1,8 @@
 <div class="container-admin">
-    <div class="row">
+    <div class="row blog">
         <h1>Entradas del blog para validar!!!</h1>
         <ng-container *ngIf="blogEntries && blogEntries.length > 0">
+
             <div class="col-md-6 mb-3" *ngFor="let blog of blogEntries; let i = index">
                 <div class="card h-100 mb-4">
                     <div class="card-header">
@@ -25,6 +26,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-12 text-end">
+                <button class="btn btn btn-validated" (click)="validateAll(blogEntries)">Validar todas
+                    <i class='far fa-check-square'></i>
+                </button>
             </div>
         </ng-container>
         <div *ngIf="blogEntries && blogEntries.length === 0" class="col-md-12">
