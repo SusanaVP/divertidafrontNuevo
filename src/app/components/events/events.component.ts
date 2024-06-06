@@ -62,15 +62,15 @@ export class EventsComponent {
       this.loadFavoriteEvents();
     }
     this.geolocationVerify();
-   await this.loadEvents();
+    await this.loadEvents();
   }
 
   async loadEvents() {
     try {
-     await this._eventService.getEvents().subscribe(entries => {
+      await this._eventService.getEvents().subscribe(entries => {
         this.eventsList = entries.map(event => ({ ...event, expand: false }));
         this.sortEventsByDistanceNearby();
-        this.ListTowns = this.eventsList.map(event => event.town);
+        this.ListTowns = Array.from(new Set(this.eventsList.map(event => event.town)));
       });
     } catch (error) {
       console.error('Error al obtener los eventos', error);

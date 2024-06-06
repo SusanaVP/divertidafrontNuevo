@@ -1,10 +1,32 @@
 <div class="container-events">
+  <div class="intro-section">
+    <h2>Eventos para Niños y Familias</h2>
+    <p>
+      ¡Bienvenidos a nuestra sección de eventos para niños y familias! Aquí encontrarás una gran variedad de actividades
+      diseñadas para disfrutar en familia. Ya sea que estés buscando eventos cercanos a tu ubicación, actividades en
+      otras poblaciones, o simplemente los eventos más próximos en el tiempo, ¡tenemos algo para todos!
+    </p>
+    <p>
+      Utiliza las opciones de búsqueda para encontrar el evento perfecto:
+    </p>
+    <ul>
+      <li><strong>Población:</strong> Filtra los eventos por la población donde se llevarán a cabo.</li>
+      <li><strong>Más cercanos:</strong> Encuentra los eventos más próximos a tu ubicación actual.</li>
+      <li><strong>Más lejanos:</strong> Descubre eventos interesantes en localidades más alejadas.</li>
+      <li><strong>Fecha más cercana:</strong> No te pierdas los eventos que se llevarán a cabo próximamente.</li>
+    </ul>
+    <p>
+      Selecciona una población específica para ver solo los eventos de esa localidad, o deja que te sorprendamos con
+      eventos cercanos y emocionantes. ¡Diviértete explorando y planificando tus próximas salidas familiares!
+    </p>
+  </div>
+
   <div class="row">
     <div class="col-12 w-100">
       <div class="row">
         <div class="col-6 mb-3 text-start">
           <label class="form-label">Buscar por:</label>
-          <select class="form-select" [(ngModel)]="selectedCategoryEvents"  (change)="onChangeSelected()">
+          <select class="form-select" [(ngModel)]="selectedCategoryEvents" (change)="onChangeSelected()">
             <option value="town">Población</option>
             <option value="nearby" selected>Más cercanos</option>
             <option value="far">Más lejanos</option>
