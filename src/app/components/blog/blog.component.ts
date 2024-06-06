@@ -83,7 +83,7 @@ export class BlogComponent {
       return this._router.navigate(['/ranking']).then(() => {
         this.idUser
         this.email
-        this.loadBlogValidated();
+        // this.loadBlogValidated();
         window.location.reload();
       });
     } else {

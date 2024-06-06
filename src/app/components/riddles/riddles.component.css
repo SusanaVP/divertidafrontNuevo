@@ -12,7 +12,26 @@
     width: 250px;
     height: 250px;
     position: relative;
-    border-color: rgb(236, 167, 30);
+    border: 2px solid rgb(236, 167, 30);
+    overflow: hidden;
+}
+
+.custom-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease-in-out;
+    transform: translate(-50%, -50%);
+}
+
+.custom-card:hover::before {
+    transform: translate(-50%, -50%) scale(1.2);
 }
 
 .custom-btn {
@@ -29,46 +48,28 @@
     color: white;
 }
 
-.comida {
+.comida::before {
     background-image: url('/assets/imagenes/Riddle/icomida.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.plantas {
+.plantas::before {
     background-image: url('/assets/imagenes/Riddle/iplanta.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.animal {
+.animal::before {
     background-image: url('/assets/imagenes/Riddle/ianimal.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.familia {
+.familia::before {
     background-image: url('/assets/imagenes/Riddle/ifamilia.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.musica {
+.musica::before {
     background-image: url('/assets/imagenes/Riddle/imusica.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.personas {
+.personas::before {
     background-image: url('/assets/imagenes/Riddle/ipersonas.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .card {
@@ -76,8 +77,12 @@
     text-align: center;
 }
 
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
 h2,
 h3 {
     font-weight: bold;
-
 }

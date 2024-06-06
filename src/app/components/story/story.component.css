@@ -12,7 +12,26 @@
     width: 250px;
     height: 250px;
     position: relative;
-    border-color: black;
+    border: 2px solid black;
+    overflow: hidden;
+}
+
+.custom-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease-in-out;
+    transform: translate(-50%, -50%);
+}
+
+.custom-card:hover::before {
+    transform: translate(-50%, -50%) scale(1.2);
 }
 
 .custom-btn {
@@ -29,46 +48,28 @@
     color: white;
 }
 
-.clasico {
+.clasico::before {
     background-image: url('/assets/imagenes/Story/icaperucita.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.corto {
+.corto::before {
     background-image: url('/assets/imagenes/Story/icorto.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.animal {
+.animal::before {
     background-image: url('/assets/imagenes/Story/ianimal.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.princess {
+.princess::before {
     background-image: url('/assets/imagenes/Story/iprincess.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.dormir {
+.dormir::before {
     background-image: url('/assets/imagenes/Story/idormir.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.navidad {
+.navidad::before {
     background-image: url('/assets/imagenes/Story/inavidad.png');
-    background-size: 50%;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 .card {
@@ -76,10 +77,15 @@
     text-align: center;
 }
 
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
 p {
     margin-top: 10px;
 }
 
 h3 {
-  font-weight: bold;  
+    font-weight: bold;
 }
