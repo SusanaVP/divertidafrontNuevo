@@ -45,7 +45,7 @@ img {
 
 .card {
   box-shadow: 4px 2px 8px rgb(209, 204, 194);
-background-color: beige;
+  background-color: beige;
 }
 
 .description {
@@ -53,9 +53,9 @@ background-color: beige;
 }
 
 .btn-success {
-  margin:5px;
+  margin: 5px;
 }
 
 .btn-secundary {
-  margin:5px;
+  margin: 5px;
 }

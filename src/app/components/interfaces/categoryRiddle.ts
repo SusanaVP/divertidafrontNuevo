@@ -1,4 +1,4 @@
-export interface CategoryRiddle{
+export interface CategoryRiddle {
     id: number;
     nameCategory: string;
 }

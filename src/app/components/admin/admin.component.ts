@@ -303,7 +303,6 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  // Función para validar datos de evento
   isDataValidEvent(event: Event): boolean {
     const titlePattern = /^[^0-9]*$/;
     const maxLength = 255;
@@ -482,6 +481,4 @@ export class AdminComponent implements OnInit {
   cancelStory() {
     this.storyForm.reset();
   }
-
-
 }

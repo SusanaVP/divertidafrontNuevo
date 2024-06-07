@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { StorageService } from './storage.service';
 import { Video } from '../components/interfaces/videos';
 import { Favorites } from '../components/interfaces/favorites';
 import { Stories } from '../components/interfaces/stories';
 import { Riddles } from '../components/interfaces/riddles';
 import { Event } from '../components/interfaces/events';
-import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +13,7 @@ export class FavoritesService {
 
   private apiUrl: string = environment.favoritesUrl;
 
-  constructor(private _http: HttpClient, private _storageService: StorageService) { }
+  constructor(private _http: HttpClient) { }
 
   private getHeaders(): HttpHeaders {
     const token = sessionStorage.getItem('token');
@@ -29,7 +27,6 @@ export class FavoritesService {
     } catch (error) {
       console.error('Error al agregar a favoritos:', error);
     }
-
   }
 
   async deleteFavorite(contentId: number, idUser: number, contentType: string) {
@@ -99,7 +96,7 @@ export class FavoritesService {
       if (result === undefined || result === null) {
         console.log('La respuesta del servidor es indefinida para los eventos favoritos.');
         return [];
-      }else if (result?.length === 0 ){
+      } else if (result?.length === 0) {
         return [];
       }
       return result;
@@ -109,9 +106,7 @@ export class FavoritesService {
     }
   }
 
-  /*cambiar nomenclatura*/
   getFavoritesIdUser(idUser: number) {
     return this._http.get<Favorites[]>(`${this.apiUrl}/favoritesIdUser/${idUser}`, { headers: this.getHeaders() });
   }
-
 }

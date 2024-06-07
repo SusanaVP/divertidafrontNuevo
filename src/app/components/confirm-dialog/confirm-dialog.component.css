@@ -3,6 +3,7 @@
     text-align: center;
     background-color: beige;
 }
+
 .dialog-title {
     color: #8E7C35;
     font-weight: bold;
@@ -28,12 +29,12 @@
 .btn-confirm {
     background-color: #F18F01;
     color: #5C4F28;
-    margin:auto;
+    margin: auto;
 }
 
-.btn-cancel{
-    margin:auto;
-    
+.btn-cancel {
+    margin: auto;
+
 }
 
 .btn-cancel:hover,

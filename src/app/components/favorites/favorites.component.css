@@ -1,21 +1,21 @@
 .btn-per {
-    margin-bottom: 10px;
-    color: rgb(214, 134, 43);
-    background-color: brown;
+  margin-bottom: 10px;
+  color: rgb(214, 134, 43);
+  background-color: brown;
 }
 
 .btn-per:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .card-video {
-    background-color: rgb(192, 241, 241);
+  background-color: rgb(192, 241, 241);
 }
 
 .card-title {
-    text-align: center;
-    font-size: large;
-    font-weight: bold;
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
 }
 
 .card-tittle {
@@ -23,64 +23,64 @@
 }
 
 .card-subtitle {
-    font-size: medium;
+  font-size: medium;
 }
 
 .botton-read {
-    font-size: 18px;
-    font-weight: bold;
-    color: rgb(244, 185, 113);
-    background-color: #e07407;
-    border: none;
-    box-shadow: none;
-    margin-bottom: 9%;
-  }
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(244, 185, 113);
+  background-color: #e07407;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 9%;
+}
 
-  .botton-read:hover {
-    transform: scale(1.1);
-  }
-  
-  .info-container {
-    margin-bottom: 10px;
-  }
-  
-  .web-link {
-    margin: 10px;
-    text-align: right;
-  }
-  
-  .web-link a {
-    color: green;
-    text-decoration: none;
-  }
+.botton-read:hover {
+  transform: scale(1.1);
+}
 
-  .web-link a:hover {
-    color: #e07407;
-  }
+.info-container {
+  margin-bottom: 10px;
+}
 
-  .card-background-event {
-    background-color:  #ede3ce;
-  }
+.web-link {
+  margin: 10px;
+  text-align: right;
+}
 
-  .img {
-    width: 20%;
-  }
+.web-link a {
+  color: green;
+  text-decoration: none;
+}
 
-  .btn-link{
-    font-size: 18px;
-    font-weight: bold;
-    color: rgb(16, 16, 16);
-    background-color: #e07407;
-    border: none;
-    box-shadow: none;
-    margin-bottom: 10px;
-    text-decoration: none;
-  }
+.web-link a:hover {
+  color: #e07407;
+}
 
-  .btn-link:hover {
-    transform: scale(1.1);
-  }
+.card-background-event {
+  background-color: #ede3ce;
+}
 
-  .container-favorites {
-    margin-bottom: 9%;
-  }
+.img {
+  width: 20%;
+}
+
+.btn-link {
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(16, 16, 16);
+  background-color: #e07407;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  transform: scale(1.1);
+}
+
+.container-favorites {
+  margin-bottom: 9%;
+}

@@ -61,7 +61,7 @@ export class ViewRiddlesComponent {
     this.loadFavoriteRiddles();
     this.loadCategoriesRiddle();
 
-    if ( this.riddles.length > 0 ) {
+    if (this.riddles.length > 0) {
       this.selectedCategoryRiddle = this.riddles[0].categoriesRiddles.id.toString();
     }
   }
@@ -166,33 +166,28 @@ export class ViewRiddlesComponent {
 
   async saveEditRiddle(riddle: Riddles) {
     this.editingRiddleId = null;
-
     const selectedCategoryRiddle = this.categoriesRiddles.find(cat => cat.id === +this.selectedCategoryRiddle);
-
     const previousCategoryId = riddle.categoriesRiddles.id;
 
-    // Asignar la nueva categoría a la adivinanza
     riddle.categoriesRiddles = selectedCategoryRiddle!;
 
     try {
-        const response: string = await this._riddlesService.editRiddle(riddle);
-        if (response === 'success') {
-            this.openSnackBar('Adivinanza modificada correctamente');
-            if (riddle.categoriesRiddles.id !== previousCategoryId) {
-              this.riddles = this.riddles!.filter(existingRiddle => existingRiddle.id !== riddle.id);
-          }
-        } else {
-            this.openSnackBar('Error al modificar la adivinanza.');
+      const response: string = await this._riddlesService.editRiddle(riddle);
+      if (response === 'success') {
+        this.openSnackBar('Adivinanza modificada correctamente');
+        if (riddle.categoriesRiddles.id !== previousCategoryId) {
+          this.riddles = this.riddles!.filter(existingRiddle => existingRiddle.id !== riddle.id);
         }
+      } else {
+        this.openSnackBar('Error al modificar la adivinanza.');
+      }
     } catch (error) {
-        console.error('Error al modificar la adivinanza', error);
-        this.openSnackBar('Error al modificar la adivinanza. Por favor, inténtelo de nuevo más tarde.');
+      console.error('Error al modificar la adivinanza', error);
+      this.openSnackBar('Error al modificar la adivinanza. Por favor, inténtelo de nuevo más tarde.');
     }
-}
-
+  }
 
   cancelEdit() {
     this.editingRiddleId = null;
   }
-
 }

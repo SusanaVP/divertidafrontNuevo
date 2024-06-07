@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { StorageService } from './storage.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.prod';
-import * as jwt_decode from 'jwt-decode';
 import { JwtResponse } from '../components/interfaces/JwtResponse';
 import { DecodedToken } from '../components/interfaces/decodeToken';
 import { jwtDecode } from 'jwt-decode';

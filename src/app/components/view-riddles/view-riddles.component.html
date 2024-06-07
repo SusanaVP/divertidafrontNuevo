@@ -51,10 +51,12 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="category" class="form-label">Categoría</label>
-                                <select class="form-select" id="category" [(ngModel)]="selectedCategoryRiddle"  (change)="onCategoryChange($event)" name="category" required>
-                                    <option *ngFor="let category of categoriesRiddles" [value]="category.id">{{ category.nameCategory }}</option>
+                                <select class="form-select" id="category" [(ngModel)]="selectedCategoryRiddle"
+                                    (change)="onCategoryChange($event)" name="category" required>
+                                    <option *ngFor="let category of categoriesRiddles" [value]="category.id">{{
+                                        category.nameCategory }}</option>
                                 </select>
-                            </div>      
+                            </div>
                             <button type="submit" class="btn btn-success">Guardar</button>
                             <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
                         </form>

@@ -83,13 +83,12 @@ export class BlogComponent {
       return this._router.navigate(['/ranking']).then(() => {
         this.idUser
         this.email
-        // this.loadBlogValidated();
+        this.loadBlogValidated();
         window.location.reload();
       });
     } else {
       return this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
     }
-
   }
 
   async likeBlog(entryId: number) {
@@ -109,7 +108,6 @@ export class BlogComponent {
 
     const { count, lastLikeTime } = likesBlog[this.idUser];
 
-    // Verificar si han pasado 24 horas desde el último like
     if ((currentTime - lastLikeTime) > oneDay) {
       likesBlog[this.idUser].count = 0;
     }

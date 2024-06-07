@@ -10,6 +10,7 @@ iframe {
     height: 500px;
     border: none;
 }
+
 .row {
     width: 100%;
     display: flex;
@@ -43,7 +44,7 @@ iframe {
 
 @media (max-width: 768px) {
     iframe {
-        height: 300px; 
+        height: 300px;
         width: 300px;
     }
 }

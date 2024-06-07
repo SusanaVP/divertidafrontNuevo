@@ -6,35 +6,35 @@
     </div>
   </div>
 
-    <div class="col-12 col-md-8 text-center">
-      <div class="card">
-        <div class="card-body">
-          <form [formGroup]="entryForm">
-            <div class="mb-3">
-              <label for="title" class="form-label">Título</label>
-              <input formControlName="title" type="text" class="form-control" id="title" required>
+  <div class="col-12 col-md-8 text-center">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="entryForm">
+          <div class="mb-3">
+            <label for="title" class="form-label">Título</label>
+            <input formControlName="title" type="text" class="form-control" id="title" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Descripción</label>
+            <textarea formControlName="description" class="form-control" id="description"></textarea>
+          </div>
+          <div class="mb-3">
+            <button type="button" class="btn btn-primary" (click)="fileInput.click()">Subir imagen</button>
+            <input id="fileInput" type="file" (change)="onFileSelected($event)" #fileInput style="display: none;">
+          </div>
+          <div class="mb-3">
+            <img *ngIf="showPreview" [src]="imageData" alt="Vista previa de la imagen" class="img-fluid mt-3">
+          </div>
+          <div class="row justify-content-end">
+            <div class="col buttons">
+              <button *ngIf="showPreview" (click)="cancelPicture()" class="btn btn-warning mt-3" type="button">Quitar
+                imagen</button>
+              <button (click)="cancelEntryBlog()" class="btn btn-danger mt-3" type="button">Cancelar</button>
+              <button (click)="submitForm()" class="btn btn-success mt-3 ml-2" type="button">Enviar</button>
             </div>
-            <div class="mb-3">
-              <label for="description" class="form-label">Descripción</label>
-              <textarea formControlName="description" class="form-control" id="description"></textarea>
-            </div>
-            <div class="mb-3">
-              <button type="button" class="btn btn-primary" (click)="fileInput.click()">Subir imagen</button>
-              <input id="fileInput" type="file" (change)="onFileSelected($event)" #fileInput style="display: none;">
-            </div>
-            <div class="mb-3">
-              <img *ngIf="showPreview" [src]="imageData" alt="Vista previa de la imagen" class="img-fluid mt-3">
-            </div>
-            <div class="row justify-content-end">
-              <div class="col buttons">
-                <button *ngIf="showPreview" (click)="cancelPicture()" class="btn btn-warning mt-3" type="button">Quitar
-                  imagen</button>
-                <button (click)="cancelEntryBlog()" class="btn btn-danger mt-3" type="button">Cancelar</button>
-                <button (click)="submitForm()" class="btn btn-success mt-3 ml-2" type="button">Enviar</button>
-              </div>
-            </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>

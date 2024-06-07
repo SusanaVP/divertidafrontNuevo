@@ -9,20 +9,20 @@ export class AppComponent {
   title = 'divertidafront';
   showArrow: boolean = false;
 
-    constructor(private router: Router) {
+  constructor(private router: Router) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         window.scrollTo(0, 0);
       }
     });
   }
-  
+
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.showArrow = window.scrollY > 300;
   }
 
   scrollToTop() {
-    window.scroll({ top: 0, left: 0, behavior: 'smooth' }); 
+    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
   }
 }

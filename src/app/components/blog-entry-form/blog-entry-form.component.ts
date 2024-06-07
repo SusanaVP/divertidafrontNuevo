@@ -102,7 +102,6 @@ export class BlogEntryFormComponent implements OnInit {
     }
   }
 
-
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {

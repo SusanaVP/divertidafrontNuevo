@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 
@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
   email: string = '';
 
   constructor(private _storageService: StorageService,
-    private _router: Router,
     private _snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private _authService: AuthService,
@@ -31,7 +30,7 @@ export class HomeComponent implements OnInit {
       verticalPosition: 'bottom',
     });
   }
-  
+
   async ngOnInit() {
     this.route.params.subscribe(params => {
       this.isLoggedIn = params['isLoggedIn'];

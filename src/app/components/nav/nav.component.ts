@@ -14,7 +14,7 @@ export class NavComponent implements OnInit {
   idUser: number | null = null;
   isLoggedIn: boolean = false;
 
-  constructor(private _authService: AuthService, private router: Router,   private _storageService: StorageService) { }
+  constructor(private _authService: AuthService, private router: Router, private _storageService: StorageService) { }
 
   ngOnInit() {
     const token = this._storageService.getToken();

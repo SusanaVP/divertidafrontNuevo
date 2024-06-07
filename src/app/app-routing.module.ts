@@ -33,8 +33,8 @@ const routes: Routes = [
   { path: 'sign-in', component: SignInComponent },
   { path: 'view-riddles', component: ViewRiddlesComponent },
   { path: 'admin', component: AdminComponent },
-  { path: 'ranking', component: RankingComponent},
-  { path: 'generator-pdf', component: GeneratorPDFComponent}
+  { path: 'ranking', component: RankingComponent },
+  { path: 'generator-pdf', component: GeneratorPDFComponent }
 ];
 
 @NgModule({

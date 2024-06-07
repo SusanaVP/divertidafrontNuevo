@@ -1,6 +1,5 @@
 import { Component, ComponentFactoryResolver, ComponentRef, OnInit, ViewContainerRef } from '@angular/core';
 import { Video } from '../interfaces/videos';
-import { VideosService } from '../../services/videos.service';
 import { FavoritesService } from '../../services/favorites.service';
 import { StorageService } from '../../services/storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -290,7 +289,6 @@ export class FavoritesComponent implements OnInit {
     const factory = this.componentFactoryResolver.resolveComponentFactory(GeneratorPDFComponent);
     const componentRef: ComponentRef<GeneratorPDFComponent> = this.viewContainerRef.createComponent(factory);
 
-    // Llama al método generatePdf() del componente para generar el PDF
     componentRef.instance.generatePdf(favoriteVideos, favoriteStories, favoriteRiddles, favoriteEvents);
   }
 

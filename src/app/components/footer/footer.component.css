@@ -10,18 +10,18 @@
     background-color: rgb(239, 195, 100);
 }
 
-.social-icons-widget a{
+.social-icons-widget a {
     color: rgb(242, 114, 9);
 }
 
-.social-icons-widget a:hover{
+.social-icons-widget a:hover {
     transform: scale(1.5);
     color: rgb(148, 110, 28);
 }
 
 li a:hover {
     transform: scale(1.1);
-    color:black;
+    color: black;
 }
 
 li a {

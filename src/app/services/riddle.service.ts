@@ -89,10 +89,10 @@ export class RiddleService {
 
   async editRiddle(riddle: Riddles): Promise<string> {
     try {
-      const response: HttpResponse<string> | undefined = await this._http.put<string>(`${this.apiUrl}/editRiddle`,  riddle , { headers: this.getHeaders(), observe: 'response' }).toPromise();
+      const response: HttpResponse<string> | undefined = await this._http.put<string>(`${this.apiUrl}/editRiddle`, riddle, { headers: this.getHeaders(), observe: 'response' }).toPromise();
       if (response && response?.status === 200) {
         return 'success';
-      }else {
+      } else {
         console.error('Error al guardar la adivinanza modificada.');
         return 'error';
       }

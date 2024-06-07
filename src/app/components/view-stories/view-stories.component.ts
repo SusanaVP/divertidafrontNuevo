@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Stories } from '../interfaces/stories';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FavoritesService } from '../../services/favorites.service';
 import { StorageService } from '../../services/storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -44,8 +44,7 @@ export class ViewStoriesComponent implements OnInit {
     private _authService: AuthService,
     private _userService: UserService,
     private dialog: MatDialog,
-    private _storyService: StoryService,
-    private route: ActivatedRoute) {
+    private _storyService: StoryService) {
     this.dividedParagraphs = [];
   }
 
@@ -195,12 +194,9 @@ export class ViewStoriesComponent implements OnInit {
 
   async saveEditStory(story: Stories) {
     this.editingStoryId = null;
-
     const selectedCategoryStory = this.categoriesStory.find(cat => cat.id === +this.selectedCategoryStory);
-
     const previousCategoryId = story.categoriesStory.id;
 
-    // Asignar la nueva categoría a la adivinanza
     story.categoriesStory = selectedCategoryStory!;
 
     try {
@@ -219,9 +215,7 @@ export class ViewStoriesComponent implements OnInit {
     }
   }
 
-
   cancelEdit() {
     this.editingStoryId = null;
   }
-
 }

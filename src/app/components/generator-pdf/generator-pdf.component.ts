@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -8,7 +7,6 @@ import { Video } from '../interfaces/videos';
 import { Stories } from '../interfaces/stories';
 import { Riddles } from '../interfaces/riddles';
 import { Event } from '../interfaces/events';
-import { FavoritesService } from '../../services/favorites.service';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -43,11 +41,9 @@ export class GeneratorPDFComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
   }
 
   generatePdf(favoriteVideos: Video[], favoriteStories: Stories[], favoriteRiddles: Riddles[], favoriteEvents: Event[]) {
-    // Verificar que los datos no sean undefined o null
     const validFavoriteVideos = favoriteVideos || [];
     const validFavoriteStories = favoriteStories || [];
     const validFavoriteRiddles = favoriteRiddles || [];

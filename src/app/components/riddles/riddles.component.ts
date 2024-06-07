@@ -11,7 +11,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class RiddlesComponent {
 
-
   constructor(
     private _riddleService: RiddleService,
     private _router: Router,

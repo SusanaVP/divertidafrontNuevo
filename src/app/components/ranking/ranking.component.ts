@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { BlogService } from '../../services/blog.service';
 import { StorageService } from '../../services/storage.service';
 
+
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { Blog } from '../interfaces/blog';
 import { Router } from '@angular/router';
@@ -58,7 +58,6 @@ export class RankingComponent {
       this.likesUpdateSubscription.unsubscribe();
     }
   }
-
 
   loadBlogValidated(): void {
     this._blogService.getBlogValidated().subscribe(

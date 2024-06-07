@@ -7,7 +7,6 @@ export class StorageService {
 
   constructor() { }
 
-  
   private isSessionStorageAvailable(): boolean {
     try {
       const testKey = '__test__';

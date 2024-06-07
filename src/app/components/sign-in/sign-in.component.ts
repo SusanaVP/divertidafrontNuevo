@@ -3,7 +3,6 @@ import { User } from '../interfaces/user';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -29,7 +28,6 @@ export class SignInComponent {
 
   constructor(private _userService: UserService,
     private _router: Router,
-    private _authService: AuthService,
     private _snackBar: MatSnackBar) { }
 
   openSnackBar(message: string) {

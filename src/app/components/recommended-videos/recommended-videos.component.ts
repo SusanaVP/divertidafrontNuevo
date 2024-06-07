@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VideosService } from '../../services/videos.service';
 import { StorageService } from '../../services/storage.service';
@@ -46,7 +45,6 @@ export class RecommendedVideosComponent implements OnInit {
     });
   }
 
-
   async ngOnInit() {
     const token = this._storageService.getToken();
     if (token && token.length > 0) {
@@ -64,7 +62,7 @@ export class RecommendedVideosComponent implements OnInit {
       if (user !== null && user !== undefined) {
         this.idUser = user.id;
       } else {
-       console.log("Error al obtener el usuario logueado");
+        console.log("Error al obtener el usuario logueado");
       }
       const videos = await this._videosService.getRecommendedVideos().toPromise();
       this.recommendedVideos = videos || [];
@@ -82,7 +80,6 @@ export class RecommendedVideosComponent implements OnInit {
       console.error('Error al obtener los videos favoritos:', error);
     }
   }
-
 
   async editFavorite(idVideo: number) {
     try {

@@ -12,7 +12,8 @@
                                 <img *ngIf="story.image" [src]="story.image" alt="{{ story.title }}"
                                     class="img-fluid rounded align-items-center mb-3">
                             </div>
-                            <div class="description" [innerHTML]="formatDescription(story.description, 50, expandedStories[story.id])">
+                            <div class="description"
+                                [innerHTML]="formatDescription(story.description, 50, expandedStories[story.id])">
                             </div>
                             <button class="btn btn-link" (click)="toggleExpandedStory(story.id)">
                                 <strong>{{ expandedStories[story.id] ? 'Leer menos' : 'Leer más' }}</strong>
@@ -24,9 +25,9 @@
                                         <i class='fas fa-bug'></i>
                                     </button>
                                     <button class="btn btn-dark color-light btn-edit " (click)="startEditing(story.id)"
-                                    title="Modificar">
-                                    <i class='fas fa-pen-square'></i>
-                                </button>
+                                        title="Modificar">
+                                        <i class='fas fa-pen-square'></i>
+                                    </button>
                                 </div>
                                 <button class="btn btn-danger " (click)="editFavoriteStory(story.id)">
                                     <i
@@ -38,18 +39,22 @@
                             <form (ngSubmit)="saveEditStory(story)">
                                 <div class="form-group mb-3">
                                     <label for="title-{{ story.id }}">Título</label>
-                                    <input type="text" class="form-control" id="title-{{ story.id }}" [(ngModel)]="story.title" name="title">
+                                    <input type="text" class="form-control" id="title-{{ story.id }}"
+                                        [(ngModel)]="story.title" name="title">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="description-{{ story.id }}">Descripción</label>
-                                    <textarea class="form-control" id="description-{{ story.id }}" [(ngModel)]="story.description" name="description"></textarea>
+                                    <textarea class="form-control" id="description-{{ story.id }}"
+                                        [(ngModel)]="story.description" name="description"></textarea>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="category" class="form-label">Categoría</label>
-                                    <select class="form-select" id="category" [(ngModel)]="selectedCategoryStory"  (change)="onCategoryChange($event)" name="category" required>
-                                        <option *ngFor="let category of categoriesStory" [value]="category.id">{{ category.nameCategory }}</option>
+                                    <select class="form-select" id="category" [(ngModel)]="selectedCategoryStory"
+                                        (change)="onCategoryChange($event)" name="category" required>
+                                        <option *ngFor="let category of categoriesStory" [value]="category.id">{{
+                                            category.nameCategory }}</option>
                                     </select>
-                                </div>                           
+                                </div>
                                 <button type="submit" class="btn btn-success">Guardar</button>
                                 <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
                             </form>

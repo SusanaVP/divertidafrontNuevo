@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { StorageService } from '../../services/storage.service';
-import * as bcrypt from 'bcryptjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 
@@ -22,7 +20,6 @@ export class LoginComponent {
 
   constructor(private _userService: UserService,
     private _router: Router,
-    private _storageService: StorageService,
     private _snackBar: MatSnackBar,
     private _authService: AuthService,) { }
 
