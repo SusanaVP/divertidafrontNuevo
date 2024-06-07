@@ -30,6 +30,7 @@ export class EventsComponent {
   eventsList: Event[] = [];
   townSelected: string = '';
   ListTowns: string[] = [];
+  isLoading: boolean = true;
 
   contentType: string = "event";
   contentId: number = 0;
@@ -66,14 +67,17 @@ export class EventsComponent {
   }
 
   async loadEvents() {
+    this.isLoading = true;
     try {
       await this._eventService.getEvents().subscribe(entries => {
         this.eventsList = entries.map(event => ({ ...event, expand: false }));
         this.sortEventsByDistanceNearby();
         this.ListTowns = Array.from(new Set(this.eventsList.map(event => event.town)));
+        this.isLoading = false;
       });
     } catch (error) {
       console.error('Error al obtener los eventos', error);
+      this.isLoading = false;
     }
   }
 

@@ -7,6 +7,7 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { Blog } from '../interfaces/blog';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ranking',
@@ -20,6 +21,7 @@ export class RankingComponent {
   idUser: number | null = null;
   isAdmin: boolean = false;
   email: string = '';
+  private likesUpdateSubscription: Subscription = new Subscription();
   rankingList: { title: string, likes: number, position: number, image: string, description: string }[] = [];
 
   constructor(private _blogService: BlogService,
@@ -44,24 +46,25 @@ export class RankingComponent {
       this.isAdmin = decode.isAdmin;
       this.email = decode.email;
     }
+
     await this.loadBlogValidated();
+    this.likesUpdateSubscription = this._blogService.getLikesUpdatedObservable().subscribe(() => {
+      this.loadBlogValidated();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.likesUpdateSubscription) {
+      this.likesUpdateSubscription.unsubscribe();
+    }
   }
 
 
-  async loadBlogValidated() {
-    await this._blogService.getBlogValidated().subscribe(
+  loadBlogValidated(): void {
+    this._blogService.getBlogValidated().subscribe(
       entries => {
         this.blogEntries = entries;
-        const filteredData = entries
-          .filter(blog => blog.likes !== 0)
-          .sort((a, b) => b.likes - a.likes);
-        this.rankingList = filteredData.map((blog, index) => ({
-          title: blog.title,
-          description: blog.description,
-          likes: blog.likes,
-          image: blog.image,
-          position: index + 1
-        }));
+        this.updateRankingList(entries);
       },
       error => {
         this._router.navigate(['/error']).then(() => {
@@ -69,6 +72,19 @@ export class RankingComponent {
         });
       }
     );
+  }
+
+  updateRankingList(entries: Blog[]): void {
+    const filteredData = entries
+      .filter(blog => blog.likes !== 0)
+      .sort((a, b) => b.likes - a.likes);
+    this.rankingList = filteredData.map((blog, index) => ({
+      title: blog.title,
+      description: blog.description,
+      likes: blog.likes,
+      image: blog.image,
+      position: index + 1
+    }));
   }
 
   goToBlogPage() {

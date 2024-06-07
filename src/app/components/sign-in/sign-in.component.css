@@ -20,13 +20,11 @@ img {
 
 .form-column {
     flex: 0 0 calc(50% - 10px);
-    /* Calculamos el 50% del ancho total y restamos el espacio entre columnas */
     margin-right: 20px;
 }
 
 .form-column:last-child {
     margin-right: 0;
-    /* Eliminamos el margen derecho de la última columna */
 }
 
 .form-column label {
@@ -43,8 +41,6 @@ img {
     .email-column {
         flex: 1 1 auto;
         margin-right: 0;
-        /* Eliminamos el margen derecho en pantallas pequeñas */
         margin-bottom: 10px;
-        /* Añadimos un margen inferior para separar las columnas en pantallas pequeñas */
     }
 }

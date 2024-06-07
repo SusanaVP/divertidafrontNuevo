@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.prod';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Blog } from '../components/interfaces/blog';
-import { Observable, catchError, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ import { Observable, catchError, map, of } from 'rxjs';
 export class BlogService {
 
   private apiUrl: string = environment.blogUrl;
+  private likesUpdated = new BehaviorSubject<void>(undefined);
 
   constructor(private _http: HttpClient) { }
 
@@ -63,6 +64,7 @@ export class BlogService {
     try {
       const response: string | undefined = await this._http.get(`${this.apiUrl}/likesBlog/${idBlog}`, { headers: this.getHeaders(), responseType: 'text' }).toPromise();
       if (response) {
+        this.likesUpdated.next();
         return 'success';
       } else {
         console.log('Error al dar like al blog', response);
@@ -102,5 +104,9 @@ export class BlogService {
       console.error('Error al eliminar el blog.', error);
       return 'error';
     }
+  }
+
+  getLikesUpdatedObservable(): Observable<void> {
+    return this.likesUpdated.asObservable();
   }
 }
