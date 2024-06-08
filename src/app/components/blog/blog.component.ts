@@ -84,7 +84,6 @@ export class BlogComponent {
         this.idUser
         this.email
         this.loadBlogValidated();
-        window.location.reload();
       });
     } else {
       return this.openSnackBar('Tienes que loguearte. Haz click en el icono de usuario.');
