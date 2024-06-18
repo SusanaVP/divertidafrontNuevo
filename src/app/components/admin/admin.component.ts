@@ -319,10 +319,6 @@ export class AdminComponent implements OnInit {
       this.openSnackBar("La información es demasiado larga.");
       return false;
     }
-    if (!this.urlPattern.test(event.url)) {
-      this.openSnackBar("La URL no es válida.");
-      return false;
-    }
     if (event.town.length > maxLength) {
       this.openSnackBar("La población es demasiado larga.");
       return false;
