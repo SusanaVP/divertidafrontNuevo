@@ -83,7 +83,7 @@ export class AdminComponent implements OnInit {
       title: ['', [Validators.required, Validators.pattern('^[^0-9]*$')]],
       description: ['', Validators.required],
       info: ['', Validators.required],
-      url: ['', [Validators.required, Validators.pattern(this.urlPattern)]],
+      url: ['', [Validators.required,]],
       date: ['', Validators.required],
       latitude: ['', Validators.required],
       longitude: ['', Validators.required],
@@ -319,6 +319,10 @@ export class AdminComponent implements OnInit {
       this.openSnackBar("La información es demasiado larga.");
       return false;
     }
+    if (!this.urlPattern.test(event.url)) {
+      this.openSnackBar("La URL no es válida.");
+      return false;
+    }
     if (event.town.length > maxLength) {
       this.openSnackBar("La población es demasiado larga.");
       return false;
@@ -401,7 +405,7 @@ export class AdminComponent implements OnInit {
           if (response === 'success') {
             this.openSnackBar("Cuento añadido correctamente.")
             this.storyForm.reset();
-            this.cancelPicture()
+            this.cancelPictureStory()
             this.imageDataStory = '';
           } else {
             this.openSnackBar("Error, el cuento no se ha podido añadir. Por favor, intentelo de nuevo más tarde.")
