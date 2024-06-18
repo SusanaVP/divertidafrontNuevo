@@ -435,6 +435,14 @@ export class AdminComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
+      const maxSizeInMB = 5;
+      const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+  
+      if (file.size > maxSizeInBytes) {
+        this.openSnackBar(`La imagen es demasiado grande. El tamaño máximo permitido es ${maxSizeInMB} MB.`);
+        return;
+      }
+  
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.imageDataEvent = e.target.result;
@@ -447,13 +455,22 @@ export class AdminComponent implements OnInit {
   onFileSelectedStory(event: any) {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imageDataStory = e.target.result;
-        this.showPreviewStory = true;
-      };
-      reader.readAsDataURL(file);
-    }
+     // Verificar el tamaño del archivo (por ejemplo, 5 MB)
+     const maxSizeInMB = 5;
+     const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+ 
+     if (file.size > maxSizeInBytes) {
+       this.openSnackBar(`La imagen es demasiado grande. El tamaño máximo permitido es ${maxSizeInMB} MB.`);
+       return;
+     }
+ 
+     const reader = new FileReader();
+     reader.onload = (e: any) => {
+       this.imageDataStory = e.target.result;
+       this.showPreviewStory = true;
+     };
+     reader.readAsDataURL(file);
+   }
   }
 
   cancelPicture() {
