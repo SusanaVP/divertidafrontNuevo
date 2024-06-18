@@ -210,12 +210,12 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  validateAll(blogEntries: Blog[]) {
+  async validateAll(blogEntries: Blog[]) {
     for (const blog of blogEntries) {
-      this.editValidationBlog(blog.id);
+      await this.editValidationBlog(blog.id);
     }
 
-    this.loadBlogNoValidated();
+    await this.loadBlogNoValidated();
   }
 
   async onSubmitVideo() {
